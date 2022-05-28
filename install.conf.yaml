@@ -6,12 +6,23 @@
 
 - link:
     ~/.tmux.conf: tmux.conf
-    ~/.vim: vim
-    ~/.vimrc: vimrc
+    ~/.zshrc: zshrc
+    ~/.config/nvim:
+        path: config/nvim/
+        exclude: [ config/nvim/plugin ]
+        create: true
+        glob: true
+        relink: true
+    ~/.config/zathura:
+        path: config/zathura
+        create: true
+        glob: true
+        relink: true
 
-- create:
-    - ~/downloads
-    - ~/.vim/undo-history
+
+# - create:
+#     - ~/downloads
+#     - ~/.vim/undo-history
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
