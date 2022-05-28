@@ -8,16 +8,21 @@
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
     ~/.config/nvim:
-        path: config/nvim/
-        exclude: [ config/nvim/plugin ]
-        create: true
-        glob: true
-        relink: true
+      path: config/nvim/
+      exclude: [ config/nvim/plugin ]
+      create: true
+      glob: true
+      relink: true
     ~/.config/zathura:
-        path: config/zathura
-        create: true
-        glob: true
-        relink: true
+      path: config/zathura
+      create: true
+      glob: true
+      relink: true
+    ~/.config/mpv:
+      path: config/mpv
+      create: true
+      glob: true
+      relink: true
 
 
 # - create:
