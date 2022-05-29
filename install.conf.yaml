@@ -7,6 +7,7 @@
 - link:
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
+    ~/.bashrc: bashrc
     ~/.config/nvim:
       path: config/nvim/
       exclude: [ config/nvim/plugin ]
