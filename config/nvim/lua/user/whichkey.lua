@@ -85,6 +85,7 @@ local mappings = {
   ['M'] = {'<cmd>MundoToggle<cr>', 'Mundo'},
   ['Z'] = {'<cmd>ZenMode<cr>', 'ZenMode'},
   [' '] = {'<cmd>StripTrailingWhitespace<cr>', "Strip trailing whitespace"},
+  ['A'] = {"<cmd>Neogen<cr>", 'Annotate'},
 
   v = {
     name = "Pasting",

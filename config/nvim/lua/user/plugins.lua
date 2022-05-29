@@ -130,6 +130,18 @@ return packer.startup(function(use)
   -- Treesitter
   use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate" }
   use { 'nvim-telescope/telescope.nvim' }
+  use {'nvim-treesitter/nvim-treesitter-textobjects'}
+  use { 'RRethy/nvim-treesitter-textsubjects', after = { 'nvim-treesitter' } }
+
+  use {
+    "danymat/neogen",
+    config = function()
+        require('neogen').setup {}
+    end,
+    requires = "nvim-treesitter/nvim-treesitter",
+    -- Uncomment next line if you want to follow only stable versions
+    -- tag = "*"
+}
 
   use {
     "folke/trouble.nvim",
