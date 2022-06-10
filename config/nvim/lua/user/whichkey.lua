@@ -86,6 +86,9 @@ local mappings = {
   ['Z'] = {'<cmd>ZenMode<cr>', 'ZenMode'},
   [' '] = {'<cmd>StripTrailingWhitespace<cr>', "Strip trailing whitespace"},
   ['A'] = {"<cmd>Neogen<cr>", 'Annotate'},
+  ['o'] = {"<cmd>NvimTreeFindFile<cr>", 'Focus Explorer'},
+  ['c'] = {"<cmd>bd<cr>", 'Close buffer'}, -- stands for buffer delete
+
 
   v = {
     name = "Pasting",
