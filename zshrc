@@ -1,3 +1,9 @@
+# Had an issue where I couldn't open a terminal on first open due to "open terminal failed: not a terminal"
+# https://github.com/romkatv/powerlevel10k/issues/1203
+if [ -z "$TMUX" ]; then
+  exec tmux new-session -A -s workspace
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -91,9 +97,6 @@ plugins=(
   # zsh-syntax-highligting
   tmux
 )
-
-ZSH_TMUX_AUTOSTART=true
-
 
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
