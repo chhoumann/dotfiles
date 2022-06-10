@@ -53,28 +53,28 @@ return packer.startup(function(use)
   use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
   use "nvim-lualine/lualine.nvim"
   use "akinsho/toggleterm.nvim"
-  use "ahmedkhalf/project.nvim"
+  use "ahmedkhalf/project.nvim" -- project manager
   use "lukas-reineke/indent-blankline.nvim"
-  use 'goolord/alpha-nvim'
+  use 'goolord/alpha-nvim' -- dashboard
   use "antoinemadec/FixCursorHold.nvim" -- This is needed to fix lsp doc highlight
-  use "folke/which-key.nvim"
+  use "folke/which-key.nvim" -- the plugin that shows you which keys you can press
   use "machakann/vim-sandwich"
-  use "lervag/vimtex"
+  use "lervag/vimtex" -- latex
   use {"phaazon/hop.nvim"}
   use {'kevinhwang91/nvim-bqf', ft = 'qf'}
   use {"kevinhwang91/nvim-hlslens"}
   use {'gelguy/wilder.nvim'}
-  use "karb94/neoscroll.nvim"
-  use {'liuchengxu/vista.vim', cmd="Vista"}
-  use "Pocco81/AutoSave.nvim"
-  use {'simnalamburt/vim-mundo', cmd={"MundoToggle", "MundoShow"}}
+  use "karb94/neoscroll.nvim" -- better scrolling
+  use {'liuchengxu/vista.vim', cmd="Vista"} -- tag explorer
+  use "Pocco81/AutoSave.nvim"  -- autosave files
+  use {'simnalamburt/vim-mundo', cmd={"MundoToggle", "MundoShow"}} -- undo manager
   use {"folke/zen-mode.nvim", cmd="ZenMode"}
   use {"jdhao/whitespace.nvim"}
-  use {'nvim-telescope/telescope-ui-select.nvim' }
+  use {'nvim-telescope/telescope-ui-select.nvim' } -- makes nvim use telescope for selecting stuff
   use {"j-hui/fidget.nvim", config=function() require("fidget").setup() end}
-  use {'stevearc/dressing.nvim'}
-  use {'rcarriga/nvim-notify'}
-  use { "beauwilliams/focus.nvim", config = function() require("focus").setup() end }
+  use {'stevearc/dressing.nvim'} -- prettier ui stuff
+  use {'rcarriga/nvim-notify'} -- prettier notifications
+  use { "beauwilliams/focus.nvim", config = function() require("focus").setup() end } -- Auto manage panes
 
   -- Git command inside vim
   use({ "tpope/vim-fugitive", event = "User InGitRepo" })
