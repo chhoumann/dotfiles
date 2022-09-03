@@ -5,9 +5,15 @@
 - clean: ['~']
 
 - link:
-    ~/.tmux.conf: tmux.conf
-    ~/.zshrc: zshrc
-    ~/.bashrc: bashrc
+    ~/.tmux.conf: 
+      force: true
+      path: tmux.conf
+    ~/.zshrc: 
+      force: true
+      path: zshrc
+    ~/.bashrc: 
+      force: true
+      path: bashrc
     ~/.config/nvim:
       path: config/nvim/
       exclude: [ config/nvim/plugin ]
