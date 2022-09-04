@@ -14,6 +14,11 @@
     ~/.bashrc: 
       force: true
       path: bashrc
+    ~/.config/lazygit/config.yml:
+      path: config/lazygit/config.yml
+      create: true
+      relink: true
+      force: true
     ~/.config/nvim:
       path: config/nvim/
       exclude: [ config/nvim/plugin ]
