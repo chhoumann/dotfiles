@@ -129,6 +129,9 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias lg=lazygit
 alias fly=/home/christian/.fly/bin/flyctl
+alias ll="exa --long --group --icons --git --header"
+alias llt="exa --oneline --tree --icons --git-ignore"
+alias ls="exa --icons --git"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
