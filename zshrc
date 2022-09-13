@@ -133,6 +133,16 @@ alias ll="exa --long --group --icons --git --header"
 alias llt="exa --oneline --tree --icons --git-ignore"
 alias ls="exa --icons --git"
 
+function init-video() {
+  local var vid_root="/mnt/d/Content/$1"
+  mkdir -p "$vid_root"
+  mkdir -p "$vid_root/Audio"
+  mkdir -p "$vid_root/Footage"
+  mkdir -p "$vid_root/Graphics"
+  mkdir -p "$vid_root/Project Files"
+  mkdir -p "$vid_root/Drafts"
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
