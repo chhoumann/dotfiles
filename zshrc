@@ -143,7 +143,36 @@ function init-video() {
   mkdir -p "$vid_root/Drafts"
 }
 
+function rh() {
+  if [ -z "$1" ]; then
+    echo "Usage: rh <file.hs>"
+    return 1
+  fi
+
+  if read -q "choice?Run in REPL? (Y/n) "; then
+    eval ghci "$1"
+    return 1
+  else 
+    local var file="$1"
+    local var bname="$(basename "$file" .hs)"
+    ghc $file -o $bname
+
+    echo "\n== Output =="
+    eval ./$bname
+    rm -f "$bname.hi" "$bname.o" "$bname"
+  fi
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 eval "$(starship init zsh)"
+
+# bun completions
+[ -s "/home/christian/.bun/_bun" ] && source "/home/christian/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+[ -f "/home/christian/.ghcup/env" ] && source "/home/christian/.ghcup/env" # ghcup-env
