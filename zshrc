@@ -181,4 +181,8 @@ eval "$(starship init zsh)"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# deno
+export DENO_INSTALL="/home/christian/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
 [ -f "/home/christian/.ghcup/env" ] && source "/home/christian/.ghcup/env" # ghcup-env
