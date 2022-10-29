@@ -97,7 +97,7 @@ plugins=(
   git
   zsh-z
   gh
-  rust
+  # rust
   zsh-autosuggestions
   # zsh-syntax-highligting
   tmux
