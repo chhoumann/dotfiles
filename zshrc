@@ -138,6 +138,7 @@ alias ll="exa --long --group --icons --git --header"
 alias llt="exa --oneline --tree --icons --git-ignore"
 alias ls="exa --icons --git"
 alias explorer="explorer.exe ."
+alias c="code"
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
