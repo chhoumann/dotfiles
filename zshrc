@@ -101,6 +101,7 @@ plugins=(
   zsh-autosuggestions
   # zsh-syntax-highligting
   tmux
+  docker
 )
 
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
