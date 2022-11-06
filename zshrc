@@ -173,4 +173,4 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 # :)
 export PATH=/home/christian/.local/bin:$PATH
 
-[ -f "/home/christian/.ghcup/env" ] && source "/home/christian/.ghcup/env" # ghcup-env
+# [ -f "/home/christian/.ghcup/env" ] && source "/home/christian/.ghcup/env" # ghcup-env
