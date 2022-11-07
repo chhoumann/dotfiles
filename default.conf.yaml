@@ -1,45 +1,46 @@
 - defaults:
-    link:
-      relink: true
+      link:
+          relink: true
 
-- clean: ['~']
+- clean: ["~"]
 
 - link:
-    ~/.tmux.conf: 
-      force: true
-      path: tmux.conf
-    ~/.zshrc: 
-      force: true
-      path: zshrc
-    ~/.bashrc: 
-      force: true
-      path: bashrc
-    ~/.config/lazygit/config.yml:
-      path: config/lazygit/config.yml
-      create: true
-      relink: true
-      force: true
-    ~/.config/nvim:
-      path: config/nvim/
-      exclude: [ config/nvim/plugin ]
-      create: true
-      glob: true
-      relink: true
-    ~/.config/zathura:
-      path: config/zathura
-      create: true
-      glob: true
-      relink: true
-    ~/.config/mpv:
-      path: config/mpv
-      create: true
-      glob: true
-      relink: true
-
-
+      ~/.tmux.conf:
+          force: true
+          path: tmux.conf
+      ~/.zshrc:
+          force: true
+          path: zshrc
+      ~/.nirc:
+          force: true
+          path: nirc
+      ~/.bashrc:
+          force: true
+          path: bashrc
+      ~/.config/lazygit/config.yml:
+          path: config/lazygit/config.yml
+          create: true
+          relink: true
+          force: true
+      ~/.config/nvim:
+          path: config/nvim/
+          exclude: [config/nvim/plugin]
+          create: true
+          glob: true
+          relink: true
+      ~/.config/zathura:
+          path: config/zathura
+          create: true
+          glob: true
+          relink: true
+      ~/.config/mpv:
+          path: config/mpv
+          create: true
+          glob: true
+          relink: true
 # - create:
 #     - ~/downloads
 #     - ~/.vim/undo-history
 
 #- shell:
-  # - [git submodule update --init --recursive, Installing submodules]
+# - [git submodule update --init --recursive, Installing submodules]
