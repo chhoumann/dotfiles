@@ -140,6 +140,7 @@ alias llt="exa --oneline --tree --icons --git-ignore"
 alias ls="exa --icons --git"
 alias explorer="explorer.exe ."
 alias c="code"
+alias gdash="gh extension exec dash"
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
