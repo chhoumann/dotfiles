@@ -8,7 +8,7 @@ customCommands:
     context: "global"
     loadingText: "Creating pull request on GitHub"
   - key: "C"
-    command: "git cz c"
+    command: "git cz"
     description: "commit with commitizen"
     context: "files"
     loadingText: "opening commitizen commit tool"
