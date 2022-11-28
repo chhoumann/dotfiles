@@ -1,0 +1,210 @@
+{
+    "python.linting.pylintEnabled": true,
+    "editor.suggestSelection": "first",
+    "git.autofetch": true,
+    "editor.renderWhitespace": "none",
+    "editor.renderControlCharacters": false,
+    "eslint.validate": ["javascript", "vue"],
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "vim.handleKeys": {},
+    "python.languageServer": "Pylance",
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "workbench.editor.untitled.hint": "hidden",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    },
+    "files.associations": {
+        "*.mdx": "markdown"
+    },
+    "editor.inlineSuggest.enabled": true,
+    "github.copilot.enable": {
+        "*": true,
+        "yaml": false,
+        "plaintext": true,
+        "markdown": true,
+        "javascript": true,
+        "haskell": true,
+        "python": true
+    },
+    "editor.fontFamily": "Hack Nerd Font Mono",
+    "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+    "terminal.integrated.defaultProfile.windows": "C:\\Program Files\\PowerShell\\6\\pwsh.exe (migrated)",
+    "terminal.integrated.profiles.windows": {
+        "C:\\Program Files\\PowerShell\\6\\pwsh.exe (migrated)": {
+            "path": "C:\\Program Files\\PowerShell\\6\\pwsh.exe",
+            "args": []
+        }
+    },
+    "terminal.integrated.fontFamily": "CaskaydiaCove Nerd Font Mono",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.linkedEditing": true,
+    "editor.cursorBlinking": "phase",
+    "editor.cursorSmoothCaretAnimation": true,
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "python.formatting.provider": "black",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "editor.guides.indentation": false,
+    "workbench.colorTheme": "GitHub Dark",
+    "vim.easymotion": true,
+    "vim.highlightedyank.enable": true,
+    "vim.useSystemClipboard": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["j", "k"],
+            "after": ["<Esc>"]
+        }
+    ],
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "vsicons.dontShowNewVersionMessage": true,
+    "editor.formatOnSave": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": ["<leader>", "f"],
+            "commands": ["editor.action.formatDocument"],
+            "when": "editorTextFocus && vim.active && !inDebugRepl",
+            "silent": true
+        },
+        {
+            "before": ["<leader>", "o"],
+            "commands": ["workbench.action.quickOpen"],
+            "when": "editorTextFocus && vim.active && !inDebugRepl"
+        },
+        {
+            "before": [":"],
+            "commands": ["workbench.action.showCommands"],
+            "silent": true
+        },
+        {
+            "before": ["<leader>", "w"],
+            "commands": ["workbench.action.files.save"],
+            "silent": true
+        },
+        {
+            "before": ["<leader>", "c"],
+            "commands": ["workbench.action.closeActiveEditor"],
+            "silent": true
+        },
+        {
+            "before": ["<leader>", "h"],
+            "commands": ["workbench.action.splitEditor"],
+            "silent": true
+        },
+        {
+            "before": ["<leader>", "v"],
+            "commands": ["workbench.action.splitEditorOrthogonal"],
+            "silent": true
+        },
+        {
+            "before": ["L"],
+            "commands": ["workbench.action.focusRightGroup"],
+            "silent": true
+        },
+        {
+            "before": ["H"],
+            "commands": ["workbench.action.focusLeftGroup"],
+            "silent": true
+        },
+        {
+            "before": ["J"],
+            "commands": ["workbench.action.focusBelowGroup"],
+            "silent": true
+        },
+        {
+            "before": ["K"],
+            "commands": ["workbench.action.focusAboveGroup"],
+            "silent": true
+        },
+    ],
+    "vim.visualModeKeyBindings": [
+        // Paste over selected without losing paste register content
+        { "before": ["<leader>", "p"], "after": ["\"", "_", "d", "P"] }
+    ],
+    "files.autoSave": "afterDelay",
+    "workbench.iconTheme": "vscode-icons",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "eslint.format.enable": true,
+    "javascript.format.enable": false,
+    "haskell.manageHLS": "GHCup",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    },
+    "[lua]": {
+        "editor.defaultFormatter": "yinfei.luahelper"
+    },
+    "editor.multiCursorModifier": "ctrlCmd",
+    "[prisma]": {
+        "editor.defaultFormatter": "Prisma.prisma"
+    },
+    "prettier.tabWidth": 4,
+    "javascript.inlayHints.enumMemberValues.enabled": true,
+    "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "javascript.inlayHints.parameterNames.enabled": "all",
+    "javascript.inlayHints.parameterTypes.enabled": true,
+    "javascript.inlayHints.variableTypes.enabled": true,
+    "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "typescript.format.semicolons": "insert",
+    "typescript.inlayHints.enumMemberValues.enabled": true,
+    "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "typescript.inlayHints.parameterNames.enabled": "all",
+    "typescript.inlayHints.parameterTypes.enabled": true,
+    "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "typescript.inlayHints.variableTypes.enabled": true,
+    "vim.leader": "<space>",
+    "vim.smartRelativeLine": true,
+    "githubPullRequests.pullBranch": "never",
+    "window.zoomLevel": 1,
+    "haskell.formattingProvider": "brittany",
+    "[haskell]": {
+        "editor.defaultFormatter": "haskell.haskell"
+    },
+    "svelte.enable-ts-plugin": true,
+    "svelte.plugin.svelte.note-new-transformation": false,
+    "vitest.enable": true,
+    "latex-workshop.latex.autoBuild.run": "never",
+    "latex-workshop.latex.recipe.default": "tectonic",
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk 🔃",
+            "tools": ["latexmk"]
+        },
+        {
+            "name": "latexmk (latexmkrc)",
+            "tools": ["latexmk_rconly"]
+        },
+        {
+            "name": "latexmk (lualatex)",
+            "tools": ["lualatexmk"]
+        },
+        {
+            "name": "latexmk (xelatex)",
+            "tools": ["xelatexmk"]
+        },
+        {
+            "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
+            "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
+        },
+        {
+            "name": "Compile Rnw files",
+            "tools": ["rnw2tex", "latexmk"]
+        },
+        {
+            "name": "Compile Jnw files",
+            "tools": ["jnw2tex", "latexmk"]
+        },
+        {
+            "name": "tectonic",
+            "tools": ["tectonic"]
+        }
+    ]
+}
