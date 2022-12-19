@@ -189,3 +189,5 @@ export PNPM_HOME="/home/christian/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
 
+# to fix cudnn for wsl
+export LD_LIBRARY_PATH=/usr/lib/wsl/lib:$LD_LIBRARY_PATH
