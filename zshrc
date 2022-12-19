@@ -157,6 +157,14 @@ function init-video() {
 
 eval "$(starship init zsh)"
 
+# Run Docker Service: https://nickjanetakis.com/blog/install-docker-in-wsl-2-without-docker-desktop
+if grep -q "microsoft" /proc/version > /dev/null 2>&1; then
+    if service docker status 2>&1 | grep -q "is not running"; then
+        wsl.exe --distribution "${WSL_DISTRO_NAME}" --user root \
+            --exec /usr/sbin/service docker start > /dev/null 2>&1
+    fi
+fi
+
 # bun completions
 [ -s "/home/christian/.bun/_bun" ] && source "/home/christian/.bun/_bun"
 
@@ -180,3 +188,4 @@ export PATH=/home/christian/.local/bin:$PATH
 export PNPM_HOME="/home/christian/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
+
