@@ -1,15 +1,27 @@
 git:
-  paging:
-    colorArg: always
-    pager: delta --dark --paging=never
+    paging:
+        colorArg: always
+        pager: delta --dark --paging=never
 customCommands:
-  - key: "<c-r>"
-    command: "gh pr create --fill --web"
-    context: "global"
-    loadingText: "Creating pull request on GitHub"
-  - key: "C"
-    command: "git cz"
-    description: "commit with commitizen"
-    context: "files"
-    loadingText: "opening commitizen commit tool"
-    subprocess: true
+    - key: "<c-r>"
+      command: "gh pr create --fill --web"
+      context: "global"
+      loadingText: "Creating pull request on GitHub"
+    - key: "C"
+      command: "git cz"
+      description: "commit with commitizen"
+      context: "files"
+      loadingText: "opening commitizen commit tool"
+      subprocess: true
+    - key: "<c-C>"
+      description: "Add co-author"
+      context: "commits"
+      loadingText: "Adding co-author ..."
+      command: 'git commit --amend -m "$(git show -s --format=%s {{.SelectedLocalCommit.Sha}})" -m "$(git show -s --format=%b)" -m "Co-authored-by: {{index .PromptResponses 0}}"'
+      prompts:
+          - type: "menuFromCommand"
+            title: "Which co-author would you like to add?"
+            command: bash -c "git shortlog --summary --numbered --email --all . | cut -f2- | awk '{print $0}'"
+            filter: '(?P<name>.*)\s+(?P<email>.*)'
+            valueFormat: "{{ .name }} {{ .email }}"
+            labelFormat: "{{ .name | bold | cyan }} {{ .email }}"
