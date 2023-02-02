@@ -153,6 +153,11 @@ function init-video() {
   mkdir -p "$vid_root/Drafts"
 }
 
+# https://github.com/antonmedv/llama
+function cdl() {
+  cd "$(llama $@)"
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
