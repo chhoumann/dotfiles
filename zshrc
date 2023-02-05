@@ -158,6 +158,19 @@ function cdl() {
   cd "$(llama $@)"
 }
 
+# this is probably a bad idea
+function updateStuff() {
+  sudo apt update -y
+  sudo apt upgrade -y
+  sudo apt autoremove -y
+  sudo apt autoclean -y
+
+  cargo install-update -a
+
+  brew update
+  brew upgrade
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
