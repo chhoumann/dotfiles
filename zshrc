@@ -108,6 +108,12 @@ fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
 source $ZSH/oh-my-zsh.sh
 
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+eval "$(pyenv virtualenv-init -)"
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -142,7 +148,6 @@ alias explorer="explorer.exe ."
 alias c="code"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
-eval "$(github-copilot-cli alias -- "$0")"
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
@@ -216,3 +221,5 @@ PERL5LIB="/home/christian/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL
 PERL_LOCAL_LIB_ROOT="/home/christian/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/home/christian/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/home/christian/perl5"; export PERL_MM_OPT;
+
+eval "$(github-copilot-cli alias -- "$0")"
