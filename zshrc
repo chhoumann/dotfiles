@@ -1,8 +1,8 @@
 # Had an issue where I couldn't open a terminal on first open due to "open terminal failed: not a terminal"
 # https://github.com/romkatv/powerlevel10k/issues/1203
-if [ -z "$TMUX" ]; then
-  exec tmux new-session -A -s workspace
-fi
+#if [ -z "$TMUX" ]; then # going without tmux on mac
+  #exec tmux new-session -A -s workspace
+#fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -95,10 +95,10 @@ export NVM_DIR="$HOME/.nvm"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  zsh-z
+  z
   gh
   # rust
-  zsh-autosuggestions
+  # zsh-autosuggestions
   # zsh-syntax-highligting
   tmux
   docker
@@ -202,7 +202,7 @@ export DENO_INSTALL="/home/christian/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
 # homebrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # :)
 export PATH=/home/christian/.local/bin:$PATH
@@ -223,3 +223,7 @@ PERL_MB_OPT="--install_base \"/home/christian/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/home/christian/perl5"; export PERL_MM_OPT;
 
 eval "$(github-copilot-cli alias -- "$0")"
+
+# fnm
+export PATH="/Users/christian/Library/Application Support/fnm:$PATH"
+eval "`fnm env`"
