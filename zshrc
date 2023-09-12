@@ -160,6 +160,7 @@ alias explorer="explorer.exe ."
 alias c="code"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
+alias cat="bat"
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
