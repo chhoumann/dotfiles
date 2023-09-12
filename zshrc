@@ -252,3 +252,5 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+export MODULAR_HOME="/home/christian/.modular"
+export PATH="/home/christian/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
