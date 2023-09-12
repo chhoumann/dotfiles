@@ -142,9 +142,20 @@ eval "$(pyenv virtualenv-init -)"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias lg=lazygit
 alias fly=/home/christian/.fly/bin/flyctl
-alias ll="exa --long --group --icons --git --header"
-alias llt="exa --oneline --tree --icons --git-ignore"
-alias ls="exa --icons --git"
+
+if type eza >/dev/null 2>&1; then
+    alias ls="eza --icons --git"
+    alias l='eza -alg --color=always --group-directories-first --git'
+    alias ll='eza -aliSgh --color=always --group-directories-first --icons --header --long --git'
+    alias lt='eza -@alT --color=always --git'
+    alias llt="eza --oneline --tree --icons --git-ignore"
+    alias lr='eza -alg --sort=modified --color=always --group-directories-first --git'
+else
+    alias l='ls -alh --group-directories-first'
+    alias ll='ls -al --group-directories-first'
+    alias lr='ls -ltrh --group-directories-first'
+fi
+
 alias explorer="explorer.exe ."
 alias c="code"
 alias gdash="gh extension exec dash"
