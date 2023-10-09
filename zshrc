@@ -100,7 +100,7 @@ plugins=(
   gh
   # rust
   zsh-autosuggestions
-  # zsh-syntax-highligting
+  zsh-syntax-highlighting
   tmux
   docker
 )
