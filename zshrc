@@ -97,12 +97,12 @@ export NVM_DIR="$HOME/.nvm"
 plugins=(
   git
   zsh-z
-  gh
+  # gh
   # rust
   zsh-autosuggestions
-  zsh-syntax-highlighting
+  # zsh-syntax-highlighting  - very slow
   tmux
-  docker
+  # docker
 )
 
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
