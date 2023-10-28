@@ -1,7 +1,19 @@
 # Had an issue where I couldn't open a terminal on first open due to "open terminal failed: not a terminal"
 # https://github.com/romkatv/powerlevel10k/issues/1203
-if [ -z "$TMUX" ]; then
-  exec tmux new-session -A -s workspace
+# if [ -z "$TMUX" ]; then
+#   exec tmux new-session -A -s workspace
+# fi
+
+if [[ -z "$ZELLIJ" ]]; then
+    if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
+        zellij attach -c
+    else
+        zellij
+    fi
+
+    if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
+        exit
+    fi
 fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -101,7 +113,7 @@ plugins=(
   # rust
   zsh-autosuggestions
   # zsh-syntax-highlighting  - very slow
-  tmux
+  # tmux
   # docker
 )
 
