@@ -124,11 +124,14 @@
             "before": ["K"],
             "commands": ["workbench.action.focusAboveGroup"],
             "silent": true
-        },
+        }
     ],
     "vim.visualModeKeyBindings": [
         // Paste over selected without losing paste register content
-        { "before": ["<leader>", "p"], "after": ["\"", "_", "d", "P"] }
+        {
+            "before": ["<leader>", "p"],
+            "after": ["\"", "_", "d", "P"]
+        }
     ],
     "files.autoSave": "afterDelay",
     "workbench.iconTheme": "vscode-icons",
@@ -136,9 +139,6 @@
     "eslint.format.enable": true,
     "javascript.format.enable": false,
     "haskell.manageHLS": "GHCup",
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.python"
-    },
     "[lua]": {
         "editor.defaultFormatter": "yinfei.luahelper"
     },
@@ -206,5 +206,22 @@
             "name": "tectonic",
             "tools": ["tectonic"]
         }
-    ]
+    ],
+    "mypy.runUsingActiveInterpreter": true,
+    "isort.args": ["--profile", "black"],
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+            "source.fixAll": true
+        },
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [88],
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "black-formatter.args": ["--line-length", "88"],
+    "pylint.args": ["--disable=C0111"],
+    "flake8.args": ["--max-line-length=88"],
+    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.autoSearchPaths": true
 }
