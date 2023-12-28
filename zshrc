@@ -17,6 +17,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export PATH="$PATH:/usr/local/bin/python"
+export QUARTO_PYTHON=/home/christian/.pyenv/shims/python
 
 # eval "$(fnm env --use-on-cd)" # --use-on-cd automatically runs fnm use when you cd into a directory with a .node-version file
 
@@ -95,13 +96,13 @@ export NVM_DIR="$HOME/.nvm"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  z
-  gh
+  zsh-z
+  # gh
   # rust
-  # zsh-autosuggestions
-  # zsh-syntax-highligting
-  tmux
-  docker
+  zsh-autosuggestions
+  # zsh-syntax-highlighting  - very slow
+  # tmux
+  # docker
 )
 
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
@@ -141,13 +142,25 @@ eval "$(pyenv virtualenv-init -)"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias lg=lazygit
 alias fly=/home/christian/.fly/bin/flyctl
-alias ll="exa --long --group --icons --git --header"
-alias llt="exa --oneline --tree --icons --git-ignore"
-alias ls="exa --icons --git"
+
+if type eza >/dev/null 2>&1; then
+    alias ls="eza --icons --git"
+    alias l='eza -alg --color=always --group-directories-first --git'
+    alias ll='eza -aliSgh --color=always --group-directories-first --icons --header --long --git'
+    alias lt='eza -@alT --color=always --git'
+    alias llt="eza --oneline --tree --icons --git-ignore"
+    alias lr='eza -alg --sort=modified --color=always --group-directories-first --git'
+else
+    alias l='ls -alh --group-directories-first'
+    alias ll='ls -al --group-directories-first'
+    alias lr='ls -ltrh --group-directories-first'
+fi
+
 alias explorer="explorer.exe ."
 alias c="code"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
+alias cat="bat"
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
@@ -223,7 +236,3 @@ PERL_MB_OPT="--install_base \"/home/christian/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/home/christian/perl5"; export PERL_MM_OPT;
 
 eval "$(github-copilot-cli alias -- "$0")"
-
-# fnm
-export PATH="/Users/christian/Library/Application Support/fnm:$PATH"
-eval "`fnm env`"
