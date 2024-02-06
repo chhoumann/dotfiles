@@ -236,7 +236,10 @@ export PATH=/home/christian/.local/bin:$PATH
 
 # pnpm
 export PNPM_HOME="/home/christian/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
 # pnpm end
 
 # to fix cudnn for wsl
