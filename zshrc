@@ -184,9 +184,9 @@ function init-video() {
   mkdir -p "$vid_root/Drafts"
 }
 
-# https://github.com/antonmedv/llama
+# https://github.com/antonmedv/walk
 function cdl() {
-  cd "$(llama $@)"
+  cd "$(walk $@)"
 }
 
 # this is probably a bad idea
