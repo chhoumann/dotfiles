@@ -1,10 +1,12 @@
 {
-    "python.linting.pylintEnabled": true,
     "editor.suggestSelection": "first",
     "git.autofetch": true,
     "editor.renderWhitespace": "none",
     "editor.renderControlCharacters": false,
-    "eslint.validate": ["javascript", "vue"],
+    "eslint.validate": [
+        "javascript",
+        "vue"
+    ],
     "editor.formatOnPaste": true,
     "editor.formatOnType": true,
     "vim.handleKeys": {},
@@ -15,7 +17,6 @@
         "**/.settings": true,
         "**/.factorypath": true
     },
-    "workbench.editor.untitled.hint": "hidden",
     "workbench.editorAssociations": {
         "*.ipynb": "jupyter-notebook"
     },
@@ -24,17 +25,22 @@
     },
     "editor.inlineSuggest.enabled": true,
     "github.copilot.enable": {
+        "quarto": false,
         "*": true,
-        "yaml": false,
         "plaintext": true,
         "markdown": true,
+        "scminput": false,
+        "yaml": false,
         "javascript": true,
-        "haskell": true,
-        "python": true
+        "haskell": false,
+        "python": true,
+        "typescript": true,
+        "cpp": true,
+        "typescriptreact": true
     },
     "editor.fontFamily": "Hack Nerd Font Mono",
     "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
-    "terminal.integrated.defaultProfile.windows": "C:\\Program Files\\PowerShell\\6\\pwsh.exe (migrated)",
+    "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
     "terminal.integrated.profiles.windows": {
         "C:\\Program Files\\PowerShell\\6\\pwsh.exe (migrated)": {
             "path": "C:\\Program Files\\PowerShell\\6\\pwsh.exe",
@@ -42,17 +48,15 @@
         }
     },
     "terminal.integrated.fontFamily": "CaskaydiaCove Nerd Font Mono",
-    "diffEditor.ignoreTrimWhitespace": false,
     "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "biomejs.biome"
     },
     "editor.linkedEditing": true,
     "editor.cursorBlinking": "phase",
-    "editor.cursorSmoothCaretAnimation": true,
+    "editor.cursorSmoothCaretAnimation": "on",
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "python.formatting.provider": "black",
     "typescript.updateImportsOnFileMove.enabled": "always",
     "editor.guides.indentation": false,
     "workbench.colorTheme": "GitHub Dark",
@@ -61,8 +65,13 @@
     "vim.useSystemClipboard": true,
     "vim.insertModeKeyBindings": [
         {
-            "before": ["j", "k"],
-            "after": ["<Esc>"]
+            "before": [
+                "j",
+                "k"
+            ],
+            "after": [
+                "<Esc>"
+            ]
         }
     ],
     "javascript.updateImportsOnFileMove.enabled": "always",
@@ -70,67 +79,144 @@
     "editor.formatOnSave": true,
     "vim.normalModeKeyBindingsNonRecursive": [
         {
-            "before": ["<leader>", "f"],
-            "commands": ["editor.action.formatDocument"],
+            "before": [
+                "<leader>",
+                "f"
+            ],
+            "commands": [
+                "editor.action.formatDocument"
+            ],
             "when": "editorTextFocus && vim.active && !inDebugRepl",
             "silent": true
         },
         {
-            "before": ["<leader>", "o"],
-            "commands": ["workbench.action.quickOpen"],
+            "before": [
+                "<leader>",
+                "o"
+            ],
+            "commands": [
+                "workbench.action.quickOpen"
+            ],
             "when": "editorTextFocus && vim.active && !inDebugRepl"
         },
         {
-            "before": [":"],
-            "commands": ["workbench.action.showCommands"],
+            "before": [
+                "<leader>",
+                "q"
+            ],
+            "commands": [
+                "workbench.action.showCommands"
+            ],
             "silent": true
         },
         {
-            "before": ["<leader>", "w"],
-            "commands": ["workbench.action.files.save"],
+            "before": [
+                "<leader>",
+                "w"
+            ],
+            "commands": [
+                "workbench.action.files.save"
+            ],
             "silent": true
         },
         {
-            "before": ["<leader>", "c"],
-            "commands": ["workbench.action.closeActiveEditor"],
+            "before": [
+                "<leader>",
+                "c"
+            ],
+            "commands": [
+                "workbench.action.closeActiveEditor"
+            ],
             "silent": true
         },
         {
-            "before": ["<leader>", "h"],
-            "commands": ["workbench.action.splitEditor"],
+            "before": [
+                "<leader>",
+                "h"
+            ],
+            "commands": [
+                "workbench.action.splitEditor"
+            ],
             "silent": true
         },
         {
-            "before": ["<leader>", "v"],
-            "commands": ["workbench.action.splitEditorOrthogonal"],
+            "before": [
+                "<leader>",
+                "v"
+            ],
+            "commands": [
+                "workbench.action.splitEditorOrthogonal"
+            ],
             "silent": true
         },
         {
-            "before": ["L"],
-            "commands": ["workbench.action.focusRightGroup"],
+            "before": [
+                "L"
+            ],
+            "commands": [
+                "workbench.action.focusRightGroup"
+            ],
             "silent": true
         },
         {
-            "before": ["H"],
-            "commands": ["workbench.action.focusLeftGroup"],
+            "before": [
+                "H"
+            ],
+            "commands": [
+                "workbench.action.focusLeftGroup"
+            ],
             "silent": true
         },
         {
-            "before": ["J"],
-            "commands": ["workbench.action.focusBelowGroup"],
+            "before": [
+                "J"
+            ],
+            "commands": [
+                "workbench.action.focusBelowGroup"
+            ],
             "silent": true
         },
         {
-            "before": ["K"],
-            "commands": ["workbench.action.focusAboveGroup"],
+            "before": [
+                "K"
+            ],
+            "commands": [
+                "workbench.action.focusAboveGroup"
+            ],
+            "silent": true
+        },
+        {
+            "before": [
+                "<C-h>"
+            ],
+            "commands": [
+                "workbench.action.previousEditor"
+            ],
+            "silent": true
+        },
+        {
+            "before": [
+                "<C-l>"
+            ],
+            "commands": [
+                "workbench.action.nextEditor"
+            ],
             "silent": true
         }
     ],
     "vim.visualModeKeyBindings": [
         // Paste over selected without losing paste register content
         {
-            "before": ["<leader>", "p"],
-            "after": ["\"", "_", "d", "P"]
+            "before": [
+                "<leader>",
+                "p"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "d",
+                "P"
+            ]
         }
     ],
     "files.autoSave": "afterDelay",
@@ -142,7 +228,6 @@
     "[lua]": {
         "editor.defaultFormatter": "yinfei.luahelper"
     },
-    "editor.multiCursorModifier": "ctrlCmd",
     "[prisma]": {
         "editor.defaultFormatter": "Prisma.prisma"
     },
@@ -163,7 +248,6 @@
     "vim.leader": "<space>",
     "vim.smartRelativeLine": true,
     "githubPullRequests.pullBranch": "never",
-    "window.zoomLevel": 1,
     "haskell.formattingProvider": "brittany",
     "[haskell]": {
         "editor.defaultFormatter": "haskell.haskell"
@@ -176,52 +260,148 @@
     "latex-workshop.latex.recipes": [
         {
             "name": "latexmk 🔃",
-            "tools": ["latexmk"]
+            "tools": [
+                "latexmk"
+            ]
         },
         {
             "name": "latexmk (latexmkrc)",
-            "tools": ["latexmk_rconly"]
+            "tools": [
+                "latexmk_rconly"
+            ]
         },
         {
             "name": "latexmk (lualatex)",
-            "tools": ["lualatexmk"]
+            "tools": [
+                "lualatexmk"
+            ]
         },
         {
             "name": "latexmk (xelatex)",
-            "tools": ["xelatexmk"]
+            "tools": [
+                "xelatexmk"
+            ]
         },
         {
             "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
-            "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
         },
         {
             "name": "Compile Rnw files",
-            "tools": ["rnw2tex", "latexmk"]
+            "tools": [
+                "rnw2tex",
+                "latexmk"
+            ]
         },
         {
             "name": "Compile Jnw files",
-            "tools": ["jnw2tex", "latexmk"]
+            "tools": [
+                "jnw2tex",
+                "latexmk"
+            ]
         },
         {
             "name": "tectonic",
-            "tools": ["tectonic"]
+            "tools": [
+                "tectonic"
+            ]
         }
     ],
-    "mypy.runUsingActiveInterpreter": true,
-    "isort.args": ["--profile", "black"],
+    "editor.accessibilitySupport": "off",
+    "task.allowAutomaticTasks": "on",
+    "editor.multiCursorModifier": "ctrlCmd",
+    "codeium.enableConfig": {
+        "*": true
+    },
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml"
+    },
+    "workbench.sideBar.location": "right",
+    "cmake.configureOnOpen": true,
+    "latex-workshop.linting.chktex.exec.path": "",
+    "latex-workshop.linting.chktex.convertOutput.column.enabled": false,
+    "latex.linter.enabled": false,
+    "chatgpt.method": "Browser Auto-login",
+    "[svelte]": {
+        "editor.defaultFormatter": "svelte.svelte-vscode"
+    },
+    "editor.cursorSurroundingLines": 10,
+    "[typescript]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "errorLens.enabled": false,
+    "C_Cpp.default.cppStandard": "c++23",
+    "terminal.integrated.env.windows": {},
+    "terminal.integrated.env.linux": {},
+    "editor.inlineSuggest.showToolbar": "always",
+    "redhat.telemetry.enabled": true,
+    "editor.stickyScroll.enabled": true,
+    "[bibtex]": {
+        "editor.defaultFormatter": "James-Yu.latex-workshop"
+    },
+    "console-ninja.showWhatsNew": false,
+    "vim.commandLineModeKeyBindings": [],
+    "vim.commandLineModeKeyBindingsNonRecursive": [],
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "[shellscript]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "quarto.render.renderOnSave": true,
+    "console-ninja.featureSet": "Community",
+    "workbench.editor.empty.hint": "hidden",
+    "typeChallenges.workspaceFolder": "/home/christian/.typeChallenges",
+    "window.zoomLevel": 1,
+    "remote.SSH.path": "C:\\Users\\chhou\\.ssh\\wsl_ssh.bat",
+    "remote.SSH.remotePlatform": {
+        "p9": "linux"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[dotenv]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "isort.args": [
+        "--profile",
+        "black"
+    ],
     "[python]": {
         "editor.codeActionsOnSave": {
-            "source.organizeImports": true,
-            "source.fixAll": true
+            "source.organizeImports": "explicit",
+            "source.fixAll": "explicit"
         },
         "editor.formatOnSave": true,
         "editor.formatOnType": true,
-        "editor.rulers": [88],
-        "editor.defaultFormatter": "ms-python.black-formatter"
+        "editor.rulers": [
+            120
+        ],
+        "editor.defaultFormatter": "ms-python.black-formatter",
     },
-    "black-formatter.args": ["--line-length", "88"],
-    "pylint.args": ["--disable=C0111"],
-    "flake8.args": ["--max-line-length=88"],
-    "python.analysis.typeCheckingMode": "strict",
-    "python.analysis.autoSearchPaths": true
+    "black-formatter.args": [
+        "--line-length=120",
+    ],
+    "flake8.args": [
+        "--max-line-length=120",
+        "--extend-ignore=E203"
+    ],
+    "python.analysis.autoSearchPaths": true,
+    "workbench.activityBar.location": "top",
+    "remote.autoForwardPortsSource": "hybrid",
+    "githubPullRequests.fileListLayout": "flat",
+    "python.analysis.autoFormatStrings": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.inlayHints.pytestParameters": true,
+    "python.analysis.inlayHints.callArgumentNames": "partial",
+    "python.analysis.typeCheckingMode": "basic",
 }

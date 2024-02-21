@@ -161,6 +161,8 @@ alias c="code"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
 alias cat="bat"
+alias py="python -m pdb -c c"
+alias pcl="gh pr list | fzf --preview 'gh pr view \{1\}' | awk '{ print \$1 }' | xargs gh pr checkout"
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
@@ -172,9 +174,9 @@ function init-video() {
   mkdir -p "$vid_root/Drafts"
 }
 
-# https://github.com/antonmedv/llama
+# https://github.com/antonmedv/walk
 function cdl() {
-  cd "$(llama $@)"
+  cd "$(walk $@)"
 }
 
 # this is probably a bad idea
@@ -224,7 +226,10 @@ export PATH=/home/christian/.local/bin:$PATH
 
 # pnpm
 export PNPM_HOME="/home/christian/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
 # pnpm end
 
 # to fix cudnn for wsl

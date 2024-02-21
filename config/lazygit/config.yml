@@ -14,6 +14,19 @@ customCommands:
       context: "files"
       loadingText: "opening commitizen commit tool"
       subprocess: true
+    - key: "<c-a>" # ctrl + a
+      description: "Pick AI commit"
+      command: 'echo "{{.Form.Msg}}" > .git/COMMIT_EDITMSG && vim .git/COMMIT_EDITMSG && [ -s .git/COMMIT_EDITMSG ] && git commit -F .git/COMMIT_EDITMSG || echo "Commit message is empty, commit aborted."'
+      context: "files"
+      subprocess: true
+      prompts:
+          - type: "menuFromCommand"
+            title: "AI Commits"
+            key: "Msg"
+            command: "bunnai"
+            filter: '^(?P<number>\d+)\.\s(?P<message>.+)$'
+            valueFormat: "{{ .message }}"
+            labelFormat: "{{ .number }}: {{ .message | green }}"
     - key: "<c-C>"
       description: "Add co-author"
       context: "commits"
