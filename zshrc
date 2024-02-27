@@ -191,7 +191,7 @@ function init-video() {
 
 # https://github.com/antonmedv/walk
 function cdl() {
-  cd "$(walk $@)"
+  cd "$(walk --icons $@)"
 }
 
 # this is probably a bad idea
