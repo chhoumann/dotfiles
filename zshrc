@@ -129,6 +129,7 @@ eval "$(pyenv init -)"
 
 eval "$(pyenv virtualenv-init -)"
 
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -256,8 +257,6 @@ PERL5LIB="/home/christian/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL
 PERL_LOCAL_LIB_ROOT="/home/christian/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/home/christian/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/home/christian/perl5"; export PERL_MM_OPT;
-
-eval "$(github-copilot-cli alias -- "$0")"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
