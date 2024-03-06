@@ -1,8 +1,20 @@
 # Had an issue where I couldn't open a terminal on first open due to "open terminal failed: not a terminal"
 # https://github.com/romkatv/powerlevel10k/issues/1203
-#if [ -z "$TMUX" ]; then # going without tmux on mac
-  #exec tmux new-session -A -s workspace
-#fi
+# if [ -z "$TMUX" ]; then
+#   exec tmux new-session -A -s workspace
+# fi
+
+if [[ -z "$ZELLIJ" ]]; then
+    if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
+        zellij attach -c
+    else
+        zellij
+    fi
+
+    if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
+        exit
+    fi
+fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -115,6 +127,7 @@ eval "$(pyenv init -)"
 
 eval "$(pyenv virtualenv-init -)"
 
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -162,7 +175,10 @@ alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
 alias cat="bat"
 alias py="python -m pdb -c c"
-alias pcl="gh pr list | fzf --preview 'gh pr view \{1\}' | awk '{ print \$1 }' | xargs gh pr checkout"
+alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
+
+# Code workspaces
+alias cm="code ~/masters.code-workspace"
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
@@ -176,7 +192,7 @@ function init-video() {
 
 # https://github.com/antonmedv/walk
 function cdl() {
-  cd "$(walk $@)"
+  cd "$(walk --icons $@)"
 }
 
 # this is probably a bad idea
@@ -240,4 +256,21 @@ PERL_LOCAL_LIB_ROOT="/home/christian/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_L
 PERL_MB_OPT="--install_base \"/home/christian/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/home/christian/perl5"; export PERL_MM_OPT;
 
-eval "$(github-copilot-cli alias -- "$0")"
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/christian/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/christian/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/christian/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/christian/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+export MODULAR_HOME="/home/christian/.modular"
+export PATH="/home/christian/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
+source "$HOME/.rye/env"
