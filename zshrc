@@ -197,14 +197,14 @@ if grep -q "microsoft" /proc/version > /dev/null 2>&1; then
 fi
 
 # bun completions
-[ -s "/home/christian/.bun/_bun" ] && source "/home/christian/.bun/_bun"
+[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # deno
-export DENO_INSTALL="/home/christian/.deno"
+export DENO_INSTALL="~/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
 # homebrew
