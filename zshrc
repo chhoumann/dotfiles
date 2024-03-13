@@ -110,6 +110,7 @@ export NVM_DIR="$HOME/.nvm"
 plugins=(
   git
   zsh-z
+  rye
   # gh
   # rust
   zsh-autosuggestions
@@ -122,11 +123,12 @@ fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
 source $ZSH/oh-my-zsh.sh
 
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# Use Rye instead
+## export PYENV_ROOT="$HOME/.pyenv"
+## command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+## eval "$(pyenv init -)"
+## eval "$(pyenv virtualenv-init -)"
 
-eval "$(pyenv virtualenv-init -)"
 
 
 # User configuration
