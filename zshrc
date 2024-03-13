@@ -46,17 +46,10 @@ export NVM_DIR="$HOME/.nvm"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  zsh-z
-  rye
-  # gh
-  # rust
-  zsh-autosuggestions
-  # zsh-syntax-highlighting  - very slow
-  # tmux
-  # docker
-)
+# if not using warp:
+if [ "$TERM_PROGRAM" != "WarpTerminal" ]; then
+  plugins=(git zsh-z rye zsh-autosuggestions)
+fi
 
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
