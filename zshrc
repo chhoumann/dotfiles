@@ -132,7 +132,7 @@ source $ZSH/oh-my-zsh.sh
 
 # --- Aliases ---
 alias lg=lazygit
-alias fly=/home/christian/.fly/bin/flyctl
+alias fly=~/.fly/bin/flyctl
 
 if type eza >/dev/null 2>&1; then
     alias ls="eza --icons --git"
@@ -211,12 +211,12 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # :)
-export PATH=/home/christian/.local/bin:$PATH
+export PATH=~/.local/bin:$PATH
 
- [ -f "/home/christian/.ghcup/env" ] && source "/home/christian/.ghcup/env" # ghcup-env
+ [ -f "~/.ghcup/env" ] && source "/home/christian/.ghcup/env" # ghcup-env
 
 # pnpm
-export PNPM_HOME="/home/christian/.local/share/pnpm"
+export PNPM_HOME="~/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -229,27 +229,27 @@ export PATH=/usr/local/cuda-12/bin${PATH:+:${PATH}}
 export LD_LIBRARY_PATH=/usr/local/cuda-12/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
 
-PATH="/home/christian/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/home/christian/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/christian/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/christian/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/christian/perl5"; export PERL_MM_OPT;
+PATH="~/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="~/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="~/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"~/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=~/perl5"; export PERL_MM_OPT;
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/christian/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('~/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/christian/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/christian/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "~/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "~/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/christian/anaconda3/bin:$PATH"
+        export PATH="~/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-export MODULAR_HOME="/home/christian/.modular"
-export PATH="/home/christian/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
+export MODULAR_HOME="~/.modular"
+export PATH="~/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 source "$HOME/.rye/env"
