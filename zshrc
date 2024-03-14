@@ -185,3 +185,4 @@ unset __conda_setup
 export MODULAR_HOME="~/.modular"
 export PATH="~/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 source "$HOME/.rye/env"
+eval "$(zoxide init zsh)"
