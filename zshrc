@@ -4,7 +4,13 @@
 #   exec tmux new-session -A -s workspace
 # fi
 
-if [ "$TERM_PROGRAM" != "WarpTerminal" ]; then
+export IS_VSCODE=false
+
+if [[ $(printenv | grep -c "VSCODE_") -gt 0 ]]; then
+    export IS_VSCODE=true
+fi
+
+if [ "$TERM_PROGRAM" != "WarpTerminal" ] && [ "$IS_VSCODE" = false ]; then
   if [[ -z "$ZELLIJ" ]]; then
       if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
           zellij attach -c
