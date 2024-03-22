@@ -21,12 +21,13 @@
         "*.ipynb": "jupyter-notebook"
     },
     "files.associations": {
-        "*.mdx": "markdown"
+        "*.mdx": "markdown",
+        "*.tmpl": "html"
     },
     "editor.inlineSuggest.enabled": true,
     "github.copilot.enable": {
         "quarto": false,
-        "*": true,
+        "*": false,
         "plaintext": true,
         "markdown": true,
         "scminput": false,
@@ -364,7 +365,7 @@
     "window.zoomLevel": 1,
     "remote.SSH.path": "C:\\Users\\chhou\\.ssh\\wsl_ssh.bat",
     "remote.SSH.remotePlatform": {
-        "p9": "linux"
+        "p9": "linux",
     },
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
@@ -386,17 +387,16 @@
         "editor.rulers": [
             120
         ],
-        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.defaultFormatter": "ms-python.black-formatter"
     },
     "black-formatter.args": [
-        "--line-length=120",
+        "--line-length=120"
     ],
     "flake8.args": [
         "--max-line-length=120",
         "--extend-ignore=E203"
     ],
     "python.analysis.autoSearchPaths": true,
-    "workbench.activityBar.location": "top",
     "remote.autoForwardPortsSource": "hybrid",
     "githubPullRequests.fileListLayout": "flat",
     "python.analysis.autoFormatStrings": true,
@@ -404,4 +404,21 @@
     "python.analysis.inlayHints.pytestParameters": true,
     "python.analysis.inlayHints.callArgumentNames": "partial",
     "python.analysis.typeCheckingMode": "basic",
+    "[quarto]": {
+        "editor.defaultFormatter": "quarto.quarto"
+    },
+    "[go]": {
+        "editor.defaultFormatter": "golang.go"
+    },
+    "[gotmpl]": {
+        "editor.defaultFormatter": "golang.go"
+    },
+    "notebook.lineNumbers": "on",
+    "go.toolsManagement.autoUpdate": true,
+    "cursor.cpp.disabledLanguages": [
+        "quarto",
+        "scminput",
+        "yaml",
+        "haskell"
+    ]
 }
