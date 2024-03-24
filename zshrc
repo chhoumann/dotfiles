@@ -123,6 +123,7 @@ function updateStuff() {
 
   brew update
   brew upgrade
+  brew cleanup
 }
 
 eval "$(starship init zsh)"
