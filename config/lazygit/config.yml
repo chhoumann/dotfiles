@@ -1,3 +1,6 @@
+gui:
+  showFileIcons: true
+  nerdFontsVersion: "3"
 git:
     paging:
         # colorArg: always
