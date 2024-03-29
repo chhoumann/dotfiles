@@ -86,7 +86,7 @@ else
     alias lr='ls -ltrh --group-directories-first'
 fi
 
-alias explorer="explorer.exe ."
+alias e="explorer.exe"
 alias c="code"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
