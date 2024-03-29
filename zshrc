@@ -112,6 +112,16 @@ function cdl() {
   cd "$(walk --icons $@)"
 }
 
+# https://github.com/sxyazi/yazi
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
 # this is probably a bad idea
 function updateStuff() {
   sudo apt update -y
