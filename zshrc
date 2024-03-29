@@ -122,20 +122,6 @@ function yy() {
 	rm -f -- "$tmp"
 }
 
-# this is probably a bad idea
-function updateStuff() {
-  sudo apt update -y
-  sudo apt upgrade -y
-  sudo apt autoremove -y
-  sudo apt autoclean -y
-
-  cargo install-update -a
-
-  brew update
-  brew upgrade
-  brew cleanup
-}
-
 eval "$(starship init zsh)"
 
 # Run Docker Service: https://nickjanetakis.com/blog/install-docker-in-wsl-2-without-docker-desktop
