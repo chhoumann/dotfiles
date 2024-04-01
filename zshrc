@@ -88,6 +88,7 @@ fi
 
 alias e="explorer.exe"
 alias c="code"
+alias cs="cursor"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
 alias cat="bat"
