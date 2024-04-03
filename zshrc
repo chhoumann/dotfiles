@@ -86,8 +86,9 @@ else
     alias lr='ls -ltrh'
 fi
 
-alias explorer="explorer.exe ."
+alias e="explorer.exe"
 alias c="code"
+alias cs="cursor"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
 alias cat="bat"
@@ -112,18 +113,14 @@ function cdl() {
   cd "$(walk --icons $@)"
 }
 
-# this is probably a bad idea
-function updateStuff() {
-  sudo apt update -y
-  sudo apt upgrade -y
-  sudo apt autoremove -y
-  sudo apt autoclean -y
-
-  cargo install-update -a
-
-  brew update
-  brew upgrade
-  brew cleanup
+# https://github.com/sxyazi/yazi
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
 }
 
 eval "$(starship init zsh)"
