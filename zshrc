@@ -12,14 +12,15 @@ fi
 
 if [ "$TERM_PROGRAM" != "WarpTerminal" ] && [ "$IS_VSCODE" = false ]; then
     if [[ "$(uname -s)" != "Darwin" ]] && [[ -z "$ZELLIJ" ]]; then
-      if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-          zellij attach -c
-      else
-          zellij
-      fi
+        if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
+            zellij attach -c
+        else
+            zellij
+        fi
 
-    if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
-        exit
+        if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
+            exit
+        fi
     fi
 fi
 
@@ -80,9 +81,9 @@ if type eza >/dev/null 2>&1; then
     alias llt="eza --oneline --tree --icons --git-ignore"
     alias lr='eza -alg --sort=modified --color=always --group-directories-first --git'
 else
-    alias l='ls -alh --group-directories-first'
-    alias ll='ls -al --group-directories-first'
-    alias lr='ls -ltrh --group-directories-first'
+    alias l='ls -alh'
+    alias ll='ls -alh'
+    alias lr='ls -ltrh'
 fi
 
 alias explorer="explorer.exe ."
@@ -141,6 +142,9 @@ fi
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# cargo
+export PATH="$HOME/.cargo/bin:$PATH"
 
 # deno
 export DENO_INSTALL="~/.deno"
