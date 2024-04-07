@@ -5,7 +5,7 @@ git:
     paging:
         # colorArg: always
         # pager: delta --dark --paging=never -s
-        externalDiffCommand: difft --color=always --syntax-highlight=on --display=inline
+        externalDiffCommand: difft --color=always --syntax-highlight=on 
 customCommands:
     - key: "<c-r>"
       command: "gh pr create --fill --web"
