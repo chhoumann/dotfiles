@@ -37,7 +37,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export PATH="$PATH:/usr/local/bin/python"
-export EDITOR="code --wait"
+export EDITOR="code"
 
 # eval "$(fnm env --use-on-cd)" # --use-on-cd automatically runs fnm use when you cd into a directory with a .node-version file
 
@@ -84,6 +84,10 @@ else
     alias l='ls -alh'
     alias ll='ls -alh'
     alias lr='ls -ltrh'
+fi
+
+if type fd >/dev/null 2>&1; then
+    alias find="fd"
 fi
 
 alias e="explorer.exe"
