@@ -1,6 +1,6 @@
 ; Run Terminal on Win+T
 #t::
-    If WinExist("ahk_exe wt.exe")
+    If WinExist("ahk_exe WindowsTerminal.exe")
         WinActivate
     else
         Run,"%LocalAppData%\Microsoft\WindowsApps\wt.exe"
