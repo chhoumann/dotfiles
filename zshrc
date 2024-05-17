@@ -34,6 +34,9 @@ fi
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+export PATH=$HOME/go/bin:$PATH
+
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export PATH="$PATH:/usr/local/bin/python"
@@ -55,7 +58,7 @@ export NVM_DIR="$HOME/.nvm"
 # Add wisely, as too many plugins slow down shell startup.
 # if not using warp:
 if [ "$TERM_PROGRAM" != "WarpTerminal" ]; then
-  plugins=(git zsh-z rye zsh-autosuggestions)
+  plugins=(git zsh-z rye zsh-autosuggestions zsh-completions zsh-syntax-highlighting)
 fi
 
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
@@ -67,6 +70,32 @@ source $ZSH/oh-my-zsh.sh
 ## command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 ## eval "$(pyenv init -)"
 ## eval "$(pyenv virtualenv-init -)"
+
+
+# https://www.youtube.com/watch?v=ud7YxC33Z3w | "This Zsh config is perhaps my favorite one yet."
+## -- Keybinds ---
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
+
+## -- History --
+HISTSIZE=5000
+HISTFILE=~/.zsh_history
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+# -- Completion styling --
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 
 # --- Aliases ---
@@ -195,4 +224,7 @@ unset __conda_setup
 export MODULAR_HOME="~/.modular"
 export PATH="~/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 source "$HOME/.rye/env"
+
+## -- Shell Integrations --
 eval "$(zoxide init zsh)"
+eval "$(fzf --zsh)"
