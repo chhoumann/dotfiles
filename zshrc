@@ -62,6 +62,9 @@ zinit cdreplay -q
 ## -- Keybinds ---
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
+# moving between words with CTRL+left and CTRL+right
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;5D' backward-word
 
 ## -- History --
 HISTSIZE=5000
@@ -213,5 +216,5 @@ unset __conda_setup
 source "$HOME/.rye/env"
 
 ## -- Shell Integrations --
-eval "$(zoxide init zsh)"
 eval "$(fzf --zsh)"
+eval "$(zoxide init zsh)"
