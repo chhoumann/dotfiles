@@ -18,7 +18,8 @@
         "**/.factorypath": true
     },
     "workbench.editorAssociations": {
-        "*.ipynb": "jupyter-notebook"
+        "*.ipynb": "jupyter-notebook",
+        "file:/**/*.csv": "jupyter-data-wrangler"
     },
     "files.associations": {
         "*.mdx": "markdown",
@@ -27,7 +28,7 @@
     "editor.inlineSuggest.enabled": true,
     "github.copilot.enable": {
         "quarto": false,
-        "*": false,
+        "*": true,
         "plaintext": true,
         "markdown": true,
         "scminput": false,
@@ -387,7 +388,7 @@
         "editor.rulers": [
             120
         ],
-        "editor.defaultFormatter": "ms-python.black-formatter"
+        "editor.defaultFormatter": "charliermarsh.ruff"
     },
     "black-formatter.args": [
         "--line-length=120"
@@ -413,12 +414,42 @@
     "[gotmpl]": {
         "editor.defaultFormatter": "golang.go"
     },
-    "notebook.lineNumbers": "on",
     "go.toolsManagement.autoUpdate": true,
     "cursor.cpp.disabledLanguages": [
         "quarto",
         "scminput",
         "yaml",
         "haskell"
-    ]
+    ],
+    "notebook.lineNumbers": "on",
+    "luahelper.format.chop_down_kv_table": false,
+    "grammarly.files.include": [
+        "**/readme.md",
+        "**/README.md",
+        "**/*.txt",
+        "**/*.tex"
+    ],
+    "github.copilot.editor.enableAutoCompletions": true,
+    "[javascript]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "jupyter.interactiveWindow.textEditor.executeSelection": true,
+    "cursor.cpp.enablePartialAccepts": true,
+    "[astro]": {
+        "editor.defaultFormatter": "astro-build.astro-vscode"
+    },
+    "leetcode.defaultLanguage": "python3",
+    "leetcode.useWsl": true,
+    "leetcode.workspaceFolder": "~/projects/Programming-Practice/Exercise Sites/LeetCode",
+    "extensions.ignoreRecommendations": true,
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "zls.path": "/home/christian/projects/zls/zig-out/bin/zls",
+    "[zig]": {
+        "editor.defaultFormatter": "AugusteRame.zls-vscode"
+    },
+    "zig.buildOnSave": true,
+    "zls.zig_exe_path": "/usr/local/zig/zig",
+    "zig.zigPath": "/usr/local/zig/zig"
 }
