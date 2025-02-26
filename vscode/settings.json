@@ -15,7 +15,8 @@
         "**/.factorypath": true
     },
     "workbench.editorAssociations": {
-        "*.ipynb": "jupyter-notebook"
+        "*.ipynb": "jupyter-notebook",
+        "file:/**/*.csv": "jupyter-data-wrangler"
     },
     "files.associations": {
         "*.mdx": "markdown",
@@ -23,6 +24,7 @@
     },
     "editor.inlineSuggest.enabled": true,
     "github.copilot.enable": {
+        "quarto": false,
         "*": true,
         "plaintext": true,
         "markdown": true,
@@ -285,7 +287,9 @@
         },
         "editor.formatOnSave": true,
         "editor.formatOnType": true,
-        "editor.rulers": [120],
+        "editor.rulers": [
+            120
+        ],
         "editor.defaultFormatter": "charliermarsh.ruff"
     },
     "black-formatter.args": ["--line-length=120"],
@@ -307,25 +311,11 @@
     "[gotmpl]": {
         "editor.defaultFormatter": "golang.go"
     },
-    "notebook.lineNumbers": "on",
     "go.toolsManagement.autoUpdate": true,
-    "cursor.cpp.disabledLanguages": ["quarto", "scminput", "yaml", "haskell"],
-    "python.defaultInterpreterPath": "/Users/christian/code/corax-backend/.venv",
-    "[csharp]": {
-        "editor.defaultFormatter": "ms-dotnettools.csharp"
-    },
-    "chat.editing.alwaysSaveWithGeneratedChanges": true,
-    "github.copilot.chat.search.semanticTextResults": true,
-    "github.copilot.chat.generateTests.codeLens": true,
-    "github.copilot.chat.inlineChatCompletionTrigger.enabled": true,
-    "github.copilot.chat.inlineChatHint.enabled": true,
-    "github.copilot.advanced": {},
-    "[typst]": {
-        "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?"
-    },
-    "[typst-code]": {
-        "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?"
-    },
-    "github.copilot.chat.editor.temporalContext.enabled": true,
-    "mssql.enableRichExperiences": true
+    "cursor.cpp.disabledLanguages": [
+        "quarto",
+        "scminput",
+        "yaml",
+        "haskell"
+    ]
 }
