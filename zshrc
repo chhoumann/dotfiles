@@ -10,12 +10,25 @@ if [[ $(printenv | grep -c "VSCODE_") -gt 0 ]]; then
     export IS_VSCODE=true
 fi
 
+# export ZELLIJ_AUTO_ATTACH=true
+
 if [ "$TERM_PROGRAM" != "WarpTerminal" ] && [ "$IS_VSCODE" = false ]; then
-    if [[ "$(uname -s)" != "Darwin" ]] && [[ -z "$ZELLIJ" ]]; then
+    if [[ -z "$ZELLIJ" ]]; then
         if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
             zellij attach -c
         else
-            zellij
+		sessions=$(zellij list-sessions --no-formatting --short)
+
+		# Check if there are any sessions
+		if [ -z "$sessions" ]; then
+		    # No sessions exist; start a new one
+		    zellij
+		else
+		    # Attach to the most recently used session
+		    # Assuming the last session in the list is the most recent
+		    last_session=$(echo "$sessions" | tail -n 1)
+		    zellij attach "$last_session"
+		fi
         fi
 
         if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
@@ -55,7 +68,7 @@ export NVM_DIR="$HOME/.nvm"
 # Add wisely, as too many plugins slow down shell startup.
 # if not using warp:
 if [ "$TERM_PROGRAM" != "WarpTerminal" ]; then
-  plugins=(git zsh-z rye zsh-autosuggestions)
+  plugins=(git zsh-z zsh-autosuggestions)
 fi
 
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
@@ -92,6 +105,7 @@ fi
 
 alias e="explorer.exe"
 alias c="code"
+alias ci="code-insiders"
 alias cs="cursor"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
@@ -160,7 +174,7 @@ export PATH=~/.local/bin:$PATH
  [ -f "~/.ghcup/env" ] && source "/home/christian/.ghcup/env" # ghcup-env
 
 # pnpm
-export PNPM_HOME="~/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -198,3 +212,10 @@ export MODULAR_HOME="~/.modular"
 export PATH="~/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 source "$HOME/.rye/env"
 eval "$(zoxide init zsh)"
+
+. "$HOME/.cargo/env"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/christian/.cache/lm-studio/bin"
+
+export PATH=$PATH:$HOME/.dotnet

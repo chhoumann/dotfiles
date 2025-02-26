@@ -3,10 +3,7 @@
     "git.autofetch": true,
     "editor.renderWhitespace": "none",
     "editor.renderControlCharacters": false,
-    "eslint.validate": [
-        "javascript",
-        "vue"
-    ],
+    "eslint.validate": ["javascript", "vue"],
     "editor.formatOnPaste": true,
     "editor.formatOnType": true,
     "vim.handleKeys": {},
@@ -26,11 +23,11 @@
     },
     "editor.inlineSuggest.enabled": true,
     "github.copilot.enable": {
-        "quarto": false,
-        "*": false,
+        "*": true,
         "plaintext": true,
         "markdown": true,
         "scminput": false,
+        "quarto": false,
         "yaml": false,
         "javascript": true,
         "haskell": false,
@@ -56,7 +53,7 @@
     "editor.cursorBlinking": "phase",
     "editor.cursorSmoothCaretAnimation": "on",
     "[json]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "typescript.updateImportsOnFileMove.enabled": "always",
     "editor.guides.indentation": false,
@@ -66,13 +63,8 @@
     "vim.useSystemClipboard": true,
     "vim.insertModeKeyBindings": [
         {
-            "before": [
-                "j",
-                "k"
-            ],
-            "after": [
-                "<Esc>"
-            ]
+            "before": ["j", "k"],
+            "after": ["<Esc>"]
         }
     ],
     "javascript.updateImportsOnFileMove.enabled": "always",
@@ -80,144 +72,77 @@
     "editor.formatOnSave": true,
     "vim.normalModeKeyBindingsNonRecursive": [
         {
-            "before": [
-                "<leader>",
-                "f"
-            ],
-            "commands": [
-                "editor.action.formatDocument"
-            ],
+            "before": ["<leader>", "f"],
+            "commands": ["editor.action.formatDocument"],
             "when": "editorTextFocus && vim.active && !inDebugRepl",
             "silent": true
         },
         {
-            "before": [
-                "<leader>",
-                "o"
-            ],
-            "commands": [
-                "workbench.action.quickOpen"
-            ],
+            "before": ["<leader>", "o"],
+            "commands": ["workbench.action.quickOpen"],
             "when": "editorTextFocus && vim.active && !inDebugRepl"
         },
         {
-            "before": [
-                "<leader>",
-                "q"
-            ],
-            "commands": [
-                "workbench.action.showCommands"
-            ],
+            "before": ["<leader>", "q"],
+            "commands": ["workbench.action.showCommands"],
             "silent": true
         },
         {
-            "before": [
-                "<leader>",
-                "w"
-            ],
-            "commands": [
-                "workbench.action.files.save"
-            ],
+            "before": ["<leader>", "w"],
+            "commands": ["workbench.action.files.save"],
             "silent": true
         },
         {
-            "before": [
-                "<leader>",
-                "c"
-            ],
-            "commands": [
-                "workbench.action.closeActiveEditor"
-            ],
+            "before": ["<leader>", "c"],
+            "commands": ["workbench.action.closeActiveEditor"],
             "silent": true
         },
         {
-            "before": [
-                "<leader>",
-                "h"
-            ],
-            "commands": [
-                "workbench.action.splitEditor"
-            ],
+            "before": ["<leader>", "h"],
+            "commands": ["workbench.action.splitEditor"],
             "silent": true
         },
         {
-            "before": [
-                "<leader>",
-                "v"
-            ],
-            "commands": [
-                "workbench.action.splitEditorOrthogonal"
-            ],
+            "before": ["<leader>", "v"],
+            "commands": ["workbench.action.splitEditorOrthogonal"],
             "silent": true
         },
         {
-            "before": [
-                "L"
-            ],
-            "commands": [
-                "workbench.action.focusRightGroup"
-            ],
+            "before": ["L"],
+            "commands": ["workbench.action.focusRightGroup"],
             "silent": true
         },
         {
-            "before": [
-                "H"
-            ],
-            "commands": [
-                "workbench.action.focusLeftGroup"
-            ],
+            "before": ["H"],
+            "commands": ["workbench.action.focusLeftGroup"],
             "silent": true
         },
         {
-            "before": [
-                "J"
-            ],
-            "commands": [
-                "workbench.action.focusBelowGroup"
-            ],
+            "before": ["J"],
+            "commands": ["workbench.action.focusBelowGroup"],
             "silent": true
         },
         {
-            "before": [
-                "K"
-            ],
-            "commands": [
-                "workbench.action.focusAboveGroup"
-            ],
+            "before": ["K"],
+            "commands": ["workbench.action.focusAboveGroup"],
             "silent": true
         },
         {
-            "before": [
-                "<C-h>"
-            ],
-            "commands": [
-                "workbench.action.previousEditor"
-            ],
+            "before": ["<C-h>"],
+            "commands": ["workbench.action.previousEditor"],
             "silent": true
         },
         {
-            "before": [
-                "<C-l>"
-            ],
-            "commands": [
-                "workbench.action.nextEditor"
-            ],
+            "before": ["<C-l>"],
+            "commands": ["workbench.action.nextEditor"],
             "silent": true
         }
     ],
     "vim.visualModeKeyBindings": [
         // Paste over selected without losing paste register content
         {
-            "before": [
-                "<leader>",
-                "p"
-            ],
-            "after": [
-                "\"",
-                "_",
-                "d",
-                "P"
-            ]
+            "before": ["<leader>", "p"],
+            "after": ["\"", "_", "d", "P"]
         }
     ],
     "files.autoSave": "afterDelay",
@@ -261,56 +186,35 @@
     "latex-workshop.latex.recipes": [
         {
             "name": "latexmk 🔃",
-            "tools": [
-                "latexmk"
-            ]
+            "tools": ["latexmk"]
         },
         {
             "name": "latexmk (latexmkrc)",
-            "tools": [
-                "latexmk_rconly"
-            ]
+            "tools": ["latexmk_rconly"]
         },
         {
             "name": "latexmk (lualatex)",
-            "tools": [
-                "lualatexmk"
-            ]
+            "tools": ["lualatexmk"]
         },
         {
             "name": "latexmk (xelatex)",
-            "tools": [
-                "xelatexmk"
-            ]
+            "tools": ["xelatexmk"]
         },
         {
             "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
-            "tools": [
-                "pdflatex",
-                "bibtex",
-                "pdflatex",
-                "pdflatex"
-            ]
+            "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
         },
         {
             "name": "Compile Rnw files",
-            "tools": [
-                "rnw2tex",
-                "latexmk"
-            ]
+            "tools": ["rnw2tex", "latexmk"]
         },
         {
             "name": "Compile Jnw files",
-            "tools": [
-                "jnw2tex",
-                "latexmk"
-            ]
+            "tools": ["jnw2tex", "latexmk"]
         },
         {
             "name": "tectonic",
-            "tools": [
-                "tectonic"
-            ]
+            "tools": ["tectonic"]
         }
     ],
     "editor.accessibilitySupport": "off",
@@ -365,18 +269,15 @@
     "window.zoomLevel": 1,
     "remote.SSH.path": "C:\\Users\\chhou\\.ssh\\wsl_ssh.bat",
     "remote.SSH.remotePlatform": {
-        "p9": "linux",
+        "p9": "linux"
     },
     "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[dotenv]": {
         "editor.defaultFormatter": "foxundermoon.shell-format"
     },
-    "isort.args": [
-        "--profile",
-        "black"
-    ],
+    "isort.args": ["--profile", "black"],
     "[python]": {
         "editor.codeActionsOnSave": {
             "source.organizeImports": "explicit",
@@ -384,18 +285,11 @@
         },
         "editor.formatOnSave": true,
         "editor.formatOnType": true,
-        "editor.rulers": [
-            120
-        ],
-        "editor.defaultFormatter": "ms-python.black-formatter"
+        "editor.rulers": [120],
+        "editor.defaultFormatter": "charliermarsh.ruff"
     },
-    "black-formatter.args": [
-        "--line-length=120"
-    ],
-    "flake8.args": [
-        "--max-line-length=120",
-        "--extend-ignore=E203"
-    ],
+    "black-formatter.args": ["--line-length=120"],
+    "flake8.args": ["--max-line-length=120", "--extend-ignore=E203"],
     "python.analysis.autoSearchPaths": true,
     "remote.autoForwardPortsSource": "hybrid",
     "githubPullRequests.fileListLayout": "flat",
@@ -415,10 +309,23 @@
     },
     "notebook.lineNumbers": "on",
     "go.toolsManagement.autoUpdate": true,
-    "cursor.cpp.disabledLanguages": [
-        "quarto",
-        "scminput",
-        "yaml",
-        "haskell"
-    ]
+    "cursor.cpp.disabledLanguages": ["quarto", "scminput", "yaml", "haskell"],
+    "python.defaultInterpreterPath": "/Users/christian/code/corax-backend/.venv",
+    "[csharp]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    },
+    "chat.editing.alwaysSaveWithGeneratedChanges": true,
+    "github.copilot.chat.search.semanticTextResults": true,
+    "github.copilot.chat.generateTests.codeLens": true,
+    "github.copilot.chat.inlineChatCompletionTrigger.enabled": true,
+    "github.copilot.chat.inlineChatHint.enabled": true,
+    "github.copilot.advanced": {},
+    "[typst]": {
+        "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?"
+    },
+    "[typst-code]": {
+        "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?"
+    },
+    "github.copilot.chat.editor.temporalContext.enabled": true,
+    "mssql.enableRichExperiences": true
 }

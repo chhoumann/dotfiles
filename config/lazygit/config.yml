@@ -30,3 +30,22 @@ customCommands:
             filter: '^(?P<number>\d+)\.\s(?P<message>.+)$'
             valueFormat: "{{ .message }}"
             labelFormat: "{{ .number }}: {{ .message | green }}"
+    - key: "<c-s>"
+      command: "git update-index --skip-worktree {{.SelectedFile.Name}}"
+      context: "files"
+      description: "Skip worktree"
+      loadingText: "Updating index for the selected files..."
+    - key: "<c-S>"
+        command: "git update-index --no-skip-worktree {{range .Form.Files}}{{.}} {{end}}"
+        context: "files"
+        description: "Show skipped worktree files and unskip selected"
+        loadingText: "Updating index for the selected files..."
+        prompts:
+            - type: "menuFromCommand"
+              title: "Skipped Worktree Files"
+              key: "Files"
+              command: "git ls-files -t | grep '^S' | sed 's/^S //'"
+              filter: '^(?P<filename>.+)$'
+              valueFormat: "{{ .filename }}"
+              labelFormat: "{{ .filename | green }}"
+              multi: true
