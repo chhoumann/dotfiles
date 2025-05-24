@@ -208,21 +208,6 @@ PERL_LOCAL_LIB_ROOT="~/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; ex
 PERL_MB_OPT="--install_base \"~/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=~/perl5"; export PERL_MM_OPT;
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/christian/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/christian/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/christian/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/christian/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
 source "$HOME/.rye/env"
 
 if [ -f ~/.api_keys ]; then
@@ -234,8 +219,3 @@ eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"
 
 . "$HOME/.cargo/env"
-alias fuz='/home/christian/projects/fuz/fuz --path "/mnt/c/notes"'
-alias fz='fuz --sorttime'
-alias fze='fuz --edit'
-alias fzd='fuz --dir-search'
-alias task-master="node /home/christian/.npm-global/lib/node_modules/task-master-ai/bin/task-master.js"

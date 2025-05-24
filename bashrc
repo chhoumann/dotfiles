@@ -117,10 +117,6 @@ if ! shopt -oq posix; then
 fi
 . "$HOME/.cargo/env"
 PATH=~/.console-ninja/.bin:$PATHexport PATH=$HOME/.npm-global/bin:$PATH
-alias fuz='/home/christian/projects/fuz/fuz --path "/mnt/c/notes"'
-alias fz='fuz --sorttime'
-alias fze='fuz --edit'
-alias fzd='fuz --dir-search'
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
