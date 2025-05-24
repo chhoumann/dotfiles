@@ -208,6 +208,8 @@ PERL_LOCAL_LIB_ROOT="~/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; ex
 PERL_MB_OPT="--install_base \"~/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=~/perl5"; export PERL_MM_OPT;
 
+UV_TORCH_BACKEND=auto
+
 source "$HOME/.rye/env"
 
 if [ -f ~/.api_keys ]; then
