@@ -50,6 +50,7 @@ zinit snippet OMZP::kubectl
 zinit snippet OMZP::kubectx
 zinit snippet OMZP::command-not-found
 
+
 # Load completions
 autoload -Uz compinit && compinit
 
@@ -65,6 +66,10 @@ bindkey '^n' history-search-forward
 # moving between words with CTRL+left and CTRL+right
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
+# undo redo with alt+u and alt+r
+bindkey '^[u' undo
+bindkey '^[r' redo
+
 
 ## -- History --
 HISTSIZE=5000
@@ -116,6 +121,7 @@ alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/
 alias cat="bat"
 alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
+alias p="cd ~/projects"
 
 # Code workspaces
 alias cm="code ~/masters.code-workspace"
@@ -158,6 +164,10 @@ fi
 # Set PATH
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$HOME/go/bin:$PATH
+export PATH=/usr/local/zig:$PATH
+export ZIG_INSTALL_PREFIX=/usr/local/zig
+
+export HOMEBREW_CURL_PATH=/home/linuxbrew/.linuxbrew/bin/curl
 
 eval "$(fnm env --use-on-cd)" # --use-on-cd automatically runs fnm use when you cd into a directory with a .node-version file
 eval "$(fnm completions --shell zsh)"
@@ -180,7 +190,7 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 export PATH=~/.local/bin:$PATH
 
 # pnpm
-export PNPM_HOME="~/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -200,14 +210,14 @@ PERL_MM_OPT="INSTALL_BASE=~/perl5"; export PERL_MM_OPT;
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('~/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/christian/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "~/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "~/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/christian/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/christian/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="~/anaconda3/bin:$PATH"
+        export PATH="/home/christian/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -215,6 +225,17 @@ unset __conda_setup
 
 source "$HOME/.rye/env"
 
+if [ -f ~/.api_keys ]; then
+    source ~/.api_keys
+fi
+
 ## -- Shell Integrations --
 eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"
+
+. "$HOME/.cargo/env"
+alias fuz='/home/christian/projects/fuz/fuz --path "/mnt/c/notes"'
+alias fz='fuz --sorttime'
+alias fze='fuz --edit'
+alias fzd='fuz --dir-search'
+alias task-master="node /home/christian/.npm-global/lib/node_modules/task-master-ai/bin/task-master.js"
