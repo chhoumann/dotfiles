@@ -43,6 +43,11 @@
           create: true
           glob: true
           relink: true
+      ~/.config/gh-dash:
+          path: config/gh-dash
+          create: true
+          glob: true
+          relink: true
 # - create:
 #     - ~/downloads
 #     - ~/.vim/undo-history
