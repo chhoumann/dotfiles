@@ -114,8 +114,7 @@ if type fd >/dev/null 2>&1; then
 fi
 
 alias e="explorer.exe"
-alias c="code"
-alias cs="cursor"
+alias c="cursor"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
 alias cat="bat"
@@ -123,8 +122,8 @@ alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 alias p="cd ~/projects"
 
-# Code workspaces
-alias cm="code ~/masters.code-workspace"
+alias claude="~/.claude/local/claude"
+alias csb="~/projects/claude-manager/claude-squad"
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
@@ -164,6 +163,7 @@ fi
 # Set PATH
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$HOME/go/bin:$PATH
+export PATH="$HOME/.local/bin:$PATH"
 export PATH=/usr/local/zig:$PATH
 export ZIG_INSTALL_PREFIX=/usr/local/zig
 
