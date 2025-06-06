@@ -148,7 +148,7 @@ keybinds clear-defaults=true {
         bind "Alt l" { MoveFocusOrTab "right"; }
         bind "Alt n" { NewPane; }
         bind "Alt o" { MoveTab "right"; }
-        bind "Ctrl q" { Quit; }
+        bind "Ctrl Shift q" { Quit; }
     }
     shared_except "locked" "move" {
         bind "Ctrl h" { SwitchToMode "move"; }
@@ -197,6 +197,32 @@ keybinds clear-defaults=true {
         bind "l" { PageScrollDown; }
         bind "Ctrl s" { SwitchToMode "normal"; }
         bind "u" { HalfPageScrollUp; }
+    }
+    shared_among "normal" "locked" {
+        bind "Ctrl l" {
+            Run "lazygit" {
+                floating true
+                close_on_exit true
+                x "5%"
+                y "5%"
+                width "90%"
+                height "90%"
+                name "lazygit"
+            }
+        }
+
+        bind "Ctrl e" {
+            Run "btop" {
+                floating true
+                close_on_exit true
+                x "10%"
+                y "10%"
+                width "80%"
+                height "80%"
+                name "btop"
+            }
+        }
+
     }
     entersearch {
         bind "Ctrl c" { SwitchToMode "scroll"; }
@@ -344,7 +370,7 @@ on_force_close "quit"
 // Valid values: positive integers
 // Default value: 10000
 // 
-// scroll_buffer_size 10000
+scroll_buffer_size 50000
  
 // Provide a command to execute when copying text. The text will be piped to
 // the stdin of the program to perform the copy. This can be used with
@@ -381,13 +407,13 @@ on_force_close "quit"
 // otherwise this will error if such a session exists.
 // Default: <RANDOM>
 // 
-// session_name "My singleton session"
+session_name "default"
  
 // When `session_name` is provided, attaches to that session
 // if it is already running or creates it otherwise.
 // Default: false
 // 
-// attach_to_session true
+attach_to_session true
  
 // Toggle between having Zellij lay out panes according to a predefined set of layouts whenever possible
 // Options:
@@ -401,20 +427,20 @@ on_force_close "quit"
 //   - true (default)
 //   - false
 // 
-// session_serialization false
+session_serialization false
  
 // Whether pane viewports are serialized along with the session, default is false
 // Options:
 //   - true
 //   - false (default)
 // 
-// serialize_pane_viewport false
+serialize_pane_viewport false
  
 // Scrollback lines to serialize along with the pane viewport when serializing sessions, 0
 // defaults to the scrollback size. If this number is higher than the scrollback size, it will
 // also default to the scrollback size. This does nothing if `serialize_pane_viewport` is not true.
 // 
-// scrollback_lines_to_serialize 10000
+scrollback_lines_to_serialize 10000
  
 // Enable or disable the rendering of styled and colored underlines (undercurl).
 // May need to be disabled for certain unsupported terminals
