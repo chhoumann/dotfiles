@@ -2,6 +2,7 @@
 export IS_VSCODE=false
 export EDITOR="code"
 
+
 # Check if running in VSCode
 if [[ $(printenv | grep -c "VSCODE_") -gt 0 ]]; then
     export IS_VSCODE=true
@@ -125,6 +126,29 @@ alias p="cd ~/projects"
 alias claude="~/.claude/local/claude"
 alias csb="~/projects/claude-manager/claude-squad"
 
+function ccv() {
+  local env_vars=(
+    "ENABLE_BACKGROUND_TASKS=true"
+    "FORCE_AUTO_BACKGROUND_TASKS=false"
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=true"
+    "CLAUDE_CODE_ENABLE_UNIFIED_READ_TOOL=true"
+    # "CLAUBBIT=true"
+  )
+  
+  local claude_args=()
+  
+  if [[ "$1" == "-y" ]]; then
+    claude_args+=("--dangerously-skip-permissions")
+  elif [[ "$1" == "-r" ]]; then
+    claude_args+=("--resume")
+  elif [[ "$1" == "-ry" ]] || [[ "$1" == "-yr" ]]; then
+    claude_args+=("--resume" "--dangerously-skip-permissions")
+  fi
+  
+  env "${env_vars[@]}" claude "${claude_args[@]}"
+}
+
+
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
   mkdir -p "$vid_root"
@@ -221,3 +245,5 @@ eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"
 
 . "$HOME/.cargo/env"
+# opencode
+export PATH=/home/christian/.opencode/bin:$PATH
