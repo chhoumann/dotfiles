@@ -128,8 +128,9 @@ alias csb="~/projects/claude-manager/claude-squad"
 
 function ccv() {
   local env_vars=(
-    "ENABLE_BACKGROUND_TASKS=true"
-    "FORCE_AUTO_BACKGROUND_TASKS=false"
+    # "ENABLE_BACKGROUND_TASKS=true"
+    # "FORCE_AUTO_BACKGROUND_TASKS=false"
+    "MAX_THINKING_TOKENS=31999"
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=true"
     "CLAUDE_CODE_ENABLE_UNIFIED_READ_TOOL=true"
     # "CLAUBBIT=true"
@@ -145,7 +146,7 @@ function ccv() {
     claude_args+=("--resume" "--dangerously-skip-permissions")
   fi
   
-  env "${env_vars[@]}" claude "${claude_args[@]}"
+  env "${env_vars[@]}" ~/.claude/local/claude "${claude_args[@]}"
 }
 
 
@@ -247,3 +248,4 @@ eval "$(zoxide init zsh)"
 . "$HOME/.cargo/env"
 # opencode
 export PATH=/home/christian/.opencode/bin:$PATH
+alias claude="/home/christian/.claude/local/claude"
