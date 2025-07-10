@@ -1,6 +1,6 @@
 prSections:
-  - title: Master's Thesis
-    filters: is:open repo:chhoumann/thesis-chemcam
+  - title: QuickAdd
+    filters: is:open repo:chhoumann/quickadd
   - title: My Pull Requests
     filters: is:open author:@me
   - title: Needs My Review
@@ -8,6 +8,8 @@ prSections:
   - title: Involved
     filters: is:open involves:@me -author:@me
 issuesSections:
+  - title: QuickAdd
+    filters: is:open repo:chhoumann/quickadd
   - title: My Issues
     filters: is:open author:@me
   - title: Assigned
