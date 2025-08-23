@@ -116,6 +116,7 @@ fi
 
 alias e="explorer.exe"
 alias c="cursor"
+alias ccc="xclip -sel clip" # better than clip.exe
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
 alias cat="bat"
@@ -123,32 +124,8 @@ alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 alias p="cd ~/projects"
 
-alias claude="~/.claude/local/claude"
 alias csb="~/projects/claude-manager/claude-squad"
-
-function ccv() {
-  local env_vars=(
-    # "ENABLE_BACKGROUND_TASKS=true"
-    # "FORCE_AUTO_BACKGROUND_TASKS=false"
-    "MAX_THINKING_TOKENS=31999"
-    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=true"
-    "CLAUDE_CODE_ENABLE_UNIFIED_READ_TOOL=true"
-    # "CLAUBBIT=true"
-  )
-  
-  local claude_args=()
-  
-  if [[ "$1" == "-y" ]]; then
-    claude_args+=("--dangerously-skip-permissions")
-  elif [[ "$1" == "-r" ]]; then
-    claude_args+=("--resume")
-  elif [[ "$1" == "-ry" ]] || [[ "$1" == "-yr" ]]; then
-    claude_args+=("--resume" "--dangerously-skip-permissions")
-  fi
-  
-  env "${env_vars[@]}" ~/.claude/local/claude "${claude_args[@]}"
-}
-
+alias ccv="claude --dangerously-skip-permissions"
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
@@ -191,6 +168,8 @@ export PATH=$HOME/go/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
 export PATH=/usr/local/zig:$PATH
 export ZIG_INSTALL_PREFIX=/usr/local/zig
+
+
 
 export HOMEBREW_CURL_PATH=/home/linuxbrew/.linuxbrew/bin/curl
 
@@ -248,4 +227,3 @@ eval "$(zoxide init zsh)"
 . "$HOME/.cargo/env"
 # opencode
 export PATH=/home/christian/.opencode/bin:$PATH
-alias claude="/home/christian/.claude/local/claude"

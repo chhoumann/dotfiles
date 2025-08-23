@@ -48,6 +48,11 @@
           create: true
           glob: true
           relink: true
+      ~/.claude/settings.json:
+          path: claude/settings.json
+          create: true
+          relink: true
+          force: true
 # - create:
 #     - ~/downloads
 #     - ~/.vim/undo-history
