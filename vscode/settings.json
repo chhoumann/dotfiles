@@ -3,14 +3,11 @@
     "git.autofetch": true,
     "editor.renderWhitespace": "none",
     "editor.renderControlCharacters": false,
-    "eslint.validate": [
-        "javascript",
-        "vue"
-    ],
+    "eslint.validate": ["javascript", "vue"],
     "editor.formatOnPaste": true,
     "editor.formatOnType": true,
     "vim.handleKeys": {},
-    "python.languageServer": "Pylance",
+    "python.languageServer": "None",
     "files.exclude": {
         "**/.classpath": true,
         "**/.project": true,
@@ -32,6 +29,7 @@
         "plaintext": true,
         "markdown": true,
         "scminput": false,
+        "quarto": false,
         "yaml": false,
         "javascript": true,
         "haskell": false,
@@ -57,7 +55,7 @@
     "editor.cursorBlinking": "phase",
     "editor.cursorSmoothCaretAnimation": "on",
     "[json]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "typescript.updateImportsOnFileMove.enabled": "always",
     "editor.guides.indentation": false,
@@ -67,13 +65,8 @@
     "vim.useSystemClipboard": true,
     "vim.insertModeKeyBindings": [
         {
-            "before": [
-                "j",
-                "k"
-            ],
-            "after": [
-                "<Esc>"
-            ]
+            "before": ["j", "k"],
+            "after": ["<Esc>"]
         }
     ],
     "javascript.updateImportsOnFileMove.enabled": "always",
@@ -81,144 +74,77 @@
     "editor.formatOnSave": true,
     "vim.normalModeKeyBindingsNonRecursive": [
         {
-            "before": [
-                "<leader>",
-                "f"
-            ],
-            "commands": [
-                "editor.action.formatDocument"
-            ],
+            "before": ["<leader>", "f"],
+            "commands": ["editor.action.formatDocument"],
             "when": "editorTextFocus && vim.active && !inDebugRepl",
             "silent": true
         },
         {
-            "before": [
-                "<leader>",
-                "o"
-            ],
-            "commands": [
-                "workbench.action.quickOpen"
-            ],
+            "before": ["<leader>", "o"],
+            "commands": ["workbench.action.quickOpen"],
             "when": "editorTextFocus && vim.active && !inDebugRepl"
         },
         {
-            "before": [
-                "<leader>",
-                "q"
-            ],
-            "commands": [
-                "workbench.action.showCommands"
-            ],
+            "before": ["<leader>", "q"],
+            "commands": ["workbench.action.showCommands"],
             "silent": true
         },
         {
-            "before": [
-                "<leader>",
-                "w"
-            ],
-            "commands": [
-                "workbench.action.files.save"
-            ],
+            "before": ["<leader>", "w"],
+            "commands": ["workbench.action.files.save"],
             "silent": true
         },
         {
-            "before": [
-                "<leader>",
-                "c"
-            ],
-            "commands": [
-                "workbench.action.closeActiveEditor"
-            ],
+            "before": ["<leader>", "c"],
+            "commands": ["workbench.action.closeActiveEditor"],
             "silent": true
         },
         {
-            "before": [
-                "<leader>",
-                "h"
-            ],
-            "commands": [
-                "workbench.action.splitEditor"
-            ],
+            "before": ["<leader>", "h"],
+            "commands": ["workbench.action.splitEditor"],
             "silent": true
         },
         {
-            "before": [
-                "<leader>",
-                "v"
-            ],
-            "commands": [
-                "workbench.action.splitEditorOrthogonal"
-            ],
+            "before": ["<leader>", "v"],
+            "commands": ["workbench.action.splitEditorOrthogonal"],
             "silent": true
         },
         {
-            "before": [
-                "L"
-            ],
-            "commands": [
-                "workbench.action.focusRightGroup"
-            ],
+            "before": ["L"],
+            "commands": ["workbench.action.focusRightGroup"],
             "silent": true
         },
         {
-            "before": [
-                "H"
-            ],
-            "commands": [
-                "workbench.action.focusLeftGroup"
-            ],
+            "before": ["H"],
+            "commands": ["workbench.action.focusLeftGroup"],
             "silent": true
         },
         {
-            "before": [
-                "J"
-            ],
-            "commands": [
-                "workbench.action.focusBelowGroup"
-            ],
+            "before": ["J"],
+            "commands": ["workbench.action.focusBelowGroup"],
             "silent": true
         },
         {
-            "before": [
-                "K"
-            ],
-            "commands": [
-                "workbench.action.focusAboveGroup"
-            ],
+            "before": ["K"],
+            "commands": ["workbench.action.focusAboveGroup"],
             "silent": true
         },
         {
-            "before": [
-                "<C-h>"
-            ],
-            "commands": [
-                "workbench.action.previousEditor"
-            ],
+            "before": ["<C-h>"],
+            "commands": ["workbench.action.previousEditor"],
             "silent": true
         },
         {
-            "before": [
-                "<C-l>"
-            ],
-            "commands": [
-                "workbench.action.nextEditor"
-            ],
+            "before": ["<C-l>"],
+            "commands": ["workbench.action.nextEditor"],
             "silent": true
         }
     ],
     "vim.visualModeKeyBindings": [
         // Paste over selected without losing paste register content
         {
-            "before": [
-                "<leader>",
-                "p"
-            ],
-            "after": [
-                "\"",
-                "_",
-                "d",
-                "P"
-            ]
+            "before": ["<leader>", "p"],
+            "after": ["\"", "_", "d", "P"]
         }
     ],
     "files.autoSave": "afterDelay",
@@ -262,56 +188,35 @@
     "latex-workshop.latex.recipes": [
         {
             "name": "latexmk 🔃",
-            "tools": [
-                "latexmk"
-            ]
+            "tools": ["latexmk"]
         },
         {
             "name": "latexmk (latexmkrc)",
-            "tools": [
-                "latexmk_rconly"
-            ]
+            "tools": ["latexmk_rconly"]
         },
         {
             "name": "latexmk (lualatex)",
-            "tools": [
-                "lualatexmk"
-            ]
+            "tools": ["lualatexmk"]
         },
         {
             "name": "latexmk (xelatex)",
-            "tools": [
-                "xelatexmk"
-            ]
+            "tools": ["xelatexmk"]
         },
         {
             "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
-            "tools": [
-                "pdflatex",
-                "bibtex",
-                "pdflatex",
-                "pdflatex"
-            ]
+            "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
         },
         {
             "name": "Compile Rnw files",
-            "tools": [
-                "rnw2tex",
-                "latexmk"
-            ]
+            "tools": ["rnw2tex", "latexmk"]
         },
         {
             "name": "Compile Jnw files",
-            "tools": [
-                "jnw2tex",
-                "latexmk"
-            ]
+            "tools": ["jnw2tex", "latexmk"]
         },
         {
             "name": "tectonic",
-            "tools": [
-                "tectonic"
-            ]
+            "tools": ["tectonic"]
         }
     ],
     "editor.accessibilitySupport": "off",
@@ -366,18 +271,19 @@
     "window.zoomLevel": 1,
     "remote.SSH.path": "C:\\Users\\chhou\\.ssh\\wsl_ssh.bat",
     "remote.SSH.remotePlatform": {
-        "p9": "linux",
+        "p9": "linux"
     },
     "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[dotenv]": {
         "editor.defaultFormatter": "foxundermoon.shell-format"
     },
-    "isort.args": [
-        "--profile",
-        "black"
-    ],
+    "isort.args": ["--profile", "black"],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll": "explicit"
+    },
     "[python]": {
         "editor.codeActionsOnSave": {
             "source.organizeImports": "explicit",
@@ -385,21 +291,14 @@
         },
         "editor.formatOnSave": true,
         "editor.formatOnType": true,
-        "editor.rulers": [
-            120
-        ],
+        "editor.rulers": [120],
         "editor.defaultFormatter": "charliermarsh.ruff"
     },
-    "black-formatter.args": [
-        "--line-length=120"
-    ],
-    "flake8.args": [
-        "--max-line-length=120",
-        "--extend-ignore=E203"
-    ],
+    "black-formatter.args": ["--line-length=120"],
+    "flake8.args": ["--max-line-length=120", "--extend-ignore=E203"],
     "python.analysis.autoSearchPaths": true,
     "remote.autoForwardPortsSource": "hybrid",
-    "githubPullRequests.fileListLayout": "flat",
+    "githubPullRequests.fileListLayout": "tree",
     "python.analysis.autoFormatStrings": true,
     "python.analysis.autoImportCompletions": true,
     "python.analysis.inlayHints.pytestParameters": true,
@@ -415,41 +314,81 @@
         "editor.defaultFormatter": "golang.go"
     },
     "go.toolsManagement.autoUpdate": true,
-    "cursor.cpp.disabledLanguages": [
-        "quarto",
-        "scminput",
-        "yaml",
-        "haskell"
+    "cursor.cpp.disabledLanguages": ["quarto", "scminput", "yaml", "haskell"],
+    "explorer.fileNesting.patterns": {
+        "*.ts": "${capture}.js",
+        "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+        "*.jsx": "${capture}.js",
+        "*.tsx": "${capture}.ts",
+        "tsconfig.json": "tsconfig.*.json",
+        "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock",
+        "*.sqlite": "${capture}.${extname}-*",
+        "*.db": "${capture}.${extname}-*",
+        "*.sqlite3": "${capture}.${extname}-*",
+        "*.db3": "${capture}.${extname}-*",
+        "*.sdb": "${capture}.${extname}-*",
+        "*.s3db": "${capture}.${extname}-*"
+    },
+    "roo-cline.allowedCommands": [
+        "npm test",
+        "npm install",
+        "tsc",
+        "git log",
+        "git diff",
+        "git show"
     ],
-    "notebook.lineNumbers": "on",
-    "luahelper.format.chop_down_kv_table": false,
-    "grammarly.files.include": [
-        "**/readme.md",
-        "**/README.md",
-        "**/*.txt",
-        "**/*.tex"
+    "mssql.connectionGroups": [
+        {
+            "name": "ROOT",
+            "id": "D70B0F02-642A-4D6C-AB15-F4AB6A806A18"
+        }
     ],
-    "github.copilot.editor.enableAutoCompletions": true,
-    "[javascript]": {
-        "editor.defaultFormatter": "biomejs.biome"
+    "mssql.connections": [],
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilot:claude-3.5-sonnet",
+    "ruff.configurationPreference": "filesystemFirst",
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "github.copilot.nextEditSuggestions.fixes": true,
+    "github.copilot.chat.followUps": "always",
+    "github.copilot.chat.codesearch.enabled": true,
+    "github.copilot.chat.agent.thinkingTool": true,
+    "github.copilot.chat.generateTests.codeLens": true,
+    "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+    "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+    "github.copilot.chat.languageContext.typescript.enabled": true,
+    "github.copilot.chat.search.keywordSuggestions": true,
+    "pgsql.serverGroups": [
+        {
+            "name": "Servers",
+            "id": "5329FD0B-8C48-45ED-96E5-2F8D91603233",
+            "isDefault": true
+        }
+    ],
+    "pgsql.connections": [
+        {
+            "id": "5F75B1C4-91A1-4808-BD3E-B842DFC27C45",
+            "groupId": "5329FD0B-8C48-45ED-96E5-2F8D91603233",
+            "authenticationType": "SqlLogin",
+            "connectTimeout": 15,
+            "applicationName": "vscode-pgsql",
+            "clientEncoding": "utf8",
+            "sslmode": "prefer",
+            "server": "localhost",
+            "user": "postgres",
+            "port": "5432",
+            "database": "postgres",
+            "password": "",
+            "profileName": "localhost, postgres (postgres)",
+            "expiresOn": 0
+        }
+    ],
+    "biome.suggestInstallingGlobally": false,
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
-    "jupyter.interactiveWindow.textEditor.executeSelection": true,
-    "cursor.cpp.enablePartialAccepts": true,
-    "[astro]": {
-        "editor.defaultFormatter": "astro-build.astro-vscode"
-    },
-    "leetcode.defaultLanguage": "python3",
-    "leetcode.useWsl": true,
-    "leetcode.workspaceFolder": "~/projects/Programming-Practice/Exercise Sites/LeetCode",
-    "extensions.ignoreRecommendations": true,
-    "[html]": {
-        "editor.defaultFormatter": "vscode.html-language-features"
-    },
-    "zls.path": "/home/christian/projects/zls/zig-out/bin/zls",
-    "[zig]": {
-        "editor.defaultFormatter": "AugusteRame.zls-vscode"
-    },
-    "zig.buildOnSave": true,
-    "zls.zig_exe_path": "/usr/local/zig/zig",
-    "zig.zigPath": "/usr/local/zig/zig"
+    "typescript.experimental.useTsgo": true,
+    "cursorpyright.analysis.autoImportCompletions": true,
+    "cursorpyright.analysis.autoSearchPaths": true,
+    "cursorpyright.analysis.inlayHints.callArgumentNames": "partial",
+    "cursorpyright.analysis.typeCheckingMode": "basic"
 }

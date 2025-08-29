@@ -8,19 +8,30 @@ if [[ $(printenv | grep -c "VSCODE_") -gt 0 ]]; then
     export IS_VSCODE=true
 fi
 
-# Terminal Specific Configurations
+# export ZELLIJ_AUTO_ATTACH=true
 if [ "$TERM_PROGRAM" != "WarpTerminal" ] && [ "$IS_VSCODE" = false ]; then
-  if [[ -z "$ZELLIJ" ]]; then
-      if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-          zellij attach -c
-      else
-          zellij
-      fi
+    if [[ -z "$ZELLIJ" ]]; then
+        if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
+            zellij attach -c
+        else
+		sessions=$(zellij list-sessions --no-formatting --short)
 
-      if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
-          exit
-      fi
-  fi
+		# Check if there are any sessions
+		if [ -z "$sessions" ]; then
+		    # No sessions exist; start a new one
+		    zellij
+		else
+		    # Attach to the most recently used session
+		    # Assuming the last session in the list is the most recent
+		    last_session=$(echo "$sessions" | tail -n 1)
+		    zellij attach "$last_session"
+		fi
+        fi
+
+        if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
+            exit
+        fi
+    fi
 fi
 
 # Zinit configuration
@@ -42,6 +53,7 @@ zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
+# eval "$(fnm env --use-on-cd)" # --use-on-cd automatically runs fnm use when you cd into a directory with a .node-version file
 # Add in snippets
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
@@ -57,6 +69,15 @@ autoload -Uz compinit && compinit
 
 zinit cdreplay -q
 
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+# if not using warp:
+if [ "$TERM_PROGRAM" != "WarpTerminal" ]; then
+  plugins=(git zsh-z zsh-autosuggestions)
+fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
@@ -105,9 +126,9 @@ if type eza >/dev/null 2>&1; then
     alias llt="eza --oneline --tree --icons --git-ignore"
     alias lr='eza -alg --sort=modified --color=always --group-directories-first --git'
 else
-    alias l='ls -alh --group-directories-first'
-    alias ll='ls -al --group-directories-first'
-    alias lr='ls -ltrh --group-directories-first'
+    alias l='ls -alh'
+    alias ll='ls -alh'
+    alias lr='ls -ltrh'
 fi
 
 if type fd >/dev/null 2>&1; then
@@ -115,14 +136,17 @@ if type fd >/dev/null 2>&1; then
 fi
 
 alias e="explorer.exe"
-alias c="cursor"
-alias ccc="xclip -sel clip" # better than clip.exe
+alias c="code"
+alias ci="code-insiders"
+alias cs="cursor"
+alias ccc="pbcopy"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
 alias cat="bat"
 alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 alias p="cd ~/projects"
+alias ccv="claude --dangerously-skip-permissions"
 
 alias csb="~/projects/claude-manager/claude-squad"
 alias ccv="claude --dangerously-skip-permissions"
@@ -166,12 +190,6 @@ fi
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$HOME/go/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
-export PATH=/usr/local/zig:$PATH
-export ZIG_INSTALL_PREFIX=/usr/local/zig
-
-
-
-export HOMEBREW_CURL_PATH=/home/linuxbrew/.linuxbrew/bin/curl
 
 eval "$(fnm env --use-on-cd)" # --use-on-cd automatically runs fnm use when you cd into a directory with a .node-version file
 eval "$(fnm completions --shell zsh)"
@@ -183,12 +201,15 @@ eval "$(fnm completions --shell zsh)"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# cargo
+export PATH="$HOME/.cargo/bin:$PATH"
+
 # deno
 export DENO_INSTALL="~/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
 # homebrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # :)
 export PATH=~/.local/bin:$PATH
@@ -214,16 +235,21 @@ PERL_MM_OPT="INSTALL_BASE=~/perl5"; export PERL_MM_OPT;
 
 UV_TORCH_BACKEND=auto
 
-source "$HOME/.rye/env"
+eval "$(zoxide init zsh)"
+
+. "$HOME/.cargo/env"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/christian/.cache/lm-studio/bin"
+export PATH=$PATH:$HOME/.dotnet
 
 if [ -f ~/.api_keys ]; then
     source ~/.api_keys
 fi
 
 ## -- Shell Integrations --
-eval "$(fzf --zsh)"
-eval "$(zoxide init zsh)"
+source <(fzf --zsh)
+export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
 
-. "$HOME/.cargo/env"
 # opencode
-export PATH=/home/christian/.opencode/bin:$PATH
+export PATH=/Users/christian/.opencode/bin:$PATH

@@ -1,0 +1,22 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    # Cursor
+    "~/Library/Application Support/Cursor/User/settings.json":
+      path: ./vscode/settings.json
+      force: true
+    "~/Library/Application Support/Cursor/User/keybindings.json":
+      path: ./vscode/keybindings.json
+      force: true
+    # VSCode
+    "~/Library/Application Support/Code/User/settings.json":
+      path: ./vscode/settings.json
+      force: true
+    "~/Library/Application Support/Code/User/keybindings.json":
+      path: ./vscode/keybindings.json
+      force: true
+

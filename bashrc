@@ -116,5 +116,7 @@ if ! shopt -oq posix; then
   fi
 fi
 . "$HOME/.cargo/env"
-PATH=~/.console-ninja/.bin:$PATHexport PATH=$HOME/.npm-global/bin:$PATH
-
+PATH=~/.console-ninja/.bin:$PATH
+export PATH=$HOME/.npm-global/bin:$PATH
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/christian/.cache/lm-studio/bin"
