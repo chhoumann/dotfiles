@@ -239,8 +239,6 @@ eval "$(zoxide init zsh)"
 
 . "$HOME/.cargo/env"
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/christian/.cache/lm-studio/bin"
 export PATH=$PATH:$HOME/.dotnet
 
 if [ -f ~/.api_keys ]; then
