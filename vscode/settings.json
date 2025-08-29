@@ -7,7 +7,7 @@
     "editor.formatOnPaste": true,
     "editor.formatOnType": true,
     "vim.handleKeys": {},
-    "python.languageServer": "Pylance",
+    "python.languageServer": "None",
     "files.exclude": {
         "**/.classpath": true,
         "**/.project": true,
@@ -280,6 +280,10 @@
         "editor.defaultFormatter": "foxundermoon.shell-format"
     },
     "isort.args": ["--profile", "black"],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll": "explicit"
+    },
     "[python]": {
         "editor.codeActionsOnSave": {
             "source.organizeImports": "explicit",
@@ -287,16 +291,14 @@
         },
         "editor.formatOnSave": true,
         "editor.formatOnType": true,
-        "editor.rulers": [
-            120
-        ],
+        "editor.rulers": [120],
         "editor.defaultFormatter": "charliermarsh.ruff"
     },
     "black-formatter.args": ["--line-length=120"],
     "flake8.args": ["--max-line-length=120", "--extend-ignore=E203"],
     "python.analysis.autoSearchPaths": true,
     "remote.autoForwardPortsSource": "hybrid",
-    "githubPullRequests.fileListLayout": "flat",
+    "githubPullRequests.fileListLayout": "tree",
     "python.analysis.autoFormatStrings": true,
     "python.analysis.autoImportCompletions": true,
     "python.analysis.inlayHints.pytestParameters": true,
@@ -312,10 +314,81 @@
         "editor.defaultFormatter": "golang.go"
     },
     "go.toolsManagement.autoUpdate": true,
-    "cursor.cpp.disabledLanguages": [
-        "quarto",
-        "scminput",
-        "yaml",
-        "haskell"
-    ]
+    "cursor.cpp.disabledLanguages": ["quarto", "scminput", "yaml", "haskell"],
+    "explorer.fileNesting.patterns": {
+        "*.ts": "${capture}.js",
+        "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+        "*.jsx": "${capture}.js",
+        "*.tsx": "${capture}.ts",
+        "tsconfig.json": "tsconfig.*.json",
+        "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock",
+        "*.sqlite": "${capture}.${extname}-*",
+        "*.db": "${capture}.${extname}-*",
+        "*.sqlite3": "${capture}.${extname}-*",
+        "*.db3": "${capture}.${extname}-*",
+        "*.sdb": "${capture}.${extname}-*",
+        "*.s3db": "${capture}.${extname}-*"
+    },
+    "roo-cline.allowedCommands": [
+        "npm test",
+        "npm install",
+        "tsc",
+        "git log",
+        "git diff",
+        "git show"
+    ],
+    "mssql.connectionGroups": [
+        {
+            "name": "ROOT",
+            "id": "D70B0F02-642A-4D6C-AB15-F4AB6A806A18"
+        }
+    ],
+    "mssql.connections": [],
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilot:claude-3.5-sonnet",
+    "ruff.configurationPreference": "filesystemFirst",
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "github.copilot.nextEditSuggestions.fixes": true,
+    "github.copilot.chat.followUps": "always",
+    "github.copilot.chat.codesearch.enabled": true,
+    "github.copilot.chat.agent.thinkingTool": true,
+    "github.copilot.chat.generateTests.codeLens": true,
+    "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+    "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+    "github.copilot.chat.languageContext.typescript.enabled": true,
+    "github.copilot.chat.search.keywordSuggestions": true,
+    "pgsql.serverGroups": [
+        {
+            "name": "Servers",
+            "id": "5329FD0B-8C48-45ED-96E5-2F8D91603233",
+            "isDefault": true
+        }
+    ],
+    "pgsql.connections": [
+        {
+            "id": "5F75B1C4-91A1-4808-BD3E-B842DFC27C45",
+            "groupId": "5329FD0B-8C48-45ED-96E5-2F8D91603233",
+            "authenticationType": "SqlLogin",
+            "connectTimeout": 15,
+            "applicationName": "vscode-pgsql",
+            "clientEncoding": "utf8",
+            "sslmode": "prefer",
+            "server": "localhost",
+            "user": "postgres",
+            "port": "5432",
+            "database": "postgres",
+            "password": "",
+            "profileName": "localhost, postgres (postgres)",
+            "expiresOn": 0
+        }
+    ],
+    "biome.suggestInstallingGlobally": false,
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
+    },
+    "typescript.experimental.useTsgo": true,
+    "cursorpyright.analysis.autoImportCompletions": true,
+    "cursorpyright.analysis.autoSearchPaths": true,
+    "cursorpyright.analysis.inlayHints.callArgumentNames": "partial",
+    "cursorpyright.analysis.typeCheckingMode": "basic"
 }

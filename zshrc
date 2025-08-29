@@ -133,11 +133,13 @@ alias e="explorer.exe"
 alias c="code"
 alias ci="code-insiders"
 alias cs="cursor"
+alias ccc="pbcopy"
 alias gdash="gh extension exec dash"
 alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
 alias cat="bat"
 alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
+alias ccv="claude --dangerously-skip-permissions"
 
 # Code workspaces
 alias cm="code ~/masters.code-workspace"
@@ -180,6 +182,7 @@ fi
 # Set PATH
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$HOME/go/bin:$PATH
+export PATH="$HOME/.local/bin:$PATH"
 
 eval "$(fnm env --use-on-cd)" # --use-on-cd automatically runs fnm use when you cd into a directory with a .node-version file
 eval "$(fnm completions --shell zsh)"
@@ -238,7 +241,6 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-source "$HOME/.rye/env"
 eval "$(zoxide init zsh)"
 
 . "$HOME/.cargo/env"
@@ -248,4 +250,8 @@ export PATH="$PATH:/Users/christian/.cache/lm-studio/bin"
 export PATH=$PATH:$HOME/.dotnet
 
 ## -- Shell Integrations --
-eval "$(fzf --zsh)"
+source <(fzf --zsh)
+export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
+
+# opencode
+export PATH=/Users/christian/.opencode/bin:$PATH
