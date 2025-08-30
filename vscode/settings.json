@@ -55,7 +55,7 @@
     "editor.cursorBlinking": "phase",
     "editor.cursorSmoothCaretAnimation": "on",
     "[json]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.json-language-features"
     },
     "typescript.updateImportsOnFileMove.enabled": "always",
     "editor.guides.indentation": false,
@@ -386,7 +386,6 @@
     "[toml]": {
         "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
-    "typescript.experimental.useTsgo": true,
     "cursorpyright.analysis.autoImportCompletions": true,
     "cursorpyright.analysis.autoSearchPaths": true,
     "cursorpyright.analysis.inlayHints.callArgumentNames": "partial",
