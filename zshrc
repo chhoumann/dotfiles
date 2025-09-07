@@ -150,6 +150,7 @@ alias ccv="claude --dangerously-skip-permissions"
 
 alias csb="~/projects/claude-manager/claude-squad"
 alias ccv="claude --dangerously-skip-permissions"
+alias cx="codex -m gpt-5 -c model_reasoning_effort='high' --search --yolo"
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
@@ -251,3 +252,4 @@ export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
 
 # opencode
 export PATH=/Users/christian/.opencode/bin:$PATH
+export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
