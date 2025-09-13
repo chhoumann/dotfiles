@@ -146,11 +146,24 @@ alias cat="bat"
 alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 alias p="cd ~/projects"
-alias ccv="claude --dangerously-skip-permissions"
 
 alias csb="~/projects/claude-manager/claude-squad"
-alias ccv="claude --dangerously-skip-permissions"
-alias cx="codex -m gpt-5 -c model_reasoning_effort='high' --search --yolo"
+
+ccv() {
+  if [[ "$1" == "update" ]]; then
+    bun update -g @anthropic-ai/claude-code --latest
+  else
+    claude --dangerously-skip-permissions "$@"
+  fi
+}
+
+cx() {
+  if [[ "$1" == "update" ]]; then
+    bun update -g @openai/codex --latest
+  else
+    codex -m gpt-5 -c model_reasoning_effort='high' --search --yolo "$@"
+  fi
+}
 
 function init-video() {
   local var vid_root="/mnt/d/Content/$1"
