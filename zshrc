@@ -167,16 +167,6 @@ cx() {
   fi
 }
 
-function init-video() {
-  local var vid_root="/mnt/d/Content/$1"
-  mkdir -p "$vid_root"
-  mkdir -p "$vid_root/Audio"
-  mkdir -p "$vid_root/Footage"
-  mkdir -p "$vid_root/Graphics"
-  mkdir -p "$vid_root/Project Files"
-  mkdir -p "$vid_root/Drafts"
-}
-
 # https://github.com/antonmedv/walk
 function cdl() {
   cd "$(walk --icons $@)"
