@@ -167,6 +167,10 @@ cx() {
   fi
 }
 
+function ampx() {
+  amp --dangerously-allow-all "${@:1}"
+}
+
 # https://github.com/antonmedv/walk
 function cdl() {
   cd "$(walk --icons $@)"

@@ -53,6 +53,11 @@
           create: true
           relink: true
           force: true
+      ~/.config/amp/settings.json:
+          path: config/amp/settings.json
+          create: true
+          relink: true
+          force: true
 # - create:
 #     - ~/downloads
 #     - ~/.vim/undo-history
