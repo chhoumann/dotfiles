@@ -9,7 +9,7 @@ if [[ $(printenv | grep -c "VSCODE_") -gt 0 ]]; then
 fi
 
 # export ZELLIJ_AUTO_ATTACH=true
-if [ "$TERM_PROGRAM" != "WarpTerminal" ] && [ "$IS_VSCODE" = false ]; then
+if [ "$TERM_PROGRAM" = "ghostty" ]; then
     if [[ -z "$ZELLIJ" ]]; then
         if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
             zellij attach -c
