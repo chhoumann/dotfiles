@@ -4,5 +4,5 @@
     "MAX_THINKING_TOKENS": "31999"
   },
   "includeCoAuthoredBy": false,
-  "model": "opus"
+  "alwaysThinkingEnabled": true
 }
