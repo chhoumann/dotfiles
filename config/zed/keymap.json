@@ -1,0 +1,24 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings, run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    // Works for the CTRL+Tab menu
+    "context": "Picker",
+    "bindings": {
+      "ctrl-j": "menu::SelectNext",
+      "ctrl-k": "menu::SelectPrevious"
+    }
+  },
+  // Alternative to CMD-P
+  {
+    "context": "VimControl && !VimWaiting && !menu",
+    "bindings": {
+      "space t": "file_finder::Toggle"
+    }
+  }
+]

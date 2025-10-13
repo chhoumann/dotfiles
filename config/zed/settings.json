@@ -1,0 +1,62 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "agent": {
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5-thinking-latest"
+    },
+    "use_modifier_to_send": true,
+    "play_sound_when_agent_done": true,
+    "always_allow_tool_actions": true,
+    "model_parameters": []
+  },
+  "inlay_hints": {
+    "enabled": true
+  },
+  "terminal": {
+    "font_family": "CaskaydiaCove Nerd Font Mono"
+  },
+  "multi_cursor_modifier": "cmd_or_ctrl",
+  "vertical_scroll_margin": 10.0,
+  "minimap": {
+    "show": "auto"
+  },
+  "cursor_blink": true,
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 1000
+    }
+  },
+  "auto_indent_on_paste": true,
+  "linked_edits": true,
+  "use_on_type_format": true,
+  "show_whitespaces": "none",
+  "show_edit_predictions": true,
+  "indent_guides": {
+    "enabled": false
+  },
+  "file_types": {
+    "html": [
+      "*.tmpl"
+    ],
+    "markdown": [
+      "*.mdx"
+    ]
+  },
+  "vim_mode": true,
+  "base_keymap": "VSCode",
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "Cursor Dark"
+  }
+}

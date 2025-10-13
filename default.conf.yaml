@@ -58,6 +58,12 @@
           create: true
           relink: true
           force: true
+      ~/.config/zed:
+          path: config/zed
+          create: true
+          glob: true
+          relink: true
+          force: true
 # - create:
 #     - ~/downloads
 #     - ~/.vim/undo-history
