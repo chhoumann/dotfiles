@@ -1,5 +1,6 @@
-## Dotfiles
-This is where I store my dotfiles.
+# Dotfiles
+
+Automated macOS development environment setup with Homebrew, dotbot, and system preferences automation.
 
 Read about my tools & workflows: https://bagerbach.com/blog/developer-workflow-on-windows-using-wsl-tmux-and-vscode
 
