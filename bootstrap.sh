@@ -219,6 +219,13 @@ configure_git() {
         echo "✅ Git user.email already set: $(git config --global user.email)"
     fi
 
+    # Set up gh as git credential helper if available
+    if command -v gh &>/dev/null; then
+        echo "🔐 Configuring GitHub CLI as git credential helper..."
+        gh auth setup-git 2>/dev/null || true
+        echo "✅ Git credentials configured"
+    fi
+
     echo ""
 }
 
