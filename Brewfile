@@ -2,9 +2,7 @@
 # Install everything with: brew bundle --file=~/Developer/dotfiles/Brewfile
 
 # Taps
-tap "homebrew/bundle"
 tap "oven-sh/bun"
-tap "jordanbaird/ice"
 
 # ============================================================
 # Command-line Tools
