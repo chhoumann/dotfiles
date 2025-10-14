@@ -5,6 +5,10 @@
 - clean: ['~']
 
 - link:
+    # Karabiner
+    ~/.config/karabiner/karabiner.json:
+      path: ./config/karabiner/karabiner.json
+      force: true
     # Cursor
     "~/Library/Application Support/Cursor/User/settings.json":
       path: ./vscode/settings.json
