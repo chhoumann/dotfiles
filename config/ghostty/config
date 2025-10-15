@@ -3,7 +3,7 @@ font-size = 14
 background-blur-radius = 20
 mouse-hide-while-typing = true
 window-decoration = true
-macos-option-as-alt = false
+macos-option-as-alt = true
 background-opacity = 0.7
 background-blur-radius = 20
 keybind = super+right=esc:OF
