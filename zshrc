@@ -264,3 +264,6 @@ export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
 # opencode
 export PATH=/Users/christian/.opencode/bin:$PATH
 export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+
+# Added by Windsurf
+export PATH="/Users/christian/.codeium/windsurf/bin:$PATH"
