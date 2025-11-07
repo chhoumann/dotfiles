@@ -389,5 +389,9 @@
     "cursorpyright.analysis.autoImportCompletions": true,
     "cursorpyright.analysis.autoSearchPaths": true,
     "cursorpyright.analysis.inlayHints.callArgumentNames": "partial",
-    "cursorpyright.analysis.typeCheckingMode": "basic"
+    "cursorpyright.analysis.typeCheckingMode": "basic",
+    "update.releaseTrack": "prerelease",
+    "ty.experimental.autoImport": true,
+    "ty.experimental.rename": true,
+    "ty.diagnosticMode": "workspace"
 }
