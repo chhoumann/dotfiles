@@ -1,6 +1,6 @@
 # Initialize Variables
 export IS_VSCODE=false
-export EDITOR="code"
+export EDITOR="zed"
 
 
 # Check if running in VSCode
