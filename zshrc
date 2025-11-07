@@ -251,7 +251,9 @@ eval "$(zoxide init zsh)"
 
 export PATH=$PATH:$HOME/.dotnet
 
-if [ -f ~/.api_keys ]; then
+if [ -f ~/.config/secrets/api.env ]; then
+    source ~/.config/secrets/api.env
+elif [ -f ~/.api_keys ]; then
     source ~/.api_keys
 fi
 

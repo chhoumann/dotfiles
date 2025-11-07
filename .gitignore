@@ -1,0 +1,3 @@
+# Secrets (real values live outside version control)
+secrets/*.env
+!secrets/*.env.example
