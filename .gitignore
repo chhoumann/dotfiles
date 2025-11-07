@@ -1,3 +1,6 @@
 # Secrets (real values live outside version control)
 secrets/*.env
 !secrets/*.env.example
+
+# Zed prompt DB lock file (generated locally, shouldn't sync)
+config/zed/prompts/prompts-library-db.0.mdb/lock.mdb
