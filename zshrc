@@ -267,3 +267,4 @@ export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
 
 # Added by Windsurf
 export PATH="/Users/christian/.codeium/windsurf/bin:$PATH"
+export PATH="$PATH:/Users/christian/Developer/vr/scripts"
