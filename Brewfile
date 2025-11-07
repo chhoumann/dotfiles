@@ -53,6 +53,7 @@ cask "zed"              # Code editor
 cask "ghostty"          # Terminal emulator
 cask "orbstack"         # Docker alternative
 cask "beekeeper-studio" # Database GUI
+cask "insomnia"         # API client
 
 # System utilities
 cask "karabiner-elements"  # Keyboard customization
