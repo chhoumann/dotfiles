@@ -69,5 +69,13 @@
       },
       "language_servers": ["ty", "!basedpyright"]
     }
+  },
+  "lsp": {
+    "clangd": {
+      "binary": {
+        "path": "/usr/bin/clangd",
+        "arguments": ["--std=c++23"]
+      }
+    }
   }
 }
