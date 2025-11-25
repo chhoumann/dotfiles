@@ -5,6 +5,9 @@
 - clean: ["~"]
 
 - link:
+      ~/.gitconfig:
+          force: true
+          path: gitconfig
       ~/.tmux.conf:
           force: true
           path: tmux.conf
