@@ -266,3 +266,7 @@ export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
 # Added by Windsurf
 export PATH="/Users/christian/.codeium/windsurf/bin:$PATH"
 export PATH="$PATH:/Users/christian/Developer/vr/scripts"
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/christian/.antigravity/antigravity/bin:$PATH"
