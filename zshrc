@@ -211,10 +211,10 @@ esac
 
 export UV_TORCH_BACKEND=auto
 
+## -- Shell Integrations --
 eval "$(zoxide init zsh)"
-
-# atuin (better shell history)
-eval "$(atuin init zsh)"
+source <(fzf --zsh)           # ctrl+t: file search, alt+c: cd to dir
+eval "$(atuin init zsh)"      # ctrl+r: history (overrides fzf's)
 
 # direnv (per-directory env vars)
 eval "$(direnv hook zsh)"
@@ -226,9 +226,6 @@ if [ -f ~/.config/secrets/api.env ]; then
 elif [ -f ~/.api_keys ]; then
     source ~/.api_keys
 fi
-
-## -- Shell Integrations --
-source <(fzf --zsh)
 export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
 
 # opencode
