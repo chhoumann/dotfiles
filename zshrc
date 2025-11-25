@@ -48,25 +48,24 @@ source "${ZINIT_HOME}/zinit.zsh"
 # zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # Add in zsh plugins
-zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
+# Load completions (must be before syntax-highlighting)
+autoload -Uz compinit && compinit
+zinit cdreplay -q
+
+# Syntax highlighting should be loaded last
+zinit light zsh-users/zsh-syntax-highlighting
+
 # Add in snippets
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
-zinit snippet OMZP::archlinux
 zinit snippet OMZP::aws
 zinit snippet OMZP::kubectl
 zinit snippet OMZP::kubectx
 zinit snippet OMZP::command-not-found
-
-
-# Load completions
-autoload -Uz compinit && compinit
-
-zinit cdreplay -q
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -197,8 +196,6 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export DENO_INSTALL="$HOME/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
-# homebrew
-# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 
 # pnpm
@@ -209,11 +206,11 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-PATH="~/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="~/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="~/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"~/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=~/perl5"; export PERL_MM_OPT;
+PATH="$HOME/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
 
 export UV_TORCH_BACKEND=auto
 
