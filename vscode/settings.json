@@ -24,19 +24,7 @@
     },
     "editor.inlineSuggest.enabled": true,
     "github.copilot.enable": {
-        "quarto": false,
-        "*": true,
-        "plaintext": true,
-        "markdown": true,
-        "scminput": false,
-        "quarto": false,
-        "yaml": false,
-        "javascript": true,
-        "haskell": false,
-        "python": true,
-        "typescript": true,
-        "cpp": true,
-        "typescriptreact": true
+        "*": false
     },
     "editor.fontFamily": "Hack Nerd Font Mono",
     "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
@@ -347,7 +335,7 @@
     "gitlens.ai.model": "vscode",
     "gitlens.ai.vscode.model": "copilot:claude-3.5-sonnet",
     "ruff.configurationPreference": "filesystemFirst",
-    "github.copilot.nextEditSuggestions.enabled": true,
+    "github.copilot.nextEditSuggestions.enabled": false,
     "github.copilot.nextEditSuggestions.fixes": true,
     "github.copilot.chat.followUps": "always",
     "github.copilot.chat.codesearch.enabled": true,
@@ -393,5 +381,12 @@
     "update.releaseTrack": "prerelease",
     "ty.experimental.autoImport": true,
     "ty.experimental.rename": true,
-    "ty.diagnosticMode": "workspace"
+    "ty.diagnosticMode": "workspace",
+    "amp.tab.enabled": true,
+    "python.pyrefly.displayTypeErrors": "force-on",
+    "amp.url": "https://ampcode.com/",
+    "javascript.referencesCodeLens.enabled": true,
+    "javascript.referencesCodeLens.showOnAllFunctions": true,
+    "typescript.referencesCodeLens.enabled": true,
+    "typescript.referencesCodeLens.showOnAllFunctions": true
 }
