@@ -127,13 +127,16 @@ fi
 alias e="open"
 alias c="code"
 alias ci="code-insiders"
-alias cs="cursor"
 alias ccc="pbcopy"
 alias gdash="gh extension exec dash"
 alias cat="bat"
 alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
-alias p="cd ~/projects"
+
+# zellij
+alias zj="zellij"
+alias zja="zellij attach"
+alias zjl="zellij list-sessions"
 
 alias csb="~/projects/claude-manager/claude-squad"
 
@@ -179,8 +182,8 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$HOME/go/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
 
-eval "$(fnm env --use-on-cd)" # --use-on-cd automatically runs fnm use when you cd into a directory with a .node-version file
-eval "$(fnm completions --shell zsh)"
+# mise (manages node, python, etc. - replaces fnm)
+eval "$(mise activate zsh)"
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
@@ -206,15 +209,15 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-PATH="$HOME/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
-
 export UV_TORCH_BACKEND=auto
 
 eval "$(zoxide init zsh)"
+
+# atuin (better shell history)
+eval "$(atuin init zsh)"
+
+# direnv (per-directory env vars)
+eval "$(direnv hook zsh)"
 
 export PATH=$PATH:$HOME/.dotnet
 

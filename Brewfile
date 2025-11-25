@@ -9,6 +9,7 @@ tap "oven-sh/bun"
 # ============================================================
 
 # Modern Unix replacements
+brew "atuin"            # Better shell history
 brew "bat"              # Better cat
 brew "eza"              # Better ls
 brew "fzf"              # Fuzzy finder
@@ -23,7 +24,7 @@ brew "lazygit"          # Git TUI
 brew "go"               # Go language
 brew "node"             # Node.js
 brew "rust"             # Rust language
-brew "fnm"              # Fast Node Manager
+brew "mise"             # Dev tool version manager
 brew "bun"              # JavaScript runtime
 
 # Terminal & shell
@@ -35,6 +36,7 @@ brew "btop"             # System monitor
 brew "uv"               # Fast Python package installer
 
 # Utilities
+brew "direnv"           # Per-directory env vars
 brew "topgrade"         # Update everything
 
 # ============================================================
