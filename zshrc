@@ -161,9 +161,7 @@ cx() {
   if [[ "$1" == "update" ]]; then
     bun update -g @openai/codex --latest
   else
-    # Can add -c model_reasoning_effort='high' to enable high reasoning; removed due to
-    # gpt-5-codex having dynamic reasoning effort.
-    codex -m gpt-5-codex --enable web_search_request --yolo -c model_reasoning_summary_format=experimental "$@"
+    codex --enable web_search_request --yolo "$@"
   fi
 }
 
