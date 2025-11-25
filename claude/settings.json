@@ -4,5 +4,8 @@
     "MAX_THINKING_TOKENS": "31999"
   },
   "includeCoAuthoredBy": false,
+  "enabledPlugins": {
+    "frontend-design@claude-code-plugins": true
+  },
   "alwaysThinkingEnabled": true
 }
