@@ -53,7 +53,6 @@ zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
-# eval "$(fnm env --use-on-cd)" # --use-on-cd automatically runs fnm use when you cd into a directory with a .node-version file
 # Add in snippets
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
@@ -69,15 +68,6 @@ autoload -Uz compinit && compinit
 
 zinit cdreplay -q
 
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-# if not using warp:
-if [ "$TERM_PROGRAM" != "WarpTerminal" ]; then
-  plugins=(git zsh-z zsh-autosuggestions)
-fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
@@ -135,13 +125,12 @@ if type fd >/dev/null 2>&1; then
     alias find="fd"
 fi
 
-alias e="explorer.exe"
+alias e="open"
 alias c="code"
 alias ci="code-insiders"
 alias cs="cursor"
 alias ccc="pbcopy"
 alias gdash="gh extension exec dash"
-alias foxpdf="/mnt/c/Program\ Files\ \(x86\)/Foxit\ Software/Foxit\ PDF\ Reader/FoxitPDFReader.exe"
 alias cat="bat"
 alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
@@ -186,14 +175,6 @@ function yy() {
 
 eval "$(starship init zsh)"
 
-# Run Docker Service: https://nickjanetakis.com/blog/install-docker-in-wsl-2-without-docker-desktop
-if grep -q "microsoft" /proc/version > /dev/null 2>&1; then
-    if service docker status 2>&1 | grep -q "is not running"; then
-        wsl.exe --distribution "${WSL_DISTRO_NAME}" --user root \
-            --exec /usr/sbin/service docker start > /dev/null 2>&1
-    fi
-fi
-
 # Set PATH
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$HOME/go/bin:$PATH
@@ -203,7 +184,7 @@ eval "$(fnm env --use-on-cd)" # --use-on-cd automatically runs fnm use when you 
 eval "$(fnm completions --shell zsh)"
 
 # bun completions
-[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -213,14 +194,12 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 # deno
-export DENO_INSTALL="~/.deno"
+export DENO_INSTALL="$HOME/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
 # homebrew
 # eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-# :)
-export PATH=~/.local/bin:$PATH
 
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
@@ -230,22 +209,15 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-# to fix cudnn for wsl
-export LD_LIBRARY_PATH=/usr/lib/wsl/lib:$LD_LIBRARY_PATH
-export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
-export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-
 PATH="~/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="~/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="~/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"~/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=~/perl5"; export PERL_MM_OPT;
 
-UV_TORCH_BACKEND=auto
+export UV_TORCH_BACKEND=auto
 
 eval "$(zoxide init zsh)"
-
-. "$HOME/.cargo/env"
 
 export PATH=$PATH:$HOME/.dotnet
 
