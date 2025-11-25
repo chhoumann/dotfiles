@@ -25,6 +25,7 @@ brew "yazi"             # Terminal file manager
 brew "walk"             # Terminal navigator
 
 # Development tools
+brew "ast-grep"         # Code search/lint/rewrite
 brew "delta"            # Better git diffs
 brew "gh"               # GitHub CLI
 brew "git"              # Version control
