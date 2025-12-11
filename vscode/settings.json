@@ -382,11 +382,12 @@
     "ty.experimental.autoImport": true,
     "ty.experimental.rename": true,
     "ty.diagnosticMode": "workspace",
-    "amp.tab.enabled": true,
+    "amp.tab.enabled": false,
     "python.pyrefly.displayTypeErrors": "force-on",
     "amp.url": "https://ampcode.com/",
     "javascript.referencesCodeLens.enabled": true,
     "javascript.referencesCodeLens.showOnAllFunctions": true,
     "typescript.referencesCodeLens.enabled": true,
-    "typescript.referencesCodeLens.showOnAllFunctions": true
+    "typescript.referencesCodeLens.showOnAllFunctions": true,
+    "jupyter.interactiveWindow.creationMode": "perFile"
 }
