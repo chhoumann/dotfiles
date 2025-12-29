@@ -9,4 +9,3 @@ background-opacity = 1.0
 background-blur-radius = 20
 keybind = super+right=esc:OF
 keybind = super+left=esc:OH
-keybind = shift+enter=text:\x1b\r
