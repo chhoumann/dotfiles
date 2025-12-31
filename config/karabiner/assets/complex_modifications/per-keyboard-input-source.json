@@ -1,0 +1,63 @@
+{
+  "title": "Per-keyboard input source (Moonlander vs Built-in)",
+  "rules": [
+    {
+      "description": "Moonlander Mark I -> ABC",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "any": "key_code",
+            "modifiers": { "optional": ["any"] }
+          },
+          "to": [
+            { "select_input_source": { "input_source_id": "^com\\.apple\\.keylayout\\.ABC$" } }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                { "vendor_id": 12951, "product_id": 6505, "is_keyboard": true }
+              ]
+            },
+            {
+              "type": "input_source_unless",
+              "input_sources": [
+                { "input_source_id": "^com\\.apple\\.keylayout\\.ABC$" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Built-in keyboard -> Danish",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "any": "key_code",
+            "modifiers": { "optional": ["any"] }
+          },
+          "to": [
+            { "select_input_source": { "input_source_id": "^com\\.apple\\.keylayout\\.Danish$" } }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                { "is_built_in_keyboard": true }
+              ]
+            },
+            {
+              "type": "input_source_unless",
+              "input_sources": [
+                { "input_source_id": "^com\\.apple\\.keylayout\\.Danish$" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

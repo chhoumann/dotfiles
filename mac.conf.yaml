@@ -9,6 +9,10 @@
     ~/.config/karabiner/karabiner.json:
       path: ./config/karabiner/karabiner.json
       force: true
+    ~/.config/karabiner/assets:
+      path: ./config/karabiner/assets
+      create: true
+      force: true
     # Cursor
     "~/Library/Application Support/Cursor/User/settings.json":
       path: ./vscode/settings.json
@@ -27,4 +31,3 @@
       path: ./vscode/keybindings.json
       create: true
       force: true
-
