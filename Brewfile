@@ -114,3 +114,4 @@ cask "mac-mouse-fix"  # Better mouse
 cask "cleanshot"      # Screenshots
 cask "clop"           # Image optimizer (free)
 cask "screen-studio"  # Screen recording
+brew "tw93/tap/mole"
