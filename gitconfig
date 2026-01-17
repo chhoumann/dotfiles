@@ -27,3 +27,5 @@
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
+[gtr "hook"]
+	postCreate = zellij action new-tab && zellij action rename-tab \"$(basename $(pwd))\" && zellij action write-chars \"cd $(pwd)\" && zellij action write 10
