@@ -160,6 +160,46 @@ function ampx() {
   amp --dangerously-allow-all "${@:1}"
 }
 
+function update_coding_agents() {
+  local -a agents updated failed skipped
+  local -A updates
+  local name cmd
+
+  agents=(amp gemini claude codex opencode)
+  updates=(
+    amp     'amp update'
+    gemini  'gemini update'
+    claude  'bun update -g @anthropic-ai/claude-code --latest'
+    codex   'bun update -g @openai/codex --latest'
+    opencode 'bun update -g opencode-ai --latest'
+  )
+
+  for name in "${agents[@]}"; do
+    cmd="${updates[$name]}"
+    case "$name" in
+      claude|codex|opencode)
+        command -v bun >/dev/null 2>&1 || { skipped+=("$name"); continue; }
+        ;;
+    esac
+    command -v "$name" >/dev/null 2>&1 || { skipped+=("$name"); continue; }
+
+    if ${(z)cmd}; then
+      updated+=("$name")
+    else
+      failed+=("$name")
+    fi
+  done
+
+  (( ${#updated[@]} )) && echo "updated: ${updated[*]}"
+  (( ${#skipped[@]} )) && echo "skipped (missing): ${skipped[*]}"
+  if (( ${#failed[@]} )); then
+    echo "failed: ${failed[*]}"
+    return 1
+  fi
+}
+
+alias uca="update_coding_agents"
+
 # https://github.com/antonmedv/walk
 function cdl() {
   cd "$(walk --icons $@)"
