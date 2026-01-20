@@ -140,6 +140,168 @@ alias zjl="zellij list-sessions"
 
 alias csb="~/projects/claude-manager/claude-squad"
 
+# Git worktree swap functions
+gwt-use() {
+  local branch="$1"
+
+  # Check if we're in a git repo
+  git rev-parse --git-dir &>/dev/null || { echo "Not in a git repository"; return 1; }
+
+  # Get main branch name
+  local main_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null)
+  main_branch=${main_branch##refs/remotes/origin/}
+  [[ -z "$main_branch" ]] && main_branch="main"
+
+  if [[ -z "$branch" ]]; then
+    # Build list: branch|path
+    local worktrees=()
+    local wt_branch wt_path
+    while IFS= read -r line; do
+      if [[ "$line" == worktree\ * ]]; then
+        wt_path="${line#worktree }"
+      elif [[ "$line" == branch\ refs/heads/* ]]; then
+        wt_branch="${line#branch refs/heads/}"
+        worktrees+=("$wt_branch"$'\t'"$wt_path")
+      fi
+    done < <(git worktree list --porcelain)
+
+    [[ ${#worktrees[@]} -eq 0 ]] && { echo "No worktrees with branches found"; return 1; }
+
+    # If only one worktree, use it directly
+    if [[ ${#worktrees[@]} -eq 1 ]]; then
+      branch="${worktrees[1]%%$'\t'*}"
+      echo "Only one worktree found, using: $branch"
+    else
+      # Build display list with time and message, sorted by most recent commit
+      local unsorted=()
+      for entry in "${worktrees[@]}"; do
+        local b="${entry%%$'\t'*}"
+        local p="${entry#*$'\t'}"
+        local timestamp=$(git log -1 --format="%ct" "$b" 2>/dev/null || echo "0")
+        local time=$(git log -1 --format="%ar" "$b" 2>/dev/null || echo "unknown")
+        local msg=$(git log -1 --format="%s" "$b" 2>/dev/null)
+        [[ ${#msg} -gt 40 ]] && msg="${msg:0:40}..."
+        unsorted+=("$timestamp"$'\t'"$b"$'\t'"$p"$'\t'"$time"$'\t'"$msg")
+      done
+      # Sort by timestamp (descending) and remove timestamp column
+      local display_list
+      display_list=$(printf '%s\n' "${unsorted[@]}" | sort -t$'\t' -k1 -rn | cut -f2-)
+
+      # Preview script with full paths
+      local preview_cmd="
+        branch=\$(echo {} | cut -f1)
+        path=\$(echo {} | cut -f2)
+        main=\"origin/$main_branch\"
+        printf '\033[1;36m━━━ %s ━━━\033[0m\n\n' \"\$branch\"
+
+        # vs main (from merge-base)
+        base=\$(git merge-base \"\$main\" \"\$branch\" 2>/dev/null)
+        if [ -n \"\$base\" ]; then
+          ahead=\$(git rev-list --count \"\$base\"..\"\$branch\" 2>/dev/null || echo 0)
+          behind=\$(git rev-list --count \"\$base\"..\"\$main\" 2>/dev/null || echo 0)
+          printf '\033[33m↑%s\033[0m ahead  \033[33m↓%s\033[0m behind %s\n' \"\$ahead\" \"\$behind\" \"\$main\"
+        fi
+
+        # vs own remote tracking branch
+        tracking=\$(git rev-parse --abbrev-ref \"\$branch\"@{upstream} 2>/dev/null)
+        if [ -n \"\$tracking\" ]; then
+          push_ahead=\$(git rev-list --count \"\$tracking\"..\"\$branch\" 2>/dev/null || echo 0)
+          push_behind=\$(git rev-list --count \"\$branch\"..\"\$tracking\" 2>/dev/null || echo 0)
+          if [ \"\$push_ahead\" -gt 0 ] || [ \"\$push_behind\" -gt 0 ]; then
+            printf '\033[35m↑%s\033[0m to push  \033[35m↓%s\033[0m to pull\n' \"\$push_ahead\" \"\$push_behind\"
+          else
+            printf '\033[32m✓ in sync with %s\033[0m\n' \"\$tracking\"
+          fi
+        else
+          printf '\033[2mno remote tracking branch\033[0m\n'
+        fi
+
+        printf '\033[2m%s\033[0m\n\n' \"\$path\"
+        changes=\$(git diff --shortstat \"\$main\"...\"\$branch\" 2>/dev/null)
+        [ -n \"\$changes\" ] && printf '\033[32m%s\033[0m\n\n' \"\$changes\"
+        printf '\033[1mRecent commits:\033[0m\n'
+        git log --color=always --format='%C(yellow)%h%C(reset) %C(cyan)%ar%C(reset) %s %C(dim)(%an)%C(reset)' -8 \"\$branch\" 2>/dev/null
+      "
+
+      local selection=$(echo "$display_list" | fzf \
+              --prompt="  " \
+              --header="Select a worktree branch to checkout here (ctrl-l: toggle preview)" \
+              --preview="$preview_cmd" \
+              --preview-window=right:55%:wrap \
+              --delimiter=$'\t' \
+              --with-nth='1,3,4' \
+              --ansi \
+              --border=rounded \
+              --border-label=" gwt-use " \
+              --bind='ctrl-l:toggle-preview')
+      [[ -z "$selection" ]] && return 1
+      branch="${selection%%$'\t'*}"
+    fi
+  fi
+
+  # Find the worktree path
+  local wt_path=$(git worktree list --porcelain | awk -v b="$branch" '
+    /^worktree / { path=$2 }
+    /^branch refs\/heads\// { if ($0 ~ b"$") print path }
+  ')
+
+  if [[ -z "$wt_path" ]]; then
+    echo "No worktree found for branch: $branch"
+    return 1
+  fi
+
+  printf "\n\033[2m⏸ Detaching worktree at %s...\033[0m\n" "$wt_path"
+  git -C "$wt_path" checkout --detach || return 1
+
+  printf "\033[2m⎇ Checking out %s...\033[0m\n" "$branch"
+  git checkout "$branch" || return 1
+
+  printf "\n\033[1;32m✓ Now on %s\033[0m\n" "$branch"
+}
+
+gwt-return() {
+  git rev-parse --git-dir &>/dev/null || { echo "Not in a git repository"; return 1; }
+
+  local branch=$(git branch --show-current)
+  if [[ -z "$branch" ]]; then
+    echo "Not on a branch (detached HEAD?)"
+    return 1
+  fi
+
+  # Find detached worktrees
+  local detached=$(git worktree list | awk '/detached/ {print $1}')
+  [[ -z "$detached" ]] && { echo "No detached worktrees found"; return 1; }
+
+  local count=$(echo "$detached" | wc -l | tr -d ' ')
+  local wt_path
+
+  if [[ "$count" -eq 1 ]]; then
+    wt_path="$detached"
+    echo "Only one detached worktree found, using: $wt_path"
+  else
+    wt_path=$(echo "$detached" | fzf \
+        --prompt="↩ Return '$branch' to: " \
+        --header="Detached worktrees" \
+        --preview='printf "\033[1;36m━━━ %s ━━━\033[0m\n\n" "$(basename {})"; git -C {} status --short 2>/dev/null; echo; git -C {} log --oneline -5 2>/dev/null' \
+        --preview-window=right:50%:wrap \
+        --ansi \
+        --border=rounded \
+        --border-label=" gwt-return ")
+    [[ -z "$wt_path" ]] && return 1
+  fi
+
+  local main_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+  [[ -z "$main_branch" ]] && main_branch="main"
+
+  printf "\n\033[2m⎇ Switching to %s...\033[0m\n" "$main_branch"
+  git checkout "$main_branch" || { git checkout main 2>/dev/null || git checkout master; } || return 1
+
+  printf "\033[2m↩ Restoring %s in %s...\033[0m\n" "$branch" "$wt_path"
+  git -C "$wt_path" checkout "$branch" || return 1
+
+  printf "\n\033[1;32m✓ %s restored to %s\033[0m\n" "$branch" "$(basename "$wt_path")"
+}
+
 ccv() {
   if [[ "$1" == "update" ]]; then
     bun update -g @anthropic-ai/claude-code --latest
