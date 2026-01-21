@@ -33,6 +33,7 @@ brew "graphviz"         # Graph visualization
 brew "hyperfine"        # CLI benchmarking
 brew "jq"               # JSON processor
 brew "lazygit"          # Git TUI
+brew "xcodegen"         # Xcode project generator
 
 # Languages & runtimes
 brew "go"               # Go language
@@ -41,9 +42,11 @@ brew "rust"             # Rust language
 brew "zig"              # Zig language
 brew "mise"             # Dev tool version manager
 brew "bun"              # JavaScript runtime
+brew "openjdk@11"       # Java 11
 brew "swiftformat"      # Swift formatter
 brew "swig"             # Wrapper generator
 brew "premake"          # Build configuration
+brew "cmake"            # Build system
 
 # Terminal & shell
 brew "tmux"             # Terminal multiplexer
@@ -62,10 +65,13 @@ brew "vercel-cli"       # Vercel deployment
 # Media
 brew "ffmpeg"           # Video/audio processing
 brew "yt-dlp"           # YouTube downloader
+brew "jpeg"             # JPEG image library
 
 # Utilities
 brew "direnv"           # Per-directory env vars
 brew "topgrade"         # Update everything
+brew "languagetool"     # Grammar checker
+brew "pandoc"           # Document converter
 
 # ============================================================
 # GUI Applications (Casks)
@@ -105,11 +111,18 @@ cask "zotero"           # Reference manager
 # Communication
 cask "discord"          # Chat
 
+# Browsers
+cask "google-chrome"    # Web browser
+
 # ============================================================
 # Optional - Apps to consider
 # ============================================================
 
 cask "mac-mouse-fix"  # Better mouse
+cask "wribe"          # AI transcription
+cask "codexbar"       # Menu bar AI
+cask "sparkle"        # App update framework
+cask "temurin@11"     # Java 11 runtime
 
 cask "cleanshot"      # Screenshots
 cask "clop"           # Image optimizer (free)
