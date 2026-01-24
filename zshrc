@@ -304,7 +304,7 @@ gwt-return() {
 
 ccv() {
   if [[ "$1" == "update" ]]; then
-    bun update -g @anthropic-ai/claude-code --latest
+    claude update
   else
     claude --dangerously-skip-permissions "$@"
   fi
@@ -323,32 +323,123 @@ function ampx() {
 }
 
 function update_coding_agents() {
+  emulate -L zsh
+  setopt local_options no_unset no_monitor no_notify
+
+  local verbose=0 parallel=0 opt
+  while getopts "vp" opt; do
+    case "$opt" in
+      v) verbose=1 ;;
+      p) parallel=1 ;;
+    esac
+  done
+  shift $((OPTIND-1))
+
   local -a agents updated failed skipped
-  local -A updates
-  local name cmd
+  local -A updates versions pids
+  local name cmd tmpdir
 
   agents=(amp gemini claude codex opencode)
   updates=(
     amp     'amp update'
     gemini  'gemini update'
-    claude  'bun update -g @anthropic-ai/claude-code --latest'
+    claude  'claude update'
     codex   'bun update -g @openai/codex --latest'
     opencode 'bun update -g opencode-ai --latest'
   )
+  versions=(
+    amp     'amp --version'
+    gemini  'gemini --version'
+    claude  'claude --version'
+    codex   'codex --version'
+    opencode 'opencode --version'
+  )
+
+  tmpdir="$(mktemp -d -t uca.XXXXXX)" || return 1
+  local stty_state=""
+  if (( parallel )); then
+    stty_state="$(stty -g 2>/dev/null)" || stty_state=""
+    [[ -n "$stty_state" ]] && stty -tostop 2>/dev/null
+  fi
+  trap '[[ -n "$stty_state" ]] && stty "$stty_state" 2>/dev/null; rm -rf "$tmpdir"' EXIT
+
+  update_one() {
+    emulate -L zsh
+    setopt local_options no_unset
+    trap - EXIT
+    local name="$1"
+    local cmd="$2"
+    local vcmd="$3"
+    local tmpdir="$4"
+    local log="$tmpdir/$name.log"
+    local meta="$tmpdir/$name.meta"
+    local start end dur exit_status before after
+
+    start=$(date +%s)
+    before="$(eval "$vcmd" 2>/dev/null | head -n 1)"
+
+    if eval "$cmd" >"$log" 2>&1 </dev/null; then
+      exit_status=0
+    else
+      exit_status=$?
+    fi
+
+    after="$(eval "$vcmd" 2>/dev/null | head -n 1)"
+    end=$(date +%s)
+    dur=$((end-start))
+
+    print -r -- "exit_status=$exit_status" >"$meta"
+    print -r -- "duration=$dur" >>"$meta"
+    print -r -- "before=${(q)before}" >>"$meta"
+    print -r -- "after=${(q)after}" >>"$meta"
+  }
 
   for name in "${agents[@]}"; do
     cmd="${updates[$name]}"
     case "$name" in
-      claude|codex|opencode)
+      codex|opencode)
         command -v bun >/dev/null 2>&1 || { skipped+=("$name"); continue; }
         ;;
     esac
     command -v "$name" >/dev/null 2>&1 || { skipped+=("$name"); continue; }
 
-    if ${(z)cmd}; then
+    if (( parallel )); then
+      update_one "$name" "$cmd" "${versions[$name]}" "$tmpdir" &
+      local pid=$!
+      pids[$name]=$pid
+    else
+      update_one "$name" "$cmd" "${versions[$name]}" "$tmpdir"
+    fi
+  done
+
+  if (( parallel )); then
+    for name in "${(k)pids[@]}"; do
+      local pid="${pids[$name]}"
+      [[ "$pid" == <-> ]] && wait "$pid"
+    done
+  fi
+
+  for name in "${agents[@]}"; do
+    local meta="$tmpdir/$name.meta"
+    local log="$tmpdir/$name.log"
+    [[ -f "$meta" ]] || continue
+    source "$meta"
+
+    if (( exit_status == 0 )); then
       updated+=("$name")
     else
       failed+=("$name")
+    fi
+
+    if (( verbose )) || (( exit_status != 0 )); then
+      echo "==> $name"
+      [[ -s "$log" ]] && cat "$log"
+    fi
+
+    if [[ -n "$before" || -n "$after" ]]; then
+      printf "%s: %s -> %s (%ss)\n" "$name" "${before:-unknown}" "${after:-unknown}" "$duration"
+    else
+      printf "%s: (%ss)\n" "$name" "$duration"
     fi
   done
 
