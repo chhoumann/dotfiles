@@ -9,27 +9,33 @@ if [[ $(printenv | grep -c "VSCODE_") -gt 0 ]]; then
 fi
 
 # export ZELLIJ_AUTO_ATTACH=true
+# Prefer tmux or zellij without affecting the other; default stays zellij.
+export MUX_PREFERRED="${MUX_PREFERRED:-zellij}"
 if [ "$TERM_PROGRAM" = "ghostty" ]; then
-    if [[ -z "$ZELLIJ" ]]; then
-        if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-            zellij attach -c
+    if [[ -z "$ZELLIJ" && -z "$TMUX" ]]; then
+        if [[ "$MUX_PREFERRED" == "tmux" ]]; then
+            tmux new -A -s main
         else
-		sessions=$(zellij list-sessions --no-formatting --short)
+            if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
+                zellij attach -c
+            else
+                sessions=$(zellij list-sessions --no-formatting --short)
 
-		# Check if there are any sessions
-		if [ -z "$sessions" ]; then
-		    # No sessions exist; start a new one
-		    zellij
-		else
-		    # Attach to the most recently used session
-		    # Assuming the last session in the list is the most recent
-		    last_session=$(echo "$sessions" | tail -n 1)
-		    zellij attach "$last_session"
-		fi
-        fi
+                # Check if there are any sessions
+                if [ -z "$sessions" ]; then
+                    # No sessions exist; start a new one
+                    zellij
+                else
+                    # Attach to the most recently used session
+                    # Assuming the last session in the list is the most recent
+                    last_session=$(echo "$sessions" | tail -n 1)
+                    zellij attach "$last_session"
+                fi
+            fi
 
-        if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
-            exit
+            if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
+                exit
+            fi
         fi
     fi
 fi
