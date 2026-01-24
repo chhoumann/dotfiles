@@ -1,0 +1,58 @@
+model = "gpt-5.2-codex"
+model_reasoning_effort = "xhigh"
+
+tool_output_token_limit = 25000
+web_search_request = true
+
+[projects."/Users/christian/Developer/dotfiles"]
+trust_level = "trusted"
+
+[projects."/Users/christian/Developer"]
+trust_level = "trusted"
+
+[projects."/private/tmp"]
+trust_level = "trusted"
+
+[projects."/Users/christian"]
+trust_level = "trusted"
+
+[projects."/Users/christian/.github-triage/data/chhoumann/quickadd/triage"]
+trust_level = "trusted"
+
+[projects."/Users/christian/notes"]
+trust_level = "trusted"
+
+[projects."/Users/christian/.vr/quickadd/trees/894"]
+trust_level = "trusted"
+
+[projects."/Users/christian/.claude/plugins/marketplaces/claude-code-plugins"]
+trust_level = "trusted"
+
+[projects."/Users/christian/.claude"]
+trust_level = "trusted"
+
+[projects."/"]
+trust_level = "untrusted"
+
+[projects."/Users/christian/.codex/skills/mistral-ocr-uv"]
+trust_level = "trusted"
+
+[notice]
+hide_gpt5_1_migration_prompt = true
+"hide_gpt-5.1-codex-max_migration_prompt" = true
+
+[notice.model_migrations]
+"gpt-5.2" = "gpt-5.2-codex"
+
+[mcp_servers.RepoPrompt]
+command = "/Users/christian/RepoPrompt/repoprompt_cli"
+args = []
+tool_timeout_sec = 10000
+enabled = false
+
+[features]
+unified_exec = true
+shell_snapshot = true
+steer = true
+collab = true
+collaboration_modes = true

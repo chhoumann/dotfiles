@@ -66,6 +66,11 @@
           create: true
           relink: true
           force: true
+      ~/.codex/config.toml:
+          path: codex/config.toml
+          create: true
+          relink: true
+          force: true
       ~/.config/zed:
           path: config/zed
           create: true
