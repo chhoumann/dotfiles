@@ -3,6 +3,7 @@
 
 # Taps
 tap "oven-sh/bun"
+tap "chhoumann/tap"
 
 # ============================================================
 # Command-line Tools
@@ -72,6 +73,7 @@ brew "direnv"           # Per-directory env vars
 brew "topgrade"         # Update everything
 brew "languagetool"     # Grammar checker
 brew "pandoc"           # Document converter
+brew "chhoumann/tap/uca" # Update multiple coding-agent CLIs with one command
 
 # ============================================================
 # GUI Applications (Casks)
