@@ -37,6 +37,12 @@ trust_level = "untrusted"
 [projects."/Users/christian/.codex/skills/mistral-ocr-uv"]
 trust_level = "trusted"
 
+[projects."/Users/christian/Developer/add-skill/.git"]
+trust_level = "trusted"
+
+[projects."/Users/christian/Library/CloudStorage/GoogleDrive-christian@bagerbach.com/My Drive/Accounting"]
+trust_level = "trusted"
+
 [notice]
 hide_gpt5_1_migration_prompt = true
 "hide_gpt-5.1-codex-max_migration_prompt" = true
