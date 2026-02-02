@@ -20,6 +20,9 @@
       ~/.bashrc:
           force: true
           path: bashrc
+      ~/.aerospace.toml:
+          force: true
+          path: aerospace.toml
       ~/.config/lazygit/config.yml:
           path: config/lazygit/config.yml
           create: true
