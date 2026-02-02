@@ -320,7 +320,7 @@ cx() {
   if [[ "$1" == "update" ]]; then
     bun update -g @openai/codex --latest
   else
-    codex --enable web_search_request --yolo "$@"
+    codex --yolo "$@"
   fi
 }
 
