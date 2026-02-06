@@ -53,9 +53,14 @@ hide_gpt5_1_migration_prompt = true
 
 [mcp_servers.RepoPrompt]
 command = "/Users/christian/RepoPrompt/repoprompt_cli"
-args = []
-tool_timeout_sec = 10000
-enabled = false
+enabled = true
+tool_timeout_sec = 10000.0
+
+# [mcp_servers.XcodeBuildMCP]
+# command = "npx"
+# args = ["-y", "xcodebuildmcp@latest"]
+# env = { "XCODEBUILDMCP_SENTRY_DISABLED" = "false" }
+# tool_timeout_sec = 600
 
 [features]
 unified_exec = true
