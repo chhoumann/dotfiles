@@ -12,7 +12,7 @@ Read about my tools & workflows: https://bagerbach.com/blog/developer-workflow-o
 
 # 2. Clone this repo
 mkdir -p ~/Developer
-git clone https://github.com/yourusername/dotfiles ~/Developer/dotfiles
+git clone https://github.com/chhoumann/dotfiles ~/Developer/dotfiles
 cd ~/Developer/dotfiles
 
 # 3. Run bootstrap (installs everything!)

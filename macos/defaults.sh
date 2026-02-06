@@ -73,8 +73,8 @@ defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 
 # Set default location for new Finder windows to Downloads
-# Options: `PfDe` (Desktop), `PfDo` (Documents), `PfHm` (Home), or file:///path/
-defaults write com.apple.finder NewWindowTarget -string "PfDo"
+# Options: `PfDe` (Desktop), `PfDo` (Documents), `PfHm` (Home), or `PfLo` (Other + NewWindowTargetPath)
+defaults write com.apple.finder NewWindowTarget -string "PfLo"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Downloads/"
 
 # Keep folders on top when sorting by name

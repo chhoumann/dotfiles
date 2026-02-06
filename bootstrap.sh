@@ -284,7 +284,7 @@ main() {
     echo "  6. Review and adjust any settings as needed"
     echo ""
     echo "📖 See the setup guide for more manual steps:"
-    echo "   https://github.com/yourusername/dotfiles#manual-setup"
+    echo "   https://github.com/chhoumann/dotfiles#manual-setup"
     echo ""
 }
 

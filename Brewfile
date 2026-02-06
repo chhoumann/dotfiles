@@ -34,6 +34,8 @@ brew "graphviz"         # Graph visualization
 brew "hyperfine"        # CLI benchmarking
 brew "jq"               # JSON processor
 brew "lazygit"          # Git TUI
+brew "shellcheck"       # Shell script linting
+brew "shfmt"            # Shell script formatter
 brew "xcodegen"         # Xcode project generator
 
 # Languages & runtimes

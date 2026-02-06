@@ -1,11 +1,10 @@
-# Initialize Variables
+# Initialize variables
 export IS_VSCODE=false
-export EDITOR="vim"
+export EDITOR="${EDITOR:-vim}"
 
-
-# Check if running in VSCode
-if [[ $(printenv | grep -c "VSCODE_") -gt 0 ]]; then
-    export IS_VSCODE=true
+# VS Code sets a few env vars; avoid spawning subprocesses here.
+if [[ -n "${VSCODE_PID-}" || -n "${VSCODE_IPC_HOOK_CLI-}" || "${TERM_PROGRAM-}" == "vscode" ]]; then
+  IS_VSCODE=true
 fi
 
 # export ZELLIJ_AUTO_ATTACH=true
@@ -44,8 +43,8 @@ fi
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 # Download Zinit, if it's not there yet
 if [ ! -d "$ZINIT_HOME" ]; then
-   mkdir -p "$(dirname $ZINIT_HOME)"
-   git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+   mkdir -p "$(dirname "$ZINIT_HOME")"
+   git clone --depth=1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 # Source/Load zinit
 source "${ZINIT_HOME}/zinit.zsh"
@@ -59,7 +58,10 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
 # Load completions (must be before syntax-highlighting)
-autoload -Uz compinit && compinit
+ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+mkdir -p "$ZSH_CACHE_DIR"
+ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
+autoload -Uz compinit && compinit -d "$ZSH_COMPDUMP"
 zinit cdreplay -q
 
 # Syntax highlighting should be loaded last
@@ -105,15 +107,21 @@ setopt hist_find_no_dups
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+if command -v eza >/dev/null 2>&1; then
+    zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --color=always --icons --git --group-directories-first "$realpath"'
+    zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza --color=always --icons --git --group-directories-first "$realpath"'
+else
+    # macOS BSD ls: use -G for color when available.
+    zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -G "$realpath"'
+    zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls -G "$realpath"'
+fi
 
 
 # --- Aliases ---
 alias lg=lazygit
-alias fly=~/.fly/bin/flyctl
+[[ -x "$HOME/.fly/bin/flyctl" ]] && alias fly="$HOME/.fly/bin/flyctl"
 
-if type eza >/dev/null 2>&1; then
+if command -v eza >/dev/null 2>&1; then
     alias ls="eza --icons --git"
     alias l='eza -alg --color=always --group-directories-first --git'
     alias ll='eza -aliSgh --color=always --group-directories-first --icons --header --long --git'
@@ -126,7 +134,7 @@ else
     alias lr='ls -ltrh'
 fi
 
-if type fd >/dev/null 2>&1; then
+if command -v fd >/dev/null 2>&1; then
     alias find="fd"
 fi
 
@@ -135,7 +143,7 @@ alias c="code"
 alias ci="code-insiders"
 alias ccc="pbcopy"
 alias gdash="gh extension exec dash"
-alias cat="bat"
+command -v bat >/dev/null 2>&1 && alias cat="bat"
 alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 
@@ -144,7 +152,7 @@ alias zj="zellij"
 alias zja="zellij attach"
 alias zjl="zellij list-sessions"
 
-alias csb="~/projects/claude-manager/claude-squad"
+alias csb="$HOME/projects/claude-manager/claude-squad"
 
 # Git worktree swap functions
 gwt-use() {
@@ -330,7 +338,7 @@ function ampx() {
 
 # https://github.com/antonmedv/walk
 function cdl() {
-  cd "$(walk --icons $@)"
+	cd "$(walk --icons "$@")"
 }
 
 # https://github.com/sxyazi/yazi
@@ -343,67 +351,111 @@ function yy() {
 	rm -f -- "$tmp"
 }
 
-eval "$(starship init zsh)"
+# Prompt
+if command -v starship >/dev/null 2>&1 && [[ -t 1 ]] && [[ "${TERM-}" != "dumb" ]]; then
+  eval "$(starship init zsh)"
+fi
 
-# Set PATH
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH=$HOME/go/bin:$PATH
-export PATH="$HOME/.local/bin:$PATH"
+# PATH management (dedupe + only add existing dirs)
+typeset -U path PATH
 
-# mise (manages node, python, etc. - replaces fnm)
-eval "$(mise activate zsh)"
+path_prepend() {
+  local dir="$1"
+  [[ -d "$dir" ]] || return 0
+  path=("$dir" $path)
+}
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+path_append() {
+  local dir="$1"
+  [[ -d "$dir" ]] || return 0
+  path+=("$dir")
+}
+
+path_prepend "$HOME/bin"
+path_prepend "$HOME/.local/bin"
+path_prepend "$HOME/go/bin"
+
+# Optional local CLIs (installed per-machine); only enabled if present.
+path_prepend "$HOME/.opencode/bin"
+path_prepend "$HOME/.codeium/windsurf/bin"
+path_prepend "$HOME/.antigravity/antigravity/bin"
+path_append "$HOME/Developer/vr/scripts"
+
+# Make Intel Homebrew / manual installs usable on Apple Silicon and vice versa.
+path_append "/usr/local/bin"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+path_prepend "$BUN_INSTALL/bin"
+[[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
 
 # cargo
-export PATH="$HOME/.cargo/bin:$PATH"
+path_prepend "$HOME/.cargo/bin"
 
 # deno
 export DENO_INSTALL="$HOME/.deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
-
-
+path_prepend "$DENO_INSTALL/bin"
 
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
+path_prepend "$PNPM_HOME"
+
+# .NET user tools
+path_append "$HOME/.dotnet"
+
+# Homebrew extras (only if installed)
+if [[ -d /opt/homebrew ]]; then
+  HOMEBREW_PREFIX="/opt/homebrew"
+elif [[ -d /usr/local/opt ]]; then
+  HOMEBREW_PREFIX="/usr/local"
+fi
+
+if [[ -n "${HOMEBREW_PREFIX-}" ]]; then
+  path_prepend "$HOMEBREW_PREFIX/opt/llvm/bin"
+  path_prepend "$HOMEBREW_PREFIX/opt/dotnet@8/bin"
+
+  # Prefer the newest installed OpenJDK.
+  for jdk in openjdk@21 openjdk@17 openjdk@11 openjdk; do
+    if [[ -d "$HOMEBREW_PREFIX/opt/$jdk/bin" ]]; then
+      path_prepend "$HOMEBREW_PREFIX/opt/$jdk/bin"
+      break
+    fi
+  done
+fi
 
 export UV_TORCH_BACKEND=auto
 
+# mise (manages node, python, etc. - replaces fnm)
+command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
+
 ## -- Shell Integrations --
-eval "$(zoxide init zsh)"
-source <(fzf --zsh)           # ctrl+t: file search, alt+c: cd to dir
-eval "$(atuin init zsh)"      # ctrl+r: history (overrides fzf's)
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
 
-# direnv (per-directory env vars)
-eval "$(direnv hook zsh)"
-
-export PATH=$PATH:$HOME/.dotnet
-
-if [ -f ~/.config/secrets/api.env ]; then
-    source ~/.config/secrets/api.env
-elif [ -f ~/.api_keys ]; then
-    source ~/.api_keys
+if command -v fzf >/dev/null 2>&1 && [[ -t 0 ]] && [[ -t 1 ]]; then
+    # Faster than `source <(fzf --zsh)` and avoids spawning a process on startup.
+    if [[ -r /opt/homebrew/opt/fzf/shell/completion.zsh ]]; then
+        source /opt/homebrew/opt/fzf/shell/completion.zsh
+        source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+    elif [[ -r /usr/local/opt/fzf/shell/completion.zsh ]]; then
+        source /usr/local/opt/fzf/shell/completion.zsh
+        source /usr/local/opt/fzf/shell/key-bindings.zsh
+    else
+        source <(fzf --zsh)
+    fi
 fi
-export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
 
-# opencode
-export PATH=/Users/christian/.opencode/bin:$PATH
-export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+if command -v atuin >/dev/null 2>&1 && [[ -t 0 ]] && [[ -t 1 ]]; then
+  eval "$(atuin init zsh)"      # ctrl+r: history (overrides fzf's)
+fi
+command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"    # per-directory env vars
 
-# Added by Windsurf
-export PATH="/Users/christian/.codeium/windsurf/bin:$PATH"
-export PATH="$PATH:/Users/christian/Developer/vr/scripts"
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+if [[ -f "$HOME/.config/secrets/api.env" ]]; then
+    source "$HOME/.config/secrets/api.env"
+elif [[ -f "$HOME/.api_keys" ]]; then
+    source "$HOME/.api_keys"
+fi
 
-# Added by Antigravity
-export PATH="/Users/christian/.antigravity/antigravity/bin:$PATH"
+# Local machine-specific overrides (kept out of this repo).
+if [[ -f "$HOME/.zshrc.local" ]]; then
+  source "$HOME/.zshrc.local"
+fi
