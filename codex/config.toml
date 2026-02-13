@@ -5,6 +5,8 @@ tool_output_token_limit = 25000
 web_search_request = true
 web_search = "live"
 
+responses_websockets_v2 = true
+
 [projects."/Users/christian/Developer/dotfiles"]
 trust_level = "trusted"
 
