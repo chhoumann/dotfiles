@@ -1,4 +1,4 @@
-model = "gpt-5.2-codex"
+model = "gpt-5.3-codex-spark"
 model_reasoning_effort = "xhigh"
 
 tool_output_token_limit = 25000
@@ -68,5 +68,5 @@ tool_timeout_sec = 10000.0
 unified_exec = true
 shell_snapshot = true
 steer = true
-# collab = true
-# collaboration_modes = true # doesn't feel ready
+multi_agent = true
+prevent_idle_sleep = true
