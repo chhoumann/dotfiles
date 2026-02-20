@@ -147,6 +147,15 @@ command -v bat >/dev/null 2>&1 && alias cat="bat"
 alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 
+fp() {
+  local root="${1:-.}"
+  if command -v fd >/dev/null 2>&1; then
+    fd --type f . "$root"
+  else
+    find "$root" -type f
+  fi | fzf --multi --preview 'bat --color=always {} 2>/dev/null || cat {}' | xargs -I{} realpath {}
+}
+
 # zellij
 alias zj="zellij"
 alias zja="zellij attach"
