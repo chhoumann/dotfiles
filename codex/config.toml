@@ -70,4 +70,4 @@ shell_snapshot = true
 steer = true
 multi_agent = true
 prevent_idle_sleep = true
-voice_transcription = true
+#voice_transcription = true
