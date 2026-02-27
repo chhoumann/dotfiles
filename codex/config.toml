@@ -70,4 +70,5 @@ shell_snapshot = true
 steer = true
 multi_agent = true
 prevent_idle_sleep = true
+default_mode_request_user_input = true
 #voice_transcription = true
