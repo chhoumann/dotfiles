@@ -10,7 +10,7 @@ fi
 # export ZELLIJ_AUTO_ATTACH=true
 # Prefer tmux or zellij without affecting the other; default stays zellij.
 export MUX_PREFERRED="${MUX_PREFERRED:-zellij}"
-if [ "$TERM_PROGRAM" = "ghostty" ]; then
+if [[ $- == *i* ]] && [[ -t 0 ]] && [[ -t 1 ]] && [[ "${TERM_PROGRAM-}" == "ghostty" ]] && command -v zellij >/dev/null 2>&1; then
     if [[ -z "$ZELLIJ" && -z "$TMUX" ]]; then
         if [[ "$MUX_PREFERRED" == "tmux" ]]; then
             tmux new -A -s main
@@ -18,7 +18,11 @@ if [ "$TERM_PROGRAM" = "ghostty" ]; then
             if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
                 zellij attach -c
             else
-                sessions=$(zellij list-sessions --no-formatting --short)
+                if command -v timeout >/dev/null 2>&1; then
+                    sessions=$(timeout 2 zellij list-sessions --no-formatting --short 2>/dev/null || true)
+                else
+                    sessions=$(zellij list-sessions --no-formatting --short 2>/dev/null || true)
+                fi
 
                 # Check if there are any sessions
                 if [ -z "$sessions" ]; then
@@ -28,7 +32,7 @@ if [ "$TERM_PROGRAM" = "ghostty" ]; then
                     # Attach to the most recently used session
                     # Assuming the last session in the list is the most recent
                     last_session=$(echo "$sessions" | tail -n 1)
-                    zellij attach "$last_session"
+                    zellij attach "$last_session" || zellij
                 fi
             fi
 
