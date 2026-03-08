@@ -13,5 +13,5 @@
   },
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "model": "sonnet"
+  "effortLevel": "high"
 }
