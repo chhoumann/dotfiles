@@ -1,11 +1,11 @@
 model = "gpt-5.3-codex"
+service_tier = "fast"
 model_reasoning_effort = "xhigh"
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
 
 tool_output_token_limit = 25000
-web_search_request = true
 web_search = "live"
-
-responses_websockets_v2 = true
 
 [projects."/Users/christian/Developer/dotfiles"]
 trust_level = "trusted"
@@ -65,10 +65,20 @@ hide_gpt5_1_migration_prompt = true
 # tool_timeout_sec = 600
 
 [features]
+undo = true
+fast_mode = true
 unified_exec = true
 shell_snapshot = true
-steer = true
 multi_agent = true
+js_repl = true
+responses_websockets_v2 = true
+runtime_metrics = true
+skill_env_var_dependency_prompt = true
 prevent_idle_sleep = true
-default_mode_request_user_input = true
 #voice_transcription = true
+
+[tools]
+view_image = true
+
+[agents]
+max_threads = 32
