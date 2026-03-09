@@ -152,6 +152,18 @@ command -v bat >/dev/null 2>&1 && alias cat="bat"
 alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 
+cdt() {
+  local base="${TMPDIR:-/tmp}"
+  local raw_label="${1:-${PWD:t}}"
+  local label="${raw_label//[^A-Za-z0-9._-]/-}"
+  local dir
+
+  [[ -z "$label" ]] && label="tmp"
+  dir=$(mktemp -d "${base%/}/${label}.XXXXXXXX") || return 1
+  cd "$dir" || return 1
+  pwd
+}
+
 fp() {
   local root="${1:-.}"
   if command -v fd >/dev/null 2>&1; then
