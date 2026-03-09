@@ -167,10 +167,10 @@ cdt() {
 fp() {
   local root="${1:-.}"
   if command -v fd >/dev/null 2>&1; then
-    fd --type f . "$root"
+    fd --type f --hidden --no-ignore-vcs --exclude .git --print0 . "$root"
   else
-    find "$root" -type f
-  fi | fzf --multi --preview 'bat --color=always {} 2>/dev/null || cat {}' | xargs -I{} realpath {}
+    find "$root" -name .git -prune -o -type f -print0
+  fi | fzf --read0 --print0 --multi --preview 'bat --color=always -- {} 2>/dev/null || command cat -- {}' | xargs -0 -I{} realpath -- "{}"
 }
 
 # zellij
