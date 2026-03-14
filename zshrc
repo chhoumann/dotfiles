@@ -488,3 +488,6 @@ fi
 
 # bun completions
 [ -s "/Users/christian/.bun/_bun" ] && source "/Users/christian/.bun/_bun"
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"
