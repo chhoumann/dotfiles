@@ -1,50 +1,15 @@
-model = "gpt-5.3-codex"
-service_tier = "fast"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
 
 tool_output_token_limit = 25000
+web_search_request = true
 web_search = "live"
 
-[projects."/Users/christian/Developer/dotfiles"]
-trust_level = "trusted"
-
-[projects."/Users/christian/Developer"]
-trust_level = "trusted"
-
-[projects."/private/tmp"]
-trust_level = "trusted"
-
-[projects."/Users/christian"]
-trust_level = "trusted"
-
-[projects."/Users/christian/.github-triage/data/chhoumann/quickadd/triage"]
-trust_level = "trusted"
-
-[projects."/Users/christian/notes"]
-trust_level = "trusted"
-
-[projects."/Users/christian/.vr/quickadd/trees/894"]
-trust_level = "trusted"
-
-[projects."/Users/christian/.claude/plugins/marketplaces/claude-code-plugins"]
-trust_level = "trusted"
-
-[projects."/Users/christian/.claude"]
-trust_level = "trusted"
-
-[projects."/"]
-trust_level = "untrusted"
-
-[projects."/Users/christian/.codex/skills/mistral-ocr-uv"]
-trust_level = "trusted"
-
-[projects."/Users/christian/Developer/add-skill/.git"]
-trust_level = "trusted"
-
-[projects."/Users/christian/Library/CloudStorage/GoogleDrive-christian@bagerbach.com/My Drive/Accounting"]
-trust_level = "trusted"
+responses_websockets_v2 = true
+service_tier = "fast"
+personality = "pragmatic"
 
 [notice]
 hide_gpt5_1_migration_prompt = true
@@ -52,6 +17,7 @@ hide_gpt5_1_migration_prompt = true
 
 [notice.model_migrations]
 "gpt-5.2" = "gpt-5.3-codex"
+"gpt-5.3-codex" = "gpt-5.4"
 
 # [mcp_servers.RepoPrompt]
 # command = "/Users/christian/RepoPrompt/repoprompt_cli"
@@ -69,16 +35,26 @@ undo = true
 fast_mode = true
 unified_exec = true
 shell_snapshot = true
+steer = true
 multi_agent = true
+prevent_idle_sleep = true
 js_repl = true
 responses_websockets_v2 = true
 runtime_metrics = true
 skill_env_var_dependency_prompt = true
-prevent_idle_sleep = true
-#voice_transcription = true
 
 [tools]
 view_image = true
 
 [agents]
 max_threads = 32
+
+[mcp_servers.RepoPrompt]
+command = "/Users/christian/RepoPrompt/repoprompt_cli"
+enabled = false
+tool_timeout_sec = 10000.0
+
+[mcp_servers.ChromeDevTools]
+command = "npx"
+enabled = false
+args = ["-y", "chrome-devtools-mcp@latest", "--autoConnect", "--channel=stable", "--no-usage-statistics"]
