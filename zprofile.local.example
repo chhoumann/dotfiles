@@ -1,0 +1,7 @@
+# OrbStack command-line tools and integration
+source "$HOME/.orbstack/shell/init.zsh" 2>/dev/null || :
+
+# Obsidian CLI
+if [[ -d "/Applications/Obsidian.app/Contents/MacOS" ]]; then
+  export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
+fi

@@ -65,7 +65,15 @@ zinit light Aloxaf/fzf-tab
 ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 mkdir -p "$ZSH_CACHE_DIR"
 ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
-autoload -Uz compinit && compinit -d "$ZSH_COMPDUMP"
+autoload -Uz compinit
+typeset -a _zcompdump_refresh
+_zcompdump_refresh=("$ZSH_COMPDUMP"(Nmh+24))
+if [[ ! -s "$ZSH_COMPDUMP" || ${#_zcompdump_refresh[@]} -gt 0 ]]; then
+    compinit -d "$ZSH_COMPDUMP"
+else
+    compinit -C -d "$ZSH_COMPDUMP"
+fi
+unset _zcompdump_refresh
 zinit cdreplay -q
 
 # Syntax highlighting should be loaded last
@@ -451,9 +459,6 @@ fi
 
 export UV_TORCH_BACKEND=auto
 
-# mise (manages node, python, etc. - replaces fnm)
-command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
-
 ## -- Shell Integrations --
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
 
@@ -489,5 +494,6 @@ fi
 # bun completions
 [ -s "/Users/christian/.bun/_bun" ] && source "/Users/christian/.bun/_bun"
 
-# Vite+ bin (https://viteplus.dev)
-. "$HOME/.vite-plus/env"
+# Keep personal shims ahead of tool-managed bins so wrappers in ~/.local/bin
+# override package launchers when needed.
+path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})

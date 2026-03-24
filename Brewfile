@@ -40,10 +40,8 @@ brew "xcodegen"         # Xcode project generator
 
 # Languages & runtimes
 brew "go"               # Go language
-brew "node"             # Node.js
 brew "rust"             # Rust language
 brew "zig"              # Zig language
-brew "mise"             # Dev tool version manager
 brew "bun"              # JavaScript runtime
 brew "openjdk@11"       # Java 11
 brew "swiftformat"      # Swift formatter
