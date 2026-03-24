@@ -1,292 +1,278 @@
 #!/usr/bin/env bash
 
-#############################################
-# Mac Bootstrap Script
-#############################################
-# Automates setup of a new Mac
-# Run with: bash ~/Developer/dotfiles/bootstrap.sh
+set -euo pipefail
 
-set -e  # Exit on error
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BOOTSTRAP_DIR="${DOTFILES_DIR}/scripts/bootstrap"
+
+yes_mode=false
+non_interactive=false
+dry_run=false
+with_app_state=false
+
+defaults_mode="ask"
+touchid_mode="ask"
+git_mode="ask"
+shell_mode="yes"
+
+git_name=""
+git_email=""
+
+steps=(xcode brew packages vite directories link defaults touchid git shell)
+
+usage() {
+  cat <<'EOF'
+Usage: ./bootstrap.sh [options]
+
+Options:
+  --yes                 Accept safe defaults for optional steps
+  --non-interactive     Never prompt; skip optional steps unless explicitly enabled
+  --dry-run             Print the steps/commands that would run
+  --with-app-state      Also link the optional apps profile
+  --defaults            Apply macOS defaults without prompting
+  --skip-defaults       Skip macOS defaults
+  --touchid             Enable Touch ID for sudo without prompting
+  --skip-touchid        Skip Touch ID setup
+  --skip-git            Skip git configuration
+  --skip-shell          Skip setting the default shell
+  --git-name NAME       Set git user.name noninteractively
+  --git-email EMAIL     Set git user.email noninteractively
+  --only STEPS          Comma-separated step list
+  -h, --help            Show this help
+
+Examples:
+  ./bootstrap.sh
+  ./bootstrap.sh --yes --with-app-state
+  ./bootstrap.sh --non-interactive --git-name "Your Name" --git-email "you@example.com"
+  ./bootstrap.sh --only brew,packages,vite,link
+EOF
+}
+
+join_by() {
+  local sep="$1"
+  shift
+  local first=true
+  for item in "$@"; do
+    if $first; then
+      printf '%s' "$item"
+      first=false
+    else
+      printf '%s%s' "$sep" "$item"
+    fi
+  done
+}
+
+contains_step() {
+  local needle="$1"
+  shift
+  local item
+  for item in "$@"; do
+    [[ "$item" == "$needle" ]] && return 0
+  done
+  return 1
+}
+
+run_step() {
+  local step_name="$1"
+  shift
+
+  if ! contains_step "$step_name" "${steps[@]}"; then
+    return 0
+  fi
+
+  if $dry_run; then
+    printf 'DRY RUN [%s]:' "$step_name"
+    printf ' %q' "$@"
+    printf '\n'
+    return 0
+  fi
+
+  "$@"
+}
+
+decide_optional_step() {
+  local mode="$1"
+  local prompt="$2"
+
+  case "$mode" in
+    yes)
+      return 0
+      ;;
+    no)
+      return 1
+      ;;
+    ask)
+      if $non_interactive; then
+        return 1
+      fi
+      if [[ ! -t 0 ]]; then
+        return 1
+      fi
+      local reply
+      read -r -p "${prompt} [y/N] " reply
+      [[ "$reply" =~ ^[Yy]$ ]]
+      return
+      ;;
+    *)
+      printf 'Unknown optional step mode: %s\n' "$mode" >&2
+      exit 1
+      ;;
+  esac
+}
+
+while (($#)); do
+  case "$1" in
+    --yes)
+      yes_mode=true
+      ;;
+    --non-interactive)
+      non_interactive=true
+      ;;
+    --dry-run)
+      dry_run=true
+      ;;
+    --with-app-state)
+      with_app_state=true
+      ;;
+    --defaults)
+      defaults_mode="yes"
+      ;;
+    --skip-defaults)
+      defaults_mode="no"
+      ;;
+    --touchid)
+      touchid_mode="yes"
+      ;;
+    --skip-touchid)
+      touchid_mode="no"
+      ;;
+    --skip-git)
+      git_mode="no"
+      ;;
+    --skip-shell)
+      shell_mode="no"
+      ;;
+    --git-name)
+      shift
+      git_name="${1:-}"
+      ;;
+    --git-email)
+      shift
+      git_email="${1:-}"
+      ;;
+    --only)
+      shift
+      IFS=',' read -r -a steps <<< "${1:-}"
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      printf 'Unknown option: %s\n' "$1" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+if $yes_mode; then
+  [[ "$defaults_mode" == "ask" ]] && defaults_mode="yes"
+  [[ "$touchid_mode" == "ask" ]] && touchid_mode="no"
+fi
+
+if $non_interactive; then
+  [[ "$defaults_mode" == "ask" ]] && defaults_mode="no"
+  [[ "$touchid_mode" == "ask" ]] && touchid_mode="no"
+  [[ "$git_mode" == "ask" ]] && git_mode="no"
+fi
+
+for step in "${steps[@]}"; do
+  case "$step" in
+    xcode|brew|packages|vite|directories|link|defaults|touchid|git|shell)
+      ;;
+    *)
+      printf 'Unknown step in --only: %s\n' "$step" >&2
+      exit 1
+      ;;
+  esac
+done
 
 echo ""
 echo "╔════════════════════════════════════╗"
-echo "║   Mac Bootstrap Script v1.0        ║"
+echo "║   Mac Bootstrap Script v2.0        ║"
 echo "╚════════════════════════════════════╝"
 echo ""
-
-# Get the directory where this script is located
-DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-#############################################
-# Check if running on macOS
-#############################################
+echo "Selected steps: $(join_by ', ' "${steps[@]}")"
+echo "App state profile: $($with_app_state && printf 'enabled' || printf 'disabled')"
+echo ""
 
 if [[ "$OSTYPE" != "darwin"* ]]; then
-    echo "❌ This script is only for macOS"
-    exit 1
+  echo "This script is only for macOS" >&2
+  exit 1
 fi
 
-#############################################
-# 1. Install Xcode Command Line Tools
-#############################################
+if contains_step xcode "${steps[@]}"; then
+  if $dry_run; then
+    run_step xcode "${BOOTSTRAP_DIR}/install-xcode-tools.sh"
+  else
+    set +e
+    "${BOOTSTRAP_DIR}/install-xcode-tools.sh"
+    rc=$?
+    set -e
+    if [[ $rc -eq 20 ]]; then
+      echo ""
+      echo "Xcode Command Line Tools installation was started."
+      echo "Finish that install, then rerun bootstrap."
+      exit 0
+    fi
+    if [[ $rc -ne 0 ]]; then
+      exit "$rc"
+    fi
+  fi
+fi
 
-install_xcode_tools() {
-    echo "📦 Installing Xcode Command Line Tools..."
+run_step brew "${BOOTSTRAP_DIR}/install-homebrew.sh"
+run_step packages "${BOOTSTRAP_DIR}/install-packages.sh" "$DOTFILES_DIR"
+run_step vite "${BOOTSTRAP_DIR}/setup-vite-plus.sh"
+run_step directories "${BOOTSTRAP_DIR}/create-directories.sh"
 
-    if xcode-select -p &>/dev/null; then
-        echo "✅ Xcode Command Line Tools already installed"
+if contains_step link "${steps[@]}"; then
+  link_args=("$DOTFILES_DIR" "mac")
+  $with_app_state && link_args+=("apps")
+  run_step link "${BOOTSTRAP_DIR}/link-dotfiles.sh" "${link_args[@]}"
+fi
+
+if contains_step defaults "${steps[@]}" && decide_optional_step "$defaults_mode" "Apply macOS defaults?"; then
+  run_step defaults "${BOOTSTRAP_DIR}/apply-macos-defaults.sh" "$DOTFILES_DIR"
+fi
+
+if contains_step touchid "${steps[@]}" && decide_optional_step "$touchid_mode" "Enable Touch ID for sudo?"; then
+  run_step touchid "${BOOTSTRAP_DIR}/enable-touchid.sh" "$DOTFILES_DIR"
+fi
+
+if contains_step git "${steps[@]}"; then
+  if [[ "$git_mode" == "yes" ]] || [[ "$git_mode" == "ask" ]]; then
+    git_args=()
+    [[ -n "$git_name" ]] && git_args+=(--name "$git_name")
+    [[ -n "$git_email" ]] && git_args+=(--email "$git_email")
+    $non_interactive && git_args+=(--non-interactive)
+    if ((${#git_args[@]} == 0)); then
+      run_step git "${BOOTSTRAP_DIR}/configure-git.sh"
     else
-        xcode-select --install
-        echo ""
-        echo "⏳ Please complete the Xcode installation dialog, then run this script again"
-        echo ""
-        exit 0
+      run_step git "${BOOTSTRAP_DIR}/configure-git.sh" "${git_args[@]}"
     fi
-}
+  fi
+fi
 
-#############################################
-# 2. Install Homebrew
-#############################################
+if contains_step shell "${steps[@]}" && [[ "$shell_mode" == "yes" ]]; then
+  run_step shell "${BOOTSTRAP_DIR}/set-shell.sh"
+fi
 
-install_homebrew() {
-    echo "🍺 Installing Homebrew..."
-
-    if command -v brew &>/dev/null; then
-        echo "✅ Homebrew already installed"
-        echo "📦 Updating Homebrew..."
-        brew update
-    else
-        echo "📥 Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-        # Add Homebrew to PATH for Apple Silicon
-        if [[ $(uname -m) == "arm64" ]]; then
-            echo ""
-            echo "🔧 Adding Homebrew to PATH for Apple Silicon..."
-            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-            eval "$(/opt/homebrew/bin/brew shellenv)"
-        fi
-
-        echo "✅ Homebrew installed"
-    fi
-
-    echo ""
-}
-
-#############################################
-# 3. Install packages from Brewfile
-#############################################
-
-install_packages() {
-    echo "📦 Installing packages from Brewfile..."
-    echo ""
-
-    if [ -f "$DOTFILES_DIR/Brewfile" ]; then
-        brew bundle --file="$DOTFILES_DIR/Brewfile"
-        echo ""
-        echo "✅ Packages installed"
-    else
-        echo "⚠️  No Brewfile found at $DOTFILES_DIR/Brewfile"
-    fi
-
-    echo ""
-}
-
-#############################################
-# 4. Create necessary directories
-#############################################
-
-create_directories() {
-    echo "📁 Creating directories..."
-
-    directories=(
-        "$HOME/.config"
-        "$HOME/Developer"
-        "$HOME/Pictures/Screenshots"
-    )
-
-    for dir in "${directories[@]}"; do
-        if [ ! -d "$dir" ]; then
-            mkdir -p "$dir"
-            echo "  ✅ Created: $dir"
-        else
-            echo "  ✅ Already exists: $dir"
-        fi
-    done
-
-    echo ""
-}
-
-#############################################
-# 5. Symlink dotfiles using dotbot
-#############################################
-
-symlink_dotfiles() {
-    echo "🔗 Symlinking dotfiles with dotbot..."
-    echo ""
-
-    cd "$DOTFILES_DIR"
-
-    # Determine which config to use based on platform
-    if [ -f "$DOTFILES_DIR/install" ]; then
-        # Run dotbot with default and mac configs
-        "$DOTFILES_DIR/install" mac
-        echo ""
-        echo "✅ Dotfiles symlinked"
-    else
-        echo "⚠️  No dotbot install script found"
-    fi
-
-    echo ""
-}
-
-#############################################
-# 6. Apply macOS defaults
-#############################################
-
-apply_macos_defaults() {
-    echo "⚙️  Apply macOS system preferences?"
-    echo "   This will configure Dock, Finder, Trackpad, etc."
-    read -p "   Apply? (y/n) " -n 1 -r
-    echo ""
-
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        if [ -f "$DOTFILES_DIR/macos/defaults.sh" ]; then
-            bash "$DOTFILES_DIR/macos/defaults.sh"
-        else
-            echo "⚠️  No macos defaults script found"
-        fi
-    else
-        echo "⏭️  Skipping macOS defaults"
-    fi
-
-    echo ""
-}
-
-#############################################
-# 7. Enable Touch ID for sudo
-#############################################
-
-enable_touchid_sudo() {
-    echo "🔐 Enable Touch ID for sudo?"
-    echo "   This allows you to use Touch ID instead of typing your password for sudo"
-    read -p "   Enable? (y/n) " -n 1 -r
-    echo ""
-
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        if [ -f "$DOTFILES_DIR/macos/enable-touchid-sudo.sh" ]; then
-            bash "$DOTFILES_DIR/macos/enable-touchid-sudo.sh"
-        else
-            echo "⚠️  Touch ID script not found"
-        fi
-    else
-        echo "⏭️  Skipping Touch ID setup"
-    fi
-
-    echo ""
-}
-
-#############################################
-# 8. Configure git
-#############################################
-
-configure_git() {
-    echo "🔧 Configuring git..."
-
-    # Check if git is installed
-    if ! command -v git &>/dev/null; then
-        echo "⚠️  Git not installed, skipping"
-        echo ""
-        return
-    fi
-
-    # Prompt for user info if not set
-    if [ -z "$(git config --global user.name)" ]; then
-        echo ""
-        read -p "Enter your full name for git: " git_name
-        git config --global user.name "$git_name"
-        echo "✅ Set git user.name"
-    else
-        echo "✅ Git user.name already set: $(git config --global user.name)"
-    fi
-
-    if [ -z "$(git config --global user.email)" ]; then
-        echo ""
-        read -p "Enter your email for git: " git_email
-        git config --global user.email "$git_email"
-        echo "✅ Set git user.email"
-    else
-        echo "✅ Git user.email already set: $(git config --global user.email)"
-    fi
-
-    # Set up gh as git credential helper if available
-    if command -v gh &>/dev/null; then
-        echo "🔐 Configuring GitHub CLI as git credential helper..."
-        gh auth setup-git 2>/dev/null || true
-        echo "✅ Git credentials configured"
-    fi
-
-    echo ""
-}
-
-#############################################
-# 9. Set default shell
-#############################################
-
-set_shell() {
-    echo "🐚 Setting default shell to zsh..."
-
-    desired_shell="/bin/zsh"
-
-    if [ "$SHELL" != "$desired_shell" ]; then
-        if ! grep -q "$desired_shell" /etc/shells; then
-            echo "$desired_shell" | sudo tee -a /etc/shells
-        fi
-        chsh -s "$desired_shell"
-        echo "✅ Shell changed to $desired_shell (restart terminal to apply)"
-    else
-        echo "✅ Shell already set to $desired_shell"
-    fi
-
-    echo ""
-}
-
-#############################################
-# Main execution
-#############################################
-
-main() {
-    echo "🚀 Starting Mac bootstrap..."
-    echo ""
-
-    # Run installation steps
-    install_xcode_tools
-    install_homebrew
-    install_packages
-    create_directories
-    symlink_dotfiles
-    apply_macos_defaults
-    enable_touchid_sudo
-    configure_git
-    set_shell
-
-    echo ""
-    echo "╔════════════════════════════════════╗"
-    echo "║   ✨ Bootstrap Complete! ✨        ║"
-    echo "╚════════════════════════════════════╝"
-    echo ""
-    echo "📝 Next steps:"
-    echo "  1. Restart your terminal (or run: exec zsh)"
-    echo "  2. Authenticate with GitHub: gh auth login"
-    echo "  3. Install 1Password and sign in"
-    echo "  4. Install a browser (Zen, Arc, etc.)"
-    echo "  5. Install Claude Code: bun add -g @anthropic-ai/claude-code"
-    echo "  6. Review and adjust any settings as needed"
-    echo ""
-    echo "📖 See the setup guide for more manual steps:"
-    echo "   https://github.com/chhoumann/dotfiles#manual-setup"
-    echo ""
-}
-
-# Run main function
-main
+echo ""
+echo "Bootstrap complete."
+echo "Next useful commands:"
+echo "  ./scripts/doctor.sh"
+echo "  ./install mac apps"
+echo ""

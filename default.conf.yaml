@@ -14,6 +14,12 @@
       ~/.zshrc:
           force: true
           path: zshrc
+      ~/.zprofile:
+          force: true
+          path: zprofile
+      ~/.zshenv:
+          force: true
+          path: zshenv
       ~/.nirc:
           force: true
           path: nirc
@@ -59,25 +65,9 @@
           create: true
           glob: true
           relink: true
-      ~/.claude/settings.json:
-          path: claude/settings.json
+      ~/.config/topgrade.toml:
+          path: config/topgrade/topgrade.toml
           create: true
-          relink: true
-          force: true
-      ~/.config/amp/settings.json:
-          path: config/amp/settings.json
-          create: true
-          relink: true
-          force: true
-      ~/.codex/config.toml:
-          path: codex/config.toml
-          create: true
-          relink: true
-          force: true
-      ~/.config/zed:
-          path: config/zed
-          create: true
-          glob: true
           relink: true
           force: true
 # - create:

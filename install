@@ -1,18 +1,93 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 DEFAULT_CONFIG_PREFIX="default"
 CONFIG_SUFFIX=".conf.yaml"
 DOTBOT_DIR="dotbot"
-
 DOTBOT_BIN="bin/dotbot"
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+usage() {
+  cat <<'EOF'
+Usage: ./install [--dry-run] [config ...] [-- <dotbot flags...>]
+
+Examples:
+  ./install
+  ./install mac
+  ./install --dry-run mac
+  ./install mac -- -v --only link
+EOF
+}
+
+dry_run=false
+configs=()
+dotbot_args=()
+parsing_dotbot_args=false
+
+while (($#)); do
+  if $parsing_dotbot_args; then
+    dotbot_args+=("$1")
+    shift
+    continue
+  fi
+
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -n|--dry-run)
+      dry_run=true
+      ;;
+    --)
+      parsing_dotbot_args=true
+      ;;
+    -*)
+      printf 'unknown wrapper option: %s\n' "$1" >&2
+      printf 'Use ./install --dry-run <config> for a dry run or ./install <config> -- <dotbot flags>\n' >&2
+      exit 1
+      ;;
+    *)
+      configs+=("$1")
+      ;;
+  esac
+  shift
+done
+
+if ((${#configs[@]} == 0)); then
+  configs=("$DEFAULT_CONFIG_PREFIX")
+else
+  configs=("$DEFAULT_CONFIG_PREFIX" "${configs[@]}")
+fi
 
 cd "${BASEDIR}"
 git -C "${DOTBOT_DIR}" submodule sync --quiet --recursive
 git submodule update --init --recursive "${DOTBOT_DIR}"
 
-for conf in "$DEFAULT_CONFIG_PREFIX" "$@"; do
-  "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${conf}${CONFIG_SUFFIX}"
+for conf in "${configs[@]}"; do
+  config_path="${BASEDIR}/${conf}${CONFIG_SUFFIX}"
+  if [[ ! -f "${config_path}" ]]; then
+    printf 'unknown config: %s\n' "${conf}" >&2
+    printf 'Expected config file: %s\n' "${config_path}" >&2
+    exit 1
+  fi
+done
+
+for conf in "${configs[@]}"; do
+  cmd=(
+    "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}"
+    -d "${BASEDIR}"
+    -c "${conf}${CONFIG_SUFFIX}"
+    "${dotbot_args[@]}"
+  )
+
+  if $dry_run; then
+    printf 'DRY RUN:'
+    printf ' %q' "${cmd[@]}"
+    printf '\n'
+    continue
+  fi
+
+  "${cmd[@]}"
 done

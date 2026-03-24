@@ -1,0 +1,48 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.claude/settings.json:
+      path: claude/settings.json
+      create: true
+      relink: true
+      force: true
+    ~/.config/amp/settings.json:
+      path: config/amp/settings.json
+      create: true
+      relink: true
+      force: true
+    ~/.codex/config.toml:
+      path: codex/config.toml
+      create: true
+      relink: true
+      force: true
+    ~/.config/zed/settings.json:
+      path: config/zed/settings.json
+      create: true
+      relink: true
+      force: true
+    ~/.config/zed/keymap.json:
+      path: config/zed/keymap.json
+      create: true
+      relink: true
+      force: true
+    "~/Library/Application Support/Cursor/User/settings.json":
+      path: ./vscode/settings.json
+      create: true
+      force: true
+    "~/Library/Application Support/Cursor/User/keybindings.json":
+      path: ./vscode/keybindings.json
+      create: true
+      force: true
+    "~/Library/Application Support/Code/User/settings.json":
+      path: ./vscode/settings.json
+      create: true
+      force: true
+    "~/Library/Application Support/Code/User/keybindings.json":
+      path: ./vscode/keybindings.json
+      create: true
+      force: true
