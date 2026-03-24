@@ -1,6 +1,6 @@
-[user]
-	name = Christian Bager Bach Houmann
-	email = christian@bagerbach.com
+[include]
+	path = ~/.gitconfig.local
+
 [init]
 	defaultBranch = main
 [pull]
