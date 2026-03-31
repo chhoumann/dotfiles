@@ -26,6 +26,9 @@
       ~/.bashrc:
           force: true
           path: bashrc
+      ~/.npmrc:
+          force: true
+          path: npmrc
       ~/.aerospace.toml:
           force: true
           path: aerospace.toml
@@ -67,6 +70,11 @@
           relink: true
       ~/.config/topgrade.toml:
           path: config/topgrade/topgrade.toml
+          create: true
+          relink: true
+          force: true
+      ~/.config/uv/uv.toml:
+          path: config/uv/uv.toml
           create: true
           relink: true
           force: true

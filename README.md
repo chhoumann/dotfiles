@@ -89,6 +89,8 @@ All configs are version controlled and symlinked:
 - Karabiner Elements (keyboard customization)
 - Zed (code editor)
 - Lazygit (git TUI)
+- npm (`min-release-age=7`)
+- uv (`exclude-newer = "7 days"`)
 - Claude Code
 - And more in `config/`
 
@@ -219,6 +221,7 @@ dotfiles/
 4. **Edit configs**: Modify stable app configurations in `config/`
 5. **Use `~/.zprofile.local` / `~/.zshrc.local`**: Keep machine-local overrides out of tracked core config
 6. **Use `~/.gitconfig.local`**: Keep machine-specific git identity out of tracked config
+7. **Use `~/.config/secrets/api.env`**: Keep exported secrets like `NPM_TOKEN` out of the repo while still letting tracked config reference them
 
 ## Resources
 

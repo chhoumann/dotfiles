@@ -1,0 +1,2 @@
+min-release-age=7
+//registry.npmjs.org/:_authToken=${NPM_TOKEN?}

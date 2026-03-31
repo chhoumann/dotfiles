@@ -85,7 +85,9 @@ fi
 check_symlink_into_repo "$HOME/.zshrc" "~/.zshrc"
 check_symlink_into_repo "$HOME/.zprofile" "~/.zprofile"
 check_symlink_into_repo "$HOME/.zshenv" "~/.zshenv"
+check_symlink_into_repo "$HOME/.npmrc" "~/.npmrc"
 check_symlink_into_repo "$HOME/.config/topgrade.toml" "~/.config/topgrade.toml"
+check_symlink_into_repo "$HOME/.config/uv/uv.toml" "~/.config/uv/uv.toml"
 
 if [[ -e "$HOME/.zprofile.local" ]]; then
   if [[ -r "$HOME/.zprofile.local" ]]; then
