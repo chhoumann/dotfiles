@@ -1,6 +1,9 @@
 # Initialize variables
 export IS_VSCODE=false
 export EDITOR="${EDITOR:-vim}"
+DOTFILES_DIR="${${(%):-%N}:A:h}"
+
+source "${DOTFILES_DIR}/shell/shared.zsh"
 
 # VS Code sets a few env vars; avoid spawning subprocesses here.
 if [[ -n "${VSCODE_PID-}" || -n "${VSCODE_IPC_HOOK_CLI-}" || "${TERM_PROGRAM-}" == "vscode" ]]; then
@@ -10,61 +13,51 @@ fi
 # export ZELLIJ_AUTO_ATTACH=true
 # Prefer tmux or zellij without affecting the other; default stays zellij.
 export MUX_PREFERRED="${MUX_PREFERRED:-zellij}"
-if [[ $- == *i* ]] && [[ -t 0 ]] && [[ -t 1 ]] && [[ "${TERM_PROGRAM-}" == "ghostty" ]] && command -v zellij >/dev/null 2>&1; then
-    if [[ -z "$ZELLIJ" && -z "$TMUX" ]]; then
-        if [[ "$MUX_PREFERRED" == "tmux" ]]; then
-            tmux new -A -s main
-        else
-            if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-                zellij attach -c
-            else
-                if command -v timeout >/dev/null 2>&1; then
-                    sessions=$(timeout 2 zellij list-sessions --no-formatting --short 2>/dev/null || true)
-                else
-                    sessions=$(zellij list-sessions --no-formatting --short 2>/dev/null || true)
-                fi
+start_preferred_mux() {
+    [[ $- == *i* ]] || return 0
+    [[ -t 0 && -t 1 ]] || return 0
+    [[ "${TERM_PROGRAM-}" == "ghostty" ]] || return 0
+    [[ -z "$ZELLIJ" && -z "$TMUX" ]] || return 0
 
-                # Check if there are any sessions
-                if [ -z "$sessions" ]; then
-                    # No sessions exist; start a new one
-                    zellij
-                else
-                    # Attach to the most recently used session
-                    # Assuming the last session in the list is the most recent
-                    last_session=$(echo "$sessions" | tail -n 1)
-                    zellij attach "$last_session" || zellij
-                fi
+    if [[ "$MUX_PREFERRED" == "tmux" ]] && command -v tmux >/dev/null 2>&1; then
+        tmux new -A -s main
+    elif command -v zellij >/dev/null 2>&1; then
+        if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
+            zellij attach -c
+        else
+            local sessions last_session
+            if command -v timeout >/dev/null 2>&1; then
+                sessions=$(timeout 2 zellij list-sessions --no-formatting --short 2>/dev/null || true)
+            else
+                sessions=$(zellij list-sessions --no-formatting --short 2>/dev/null || true)
             fi
 
-            if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
-                exit
+            if [[ -z "$sessions" ]]; then
+                zellij
+            else
+                last_session=$(printf '%s\n' "$sessions" | tail -n 1)
+                zellij attach "$last_session" || zellij
             fi
         fi
+
+        [[ "$ZELLIJ_AUTO_EXIT" == "true" ]] && exit
     fi
-fi
+}
+
+start_preferred_mux
 
 # Zinit configuration
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-# Download Zinit, if it's not there yet
-if [ ! -d "$ZINIT_HOME" ]; then
-   mkdir -p "$(dirname "$ZINIT_HOME")"
-   git clone --depth=1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+if [[ -r "${ZINIT_HOME}/zinit.zsh" ]]; then
+  source "${ZINIT_HOME}/zinit.zsh"
 fi
-# Source/Load zinit
-source "${ZINIT_HOME}/zinit.zsh"
 
 # Add in Powerlevel10k if desired - remember to comment out starship & use the p10k file
 # zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # Add in zsh plugins that extend completions before `compinit`.
-zinit light zsh-users/zsh-completions
-
-# Non-login shells inside Zellij do not source `.zprofile`, so make Homebrew's
-# completion functions available here as well before running `compinit`.
-if [[ -d /opt/homebrew/share/zsh/site-functions ]]; then
-  fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
-elif [[ -d /usr/local/share/zsh/site-functions ]]; then
-  fpath=(/usr/local/share/zsh/site-functions $fpath)
+if (( ${+functions[zinit]} )); then
+  zinit light zsh-users/zsh-completions
 fi
 
 # Load completions (must be before syntax-highlighting)
@@ -80,15 +73,19 @@ else
     compinit -C -d "$ZSH_COMPDUMP"
 fi
 unset _zcompdump_refresh
-zinit cdreplay -q
+if (( ${+functions[zinit]} )); then
+  zinit cdreplay -q
+fi
 
 # Add in snippets
-zinit snippet OMZP::git
-zinit snippet OMZP::sudo
-zinit snippet OMZP::aws
-zinit snippet OMZP::kubectl
-zinit snippet OMZP::kubectx
-zinit snippet OMZP::command-not-found
+if (( ${+functions[zinit]} )); then
+  zinit snippet OMZP::git
+  zinit snippet OMZP::sudo
+  zinit snippet OMZP::aws
+  zinit snippet OMZP::kubectl
+  zinit snippet OMZP::kubectx
+  zinit snippet OMZP::command-not-found
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -440,13 +437,6 @@ path_prepend "$PNPM_HOME"
 # .NET user tools
 path_append "$HOME/.dotnet"
 
-# Homebrew extras (only if installed)
-if [[ -d /opt/homebrew ]]; then
-  HOMEBREW_PREFIX="/opt/homebrew"
-elif [[ -d /usr/local/opt ]]; then
-  HOMEBREW_PREFIX="/usr/local"
-fi
-
 if [[ -n "${HOMEBREW_PREFIX-}" ]]; then
   path_prepend "$HOMEBREW_PREFIX/opt/llvm/bin"
   path_prepend "$HOMEBREW_PREFIX/opt/dotnet@8/bin"
@@ -481,9 +471,11 @@ fi
 # fzf-tab should load after `compinit` and after fzf's own shell scripts so it
 # becomes the final owner of `Tab`. Autosuggestions should come after that
 # because it wraps widgets.
-zinit light Aloxaf/fzf-tab
-zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-syntax-highlighting
+if (( ${+functions[zinit]} )); then
+    zinit light Aloxaf/fzf-tab
+    zinit light zsh-users/zsh-autosuggestions
+    zinit light zsh-users/zsh-syntax-highlighting
+fi
 
 if command -v atuin >/dev/null 2>&1 && [[ -t 0 ]] && [[ -t 1 ]]; then
   eval "$(atuin init zsh)"      # ctrl+r: history (overrides fzf's)
@@ -500,9 +492,6 @@ fi
 if [[ -f "$HOME/.zshrc.local" ]]; then
   source "$HOME/.zshrc.local"
 fi
-
-# bun completions
-[ -s "/Users/christian/.bun/_bun" ] && source "/Users/christian/.bun/_bun"
 
 # Keep personal shims ahead of tool-managed bins so wrappers in ~/.local/bin
 # override package launchers when needed.

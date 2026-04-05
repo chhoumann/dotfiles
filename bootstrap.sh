@@ -18,7 +18,7 @@ shell_mode="yes"
 git_name=""
 git_email=""
 
-steps=(xcode brew packages vite directories link defaults touchid git shell)
+steps=(xcode brew packages zinit vite directories link defaults touchid git shell)
 
 usage() {
   cat <<'EOF'
@@ -190,7 +190,7 @@ fi
 
 for step in "${steps[@]}"; do
   case "$step" in
-    xcode|brew|packages|vite|directories|link|defaults|touchid|git|shell)
+    xcode|brew|packages|zinit|vite|directories|link|defaults|touchid|git|shell)
       ;;
     *)
       printf 'Unknown step in --only: %s\n' "$step" >&2
@@ -235,6 +235,7 @@ fi
 
 run_step brew "${BOOTSTRAP_DIR}/install-homebrew.sh"
 run_step packages "${BOOTSTRAP_DIR}/install-packages.sh" "$DOTFILES_DIR"
+run_step zinit "${BOOTSTRAP_DIR}/install-zinit.sh"
 run_step vite "${BOOTSTRAP_DIR}/setup-vite-plus.sh"
 run_step directories "${BOOTSTRAP_DIR}/create-directories.sh"
 
