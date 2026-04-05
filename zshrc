@@ -56,10 +56,16 @@ source "${ZINIT_HOME}/zinit.zsh"
 # Add in Powerlevel10k if desired - remember to comment out starship & use the p10k file
 # zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-# Add in zsh plugins
+# Add in zsh plugins that extend completions before `compinit`.
 zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
-zinit light Aloxaf/fzf-tab
+
+# Non-login shells inside Zellij do not source `.zprofile`, so make Homebrew's
+# completion functions available here as well before running `compinit`.
+if [[ -d /opt/homebrew/share/zsh/site-functions ]]; then
+  fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+elif [[ -d /usr/local/share/zsh/site-functions ]]; then
+  fpath=(/usr/local/share/zsh/site-functions $fpath)
+fi
 
 # Load completions (must be before syntax-highlighting)
 ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
@@ -75,9 +81,6 @@ else
 fi
 unset _zcompdump_refresh
 zinit cdreplay -q
-
-# Syntax highlighting should be loaded last
-zinit light zsh-users/zsh-syntax-highlighting
 
 # Add in snippets
 zinit snippet OMZP::git
@@ -474,6 +477,13 @@ if command -v fzf >/dev/null 2>&1 && [[ -t 0 ]] && [[ -t 1 ]]; then
         source <(fzf --zsh)
     fi
 fi
+
+# fzf-tab should load after `compinit` and after fzf's own shell scripts so it
+# becomes the final owner of `Tab`. Autosuggestions should come after that
+# because it wraps widgets.
+zinit light Aloxaf/fzf-tab
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
 
 if command -v atuin >/dev/null 2>&1 && [[ -t 0 ]] && [[ -t 1 ]]; then
   eval "$(atuin init zsh)"      # ctrl+r: history (overrides fzf's)
