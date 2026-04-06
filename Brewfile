@@ -61,6 +61,7 @@ brew "uv"               # Fast Python package installer
 # Web & cloud
 brew "caddy"            # Web server
 brew "cloudflare-wrangler" # Cloudflare Workers CLI
+brew "helm"             # Kubernetes package manager
 brew "k9s"              # Kubernetes TUI
 brew "vercel-cli"       # Vercel deployment
 
