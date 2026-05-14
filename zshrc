@@ -186,6 +186,18 @@ alias zj="zellij"
 alias zja="zellij attach"
 alias zjl="zellij list-sessions"
 
+# Track each zellij pane's cwd so floating-pane launchers (yazi, etc.) can land
+# in the focused pane's directory. zellij's `Run` doesn't expose focused-pane
+# cwd via CLI on macOS, so we tail it from chpwd.
+if [[ -n "$ZELLIJ_PANE_ID" ]]; then
+  _zellij_cwd_track() {
+    print -r -- "$PWD" >| "${TMPDIR:-/tmp}/zellij-cwd-${ZELLIJ_PANE_ID}"
+  }
+  typeset -ag chpwd_functions
+  chpwd_functions+=(_zellij_cwd_track)
+  _zellij_cwd_track
+fi
+
 alias csb="$HOME/projects/claude-manager/claude-squad"
 
 # Git worktree swap functions

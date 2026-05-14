@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Run a command in the most-recently-active zellij pane's cwd.
+# Pairs with the _zellij_cwd_track hook in zshrc.
+set -euo pipefail
+
+tmpdir="${TMPDIR:-/tmp}"
+self="${ZELLIJ_PANE_ID:-}"
+latest=""
+latest_mtime=0
+
+shopt -s nullglob
+for f in "$tmpdir"/zellij-cwd-*; do
+  pane="${f##*/zellij-cwd-}"
+  [[ "$pane" == "$self" ]] && continue
+  mtime=$(stat -f %m "$f" 2>/dev/null || stat -c %Y "$f" 2>/dev/null || echo 0)
+  if (( mtime > latest_mtime )); then
+    latest_mtime=$mtime
+    latest=$f
+  fi
+done
+
+if [[ -n "$latest" ]] && target=$(<"$latest") && [[ -d "$target" ]]; then
+  cd "$target"
+fi
+
+exec "$@"
