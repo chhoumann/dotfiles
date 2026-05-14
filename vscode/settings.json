@@ -1,402 +1,242 @@
 {
-    "editor.suggestSelection": "first",
-    "git.autofetch": true,
-    "editor.renderWhitespace": "none",
-    "editor.renderControlCharacters": false,
-    "eslint.validate": ["javascript", "vue"],
-    "editor.formatOnPaste": true,
-    "editor.formatOnType": true,
-    "vim.handleKeys": {},
-    "python.languageServer": "None",
-    "files.exclude": {
-        "**/.classpath": true,
-        "**/.project": true,
-        "**/.settings": true,
-        "**/.factorypath": true
-    },
-    "workbench.editorAssociations": {
-        "*.ipynb": "jupyter-notebook",
-        "file:/**/*.csv": "jupyter-data-wrangler"
-    },
-    "files.associations": {
-        "*.mdx": "markdown",
-        "*.tmpl": "html"
-    },
-    "editor.inlineSuggest.enabled": true,
-    "github.copilot.enable": {
-        "*": false
-    },
-    "editor.fontFamily": "Hack Nerd Font Mono",
-    "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
-    "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
-    "terminal.integrated.profiles.windows": {
-        "C:\\Program Files\\PowerShell\\6\\pwsh.exe (migrated)": {
-            "path": "C:\\Program Files\\PowerShell\\6\\pwsh.exe",
-            "args": []
-        }
-    },
-    "terminal.integrated.fontFamily": "CaskaydiaCove Nerd Font Mono",
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "biomejs.biome"
-    },
-    "editor.linkedEditing": true,
-    "editor.cursorBlinking": "phase",
-    "editor.cursorSmoothCaretAnimation": "on",
-    "[json]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "editor.guides.indentation": false,
-    "workbench.colorTheme": "GitHub Dark",
-    "vim.easymotion": true,
-    "vim.highlightedyank.enable": true,
-    "vim.useSystemClipboard": true,
-    "vim.insertModeKeyBindings": [
-        {
-            "before": ["j", "k"],
-            "after": ["<Esc>"]
-        }
-    ],
-    "javascript.updateImportsOnFileMove.enabled": "always",
-    "vsicons.dontShowNewVersionMessage": true,
-    "editor.formatOnSave": true,
-    "vim.normalModeKeyBindingsNonRecursive": [
-        {
-            "before": ["<leader>", "f"],
-            "commands": ["editor.action.formatDocument"],
-            "when": "editorTextFocus && vim.active && !inDebugRepl",
-            "silent": true
-        },
-        {
-            "before": ["<leader>", "o"],
-            "commands": ["workbench.action.quickOpen"],
-            "when": "editorTextFocus && vim.active && !inDebugRepl"
-        },
-        {
-            "before": ["<leader>", "q"],
-            "commands": ["workbench.action.showCommands"],
-            "silent": true
-        },
-        {
-            "before": ["<leader>", "w"],
-            "commands": ["workbench.action.files.save"],
-            "silent": true
-        },
-        {
-            "before": ["<leader>", "c"],
-            "commands": ["workbench.action.closeActiveEditor"],
-            "silent": true
-        },
-        {
-            "before": ["<leader>", "h"],
-            "commands": ["workbench.action.splitEditor"],
-            "silent": true
-        },
-        {
-            "before": ["<leader>", "v"],
-            "commands": ["workbench.action.splitEditorOrthogonal"],
-            "silent": true
-        },
-        {
-            "before": ["L"],
-            "commands": ["workbench.action.focusRightGroup"],
-            "silent": true
-        },
-        {
-            "before": ["H"],
-            "commands": ["workbench.action.focusLeftGroup"],
-            "silent": true
-        },
-        {
-            "before": ["J"],
-            "commands": ["workbench.action.focusBelowGroup"],
-            "silent": true
-        },
-        {
-            "before": ["K"],
-            "commands": ["workbench.action.focusAboveGroup"],
-            "silent": true
-        },
-        {
-            "before": ["<C-h>"],
-            "commands": ["workbench.action.previousEditor"],
-            "silent": true
-        },
-        {
-            "before": ["<C-l>"],
-            "commands": ["workbench.action.nextEditor"],
-            "silent": true
-        }
-    ],
-    "vim.visualModeKeyBindings": [
-        // Paste over selected without losing paste register content
-        {
-            "before": ["<leader>", "p"],
-            "after": ["\"", "_", "d", "P"]
-        }
-    ],
-    "files.autoSave": "afterDelay",
-    "workbench.iconTheme": "vscode-icons",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "eslint.format.enable": true,
-    "javascript.format.enable": false,
-    "haskell.manageHLS": "GHCup",
-    "[lua]": {
-        "editor.defaultFormatter": "yinfei.luahelper"
-    },
-    "[prisma]": {
-        "editor.defaultFormatter": "Prisma.prisma"
-    },
-    "prettier.tabWidth": 4,
-    "javascript.inlayHints.enumMemberValues.enabled": true,
-    "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
-    "javascript.inlayHints.parameterNames.enabled": "all",
-    "javascript.inlayHints.parameterTypes.enabled": true,
-    "javascript.inlayHints.variableTypes.enabled": true,
-    "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
-    "typescript.format.semicolons": "insert",
-    "typescript.inlayHints.enumMemberValues.enabled": true,
-    "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
-    "typescript.inlayHints.parameterNames.enabled": "all",
-    "typescript.inlayHints.parameterTypes.enabled": true,
-    "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
-    "typescript.inlayHints.variableTypes.enabled": true,
-    "vim.leader": "<space>",
-    "vim.smartRelativeLine": true,
-    "githubPullRequests.pullBranch": "never",
-    "haskell.formattingProvider": "brittany",
-    "[haskell]": {
-        "editor.defaultFormatter": "haskell.haskell"
-    },
-    "svelte.enable-ts-plugin": true,
-    "svelte.plugin.svelte.note-new-transformation": false,
-    "vitest.enable": true,
-    "latex-workshop.latex.autoBuild.run": "never",
-    "latex-workshop.latex.recipe.default": "tectonic",
-    "latex-workshop.latex.recipes": [
-        {
-            "name": "latexmk 🔃",
-            "tools": ["latexmk"]
-        },
-        {
-            "name": "latexmk (latexmkrc)",
-            "tools": ["latexmk_rconly"]
-        },
-        {
-            "name": "latexmk (lualatex)",
-            "tools": ["lualatexmk"]
-        },
-        {
-            "name": "latexmk (xelatex)",
-            "tools": ["xelatexmk"]
-        },
-        {
-            "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
-            "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
-        },
-        {
-            "name": "Compile Rnw files",
-            "tools": ["rnw2tex", "latexmk"]
-        },
-        {
-            "name": "Compile Jnw files",
-            "tools": ["jnw2tex", "latexmk"]
-        },
-        {
-            "name": "tectonic",
-            "tools": ["tectonic"]
-        }
-    ],
-    "editor.accessibilitySupport": "off",
-    "task.allowAutomaticTasks": "on",
-    "editor.multiCursorModifier": "ctrlCmd",
-    "codeium.enableConfig": {
-        "*": true
-    },
-    "[cpp]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools"
-    },
-    "editor.unicodeHighlight.nonBasicASCII": false,
-    "[xml]": {
-        "editor.defaultFormatter": "redhat.vscode-xml"
-    },
-    "workbench.sideBar.location": "right",
-    "cmake.configureOnOpen": true,
-    "latex-workshop.linting.chktex.exec.path": "",
-    "latex-workshop.linting.chktex.convertOutput.column.enabled": false,
-    "latex.linter.enabled": false,
-    "chatgpt.method": "Browser Auto-login",
-    "[svelte]": {
-        "editor.defaultFormatter": "svelte.svelte-vscode"
-    },
-    "editor.cursorSurroundingLines": 10,
-    "[typescript]": {
-        "editor.defaultFormatter": "biomejs.biome"
-    },
-    "errorLens.enabled": false,
-    "C_Cpp.default.cppStandard": "c++23",
-    "terminal.integrated.env.windows": {},
-    "terminal.integrated.env.linux": {},
-    "editor.inlineSuggest.showToolbar": "always",
-    "redhat.telemetry.enabled": true,
-    "editor.stickyScroll.enabled": true,
-    "[bibtex]": {
-        "editor.defaultFormatter": "James-Yu.latex-workshop"
-    },
-    "console-ninja.showWhatsNew": false,
-    "vim.commandLineModeKeyBindings": [],
-    "vim.commandLineModeKeyBindingsNonRecursive": [],
-    "[rust]": {
-        "editor.defaultFormatter": "rust-lang.rust-analyzer"
-    },
-    "[shellscript]": {
-        "editor.defaultFormatter": "foxundermoon.shell-format"
-    },
-    "quarto.render.renderOnSave": true,
-    "console-ninja.featureSet": "Community",
-    "workbench.editor.empty.hint": "hidden",
-    "typeChallenges.workspaceFolder": "/home/christian/.typeChallenges",
-    "window.zoomLevel": 1,
-    "remote.SSH.path": "C:\\Users\\chhou\\.ssh\\wsl_ssh.bat",
-    "remote.SSH.remotePlatform": {
-        "p9": "linux"
-    },
-    "[jsonc]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[dotenv]": {
-        "editor.defaultFormatter": "foxundermoon.shell-format"
-    },
-    "isort.args": ["--profile", "black"],
+  // ─── Editor ─────────────────────────────────────────────────────────
+  "editor.suggestSelection": "first",
+  "editor.renderWhitespace": "none",
+  "editor.renderControlCharacters": false,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": false,                      // ⚡ was true — runs formatter on every keystroke
+  "editor.linkedEditing": true,
+  "editor.cursorBlinking": "phase",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.guides.indentation": false,
+  "editor.accessibilitySupport": "off",
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.unicodeHighlight.nonBasicASCII": false,
+  "editor.stickyScroll.enabled": true,
+  "editor.inlineSuggest.enabled": true,
+  "editor.inlineSuggest.showToolbar": "always",
+  "editor.cursorSurroundingLines": 10,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit"
+  },
+
+  // ⚡ Reference codelens on EVERY function was scanning the world. Off.
+  "javascript.referencesCodeLens.enabled": false,
+  "javascript.referencesCodeLens.showOnAllFunctions": false,
+  "typescript.referencesCodeLens.enabled": false,
+  "typescript.referencesCodeLens.showOnAllFunctions": false,
+
+  // ⚡ Excluding heavy dirs from file watchers & search — biggest perf win on large repos
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.turbo/**": true,
+    "**/.cache/**": true,
+    "**/__pycache__/**": true,
+    "**/.venv/**": true,
+    "**/.mypy_cache/**": true,
+    "**/.ruff_cache/**": true,
+    "**/target/**": true,
+    "**/coverage/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.turbo": true,
+    "**/__pycache__": true,
+    "**/.venv": true,
+    "**/coverage": true,
+    "**/*.lock": true,
+    "**/package-lock.json": true,
+    "**/yarn.lock": true,
+    "**/pnpm-lock.yaml": true
+  },
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
+  "files.autoSave": "afterDelay",
+  "files.associations": {
+    "*.mdx": "markdown",
+    "*.tmpl": "html"
+  },
+
+  // ─── Workbench ──────────────────────────────────────────────────────
+  "workbench.colorTheme": "GitHub Dark",
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.sideBar.location": "right",
+  "workbench.editor.empty.hint": "hidden",
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter-notebook"
+  },
+
+  // ─── Terminal / Window ──────────────────────────────────────────────
+  "editor.fontFamily": "Hack Nerd Font Mono",
+  "terminal.integrated.fontFamily": "CaskaydiaCove Nerd Font Mono",
+  "window.zoomLevel": 1,
+  "window.autoDetectColorScheme": false,
+
+  // ─── Git ────────────────────────────────────────────────────────────
+  "git.autofetch": true,
+  "githubPullRequests.pullBranch": "never",
+  "githubPullRequests.fileListLayout": "tree",
+
+  // ─── TypeScript / JavaScript ────────────────────────────────────────
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.format.semicolons": "insert",
+  "javascript.format.enable": false,
+  // Inlay hints (heavy but useful — keeping; toggle off if still slow)
+  "javascript.inlayHints.enumMemberValues.enabled": true,
+  "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "javascript.inlayHints.parameterNames.enabled": "all",
+  "javascript.inlayHints.parameterTypes.enabled": true,
+  "javascript.inlayHints.variableTypes.enabled": true,
+  "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "typescript.inlayHints.enumMemberValues.enabled": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.parameterTypes.enabled": true,
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "typescript.inlayHints.variableTypes.enabled": true,
+
+  // ─── Python (Pylance + Ruff only) ───────────────────────────────────
+  "python.languageServer": "Default",
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.autoFormatStrings": true,
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.inlayHints.pytestParameters": true,
+  "python.analysis.inlayHints.callArgumentNames": "partial",
+  "ruff.configurationPreference": "filesystemFirst",
+  "[python]": {
     "editor.codeActionsOnSave": {
-        "source.organizeImports": "explicit",
-        "source.fixAll": "explicit"
+      "source.organizeImports": "explicit",
+      "source.fixAll": "explicit"
     },
-    "[python]": {
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": "explicit",
-            "source.fixAll": "explicit"
-        },
-        "editor.formatOnSave": true,
-        "editor.formatOnType": true,
-        "editor.rulers": [120],
-        "editor.defaultFormatter": "charliermarsh.ruff"
+    "editor.formatOnSave": true,
+    "editor.rulers": [120],
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+
+  // ─── Per-language formatters ────────────────────────────────────────
+  "[typescript]":      { "editor.defaultFormatter": "biomejs.biome" },
+  "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[json]":            { "editor.defaultFormatter": "vscode.json-language-features" },
+  "[jsonc]":           { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[svelte]":          { "editor.defaultFormatter": "svelte.svelte-vscode" },
+  "[prisma]":          { "editor.defaultFormatter": "Prisma.prisma" },
+  "[go]":              { "editor.defaultFormatter": "golang.go" },
+  "[toml]":            { "editor.defaultFormatter": "tamasfe.even-better-toml" },
+  "prettier.tabWidth": 4,
+
+  // ─── Svelte / Go ────────────────────────────────────────────────────
+  "svelte.enable-ts-plugin": true,
+  "svelte.plugin.svelte.note-new-transformation": false,
+  "go.toolsManagement.autoUpdate": true,
+
+  // ─── Vitest (kept) ──────────────────────────────────────────────────
+  "vitest.enable": true,
+
+  // ─── Misc / explorer ────────────────────────────────────────────────
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.js",
+    "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+    "*.jsx": "${capture}.js",
+    "*.tsx": "${capture}.ts",
+    "tsconfig.json": "tsconfig.*.json",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock"
+  },
+
+  // ─── Updates ────────────────────────────────────────────────────────
+  "update.releaseTrack": "default",                   // ⚡ was "dev" — back to stable channel
+  "update.mode": "silentlyApplyOnQuit",
+
+  // ─── Schema downloads (harmless trust list, kept) ───────────────────
+  "json.schemaDownload.trustedDomains": {
+    "https://schemastore.azurewebsites.net/": true,
+    "https://raw.githubusercontent.com/": true,
+    "https://www.schemastore.org/": true,
+    "https://json.schemastore.org/": true,
+    "https://json-schema.org/": true,
+    "https://biomejs.dev": true
+  },
+
+  // ─── Telemetry (your choice — kept as you had it) ───────────────────
+  "redhat.telemetry.enabled": true,
+  "task.allowAutomaticTasks": "on",
+  "vsicons.dontShowNewVersionMessage": true,
+
+  // ─── Vim (restored verbatim from backup) ────────────────────────────
+  "vim.leader": "<space>",
+  "vim.easymotion": true,
+  "vim.highlightedyank.enable": true,
+  "vim.useSystemClipboard": true,
+  "vim.smartRelativeLine": true,
+  "vim.disableExtension": false,
+  "vim.handleKeys": {},
+  "vim.commandLineModeKeyBindings": [],
+  "vim.commandLineModeKeyBindingsNonRecursive": [],
+  "vim.insertModeKeyBindings": [
+    { "before": ["j", "k"], "after": ["<Esc>"] }
+  ],
+  "vim.visualModeKeyBindings": [
+    // Paste over selected without losing paste register content
+    { "before": ["<leader>", "p"], "after": ["\"", "_", "d", "P"] }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["<leader>", "f"],
+      "commands": ["editor.action.formatDocument"],
+      "when": "editorTextFocus && vim.active && !inDebugRepl",
+      "silent": true
     },
-    "black-formatter.args": ["--line-length=120"],
-    "flake8.args": ["--max-line-length=120", "--extend-ignore=E203"],
-    "python.analysis.autoSearchPaths": true,
-    "remote.autoForwardPortsSource": "hybrid",
-    "githubPullRequests.fileListLayout": "tree",
-    "python.analysis.autoFormatStrings": true,
-    "python.analysis.autoImportCompletions": true,
-    "python.analysis.inlayHints.pytestParameters": true,
-    "python.analysis.inlayHints.callArgumentNames": "partial",
-    "python.analysis.typeCheckingMode": "basic",
-    "[quarto]": {
-        "editor.defaultFormatter": "quarto.quarto"
+    {
+      "before": ["<leader>", "o"],
+      "commands": ["workbench.action.quickOpen"],
+      "when": "editorTextFocus && vim.active && !inDebugRepl"
     },
-    "[go]": {
-        "editor.defaultFormatter": "golang.go"
+    {
+      "before": ["<leader>", "q"],
+      "commands": ["workbench.action.showCommands"],
+      "silent": true
     },
-    "[gotmpl]": {
-        "editor.defaultFormatter": "golang.go"
+    {
+      "before": ["<leader>", "w"],
+      "commands": ["workbench.action.files.save"],
+      "silent": true
     },
-    "go.toolsManagement.autoUpdate": true,
-    "cursor.cpp.disabledLanguages": ["quarto", "scminput", "yaml", "haskell"],
-    "explorer.fileNesting.patterns": {
-        "*.ts": "${capture}.js",
-        "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
-        "*.jsx": "${capture}.js",
-        "*.tsx": "${capture}.ts",
-        "tsconfig.json": "tsconfig.*.json",
-        "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock",
-        "*.sqlite": "${capture}.${extname}-*",
-        "*.db": "${capture}.${extname}-*",
-        "*.sqlite3": "${capture}.${extname}-*",
-        "*.db3": "${capture}.${extname}-*",
-        "*.sdb": "${capture}.${extname}-*",
-        "*.s3db": "${capture}.${extname}-*"
+    {
+      "before": ["<leader>", "c"],
+      "commands": ["workbench.action.closeActiveEditor"],
+      "silent": true
     },
-    "roo-cline.allowedCommands": [
-        "npm test",
-        "npm install",
-        "tsc",
-        "git log",
-        "git diff",
-        "git show"
-    ],
-    "mssql.connectionGroups": [
-        {
-            "name": "ROOT",
-            "id": "D70B0F02-642A-4D6C-AB15-F4AB6A806A18"
-        }
-    ],
-    "mssql.connections": [],
-    "gitlens.ai.model": "vscode",
-    "gitlens.ai.vscode.model": "copilot:claude-3.5-sonnet",
-    "ruff.configurationPreference": "filesystemFirst",
-    "github.copilot.nextEditSuggestions.enabled": false,
-    "github.copilot.nextEditSuggestions.fixes": true,
-    "github.copilot.chat.followUps": "always",
-    "github.copilot.chat.codesearch.enabled": true,
-    "github.copilot.chat.agent.thinkingTool": true,
-    "github.copilot.chat.generateTests.codeLens": true,
-    "github.copilot.chat.languageContext.fix.typescript.enabled": true,
-    "github.copilot.chat.languageContext.inline.typescript.enabled": true,
-    "github.copilot.chat.languageContext.typescript.enabled": true,
-    "github.copilot.chat.search.keywordSuggestions": true,
-    "pgsql.serverGroups": [
-        {
-            "name": "Servers",
-            "id": "5329FD0B-8C48-45ED-96E5-2F8D91603233",
-            "isDefault": true
-        }
-    ],
-    "pgsql.connections": [
-        {
-            "id": "5F75B1C4-91A1-4808-BD3E-B842DFC27C45",
-            "groupId": "5329FD0B-8C48-45ED-96E5-2F8D91603233",
-            "authenticationType": "SqlLogin",
-            "connectTimeout": 15,
-            "applicationName": "vscode-pgsql",
-            "clientEncoding": "utf8",
-            "sslmode": "prefer",
-            "server": "localhost",
-            "user": "postgres",
-            "port": "5432",
-            "database": "postgres",
-            "password": "",
-            "profileName": "localhost, postgres (postgres)",
-            "expiresOn": 0
-        }
-    ],
-    "biome.suggestInstallingGlobally": false,
-    "[toml]": {
-        "editor.defaultFormatter": "tamasfe.even-better-toml"
+    {
+      "before": ["<leader>", "h"],
+      "commands": ["workbench.action.splitEditor"],
+      "silent": true
     },
-    "cursorpyright.analysis.autoImportCompletions": true,
-    "cursorpyright.analysis.autoSearchPaths": true,
-    "cursorpyright.analysis.inlayHints.callArgumentNames": "partial",
-    "cursorpyright.analysis.typeCheckingMode": "basic",
-    "update.releaseTrack": "prerelease",
-    "ty.experimental.autoImport": true,
-    "ty.experimental.rename": true,
-    "ty.diagnosticMode": "workspace",
-    "amp.tab.enabled": false,
-    "python.pyrefly.displayTypeErrors": "force-on",
-    "amp.url": "https://ampcode.com/",
-    "javascript.referencesCodeLens.enabled": true,
-    "javascript.referencesCodeLens.showOnAllFunctions": true,
-    "typescript.referencesCodeLens.enabled": true,
-    "typescript.referencesCodeLens.showOnAllFunctions": true,
-    "jupyter.interactiveWindow.creationMode": "perFile",
-    "json.schemaDownload.trustedDomains": {
-        "https://schemastore.azurewebsites.net/": true,
-        "https://raw.githubusercontent.com/": true,
-        "https://www.schemastore.org/": true,
-        "https://json.schemastore.org/": true,
-        "https://json-schema.org/": true,
-        "https://biomejs.dev": true
+    {
+      "before": ["<leader>", "v"],
+      "commands": ["workbench.action.splitEditorOrthogonal"],
+      "silent": true
     },
-    "amp.tools.disable": []
+    { "before": ["L"], "commands": ["workbench.action.focusRightGroup"], "silent": true },
+    { "before": ["H"], "commands": ["workbench.action.focusLeftGroup"],  "silent": true },
+    { "before": ["J"], "commands": ["workbench.action.focusBelowGroup"], "silent": true },
+    { "before": ["K"], "commands": ["workbench.action.focusAboveGroup"], "silent": true },
+    { "before": ["<C-h>"], "commands": ["workbench.action.previousEditor"], "silent": true },
+    { "before": ["<C-l>"], "commands": ["workbench.action.nextEditor"],     "silent": true }
+  ]
 }
