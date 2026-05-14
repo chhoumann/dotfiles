@@ -11,4 +11,6 @@ window-padding-color = extend
 keybind = super+right=esc:OF
 keybind = super+left=esc:OH
 keybind = shift+enter=text:\x1b\r
+keybind = super+t=ignore
+keybind = super+n=ignore
 macos-titlebar-style = transparent
