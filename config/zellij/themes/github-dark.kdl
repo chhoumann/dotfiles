@@ -11,5 +11,54 @@ themes {
         cyan "#39c5cf"
         white "#b1bac4"
         orange "#ffa657"
+
+        ribbon_unselected {
+            base 201 209 217
+            background 33 38 45
+            emphasis_0 163 113 247
+            emphasis_1 240 246 252
+            emphasis_2 63 185 80
+            emphasis_3 88 166 255
+        }
+        ribbon_selected {
+            base 13 17 23
+            background 88 166 255
+            emphasis_0 255 123 114
+            emphasis_1 240 246 252
+            emphasis_2 63 185 80
+            emphasis_3 163 113 247
+        }
+        text_unselected {
+            base 139 148 158
+            background 33 38 45
+            emphasis_0 163 113 247
+            emphasis_1 240 246 252
+            emphasis_2 63 185 80
+            emphasis_3 88 166 255
+        }
+        text_selected {
+            base 13 17 23
+            background 88 166 255
+            emphasis_0 240 246 252
+            emphasis_1 240 246 252
+            emphasis_2 63 185 80
+            emphasis_3 163 113 247
+        }
+        exit_code_success {
+            base 63 185 80
+            background 13 17 23
+            emphasis_0 240 246 252
+            emphasis_1 240 246 252
+            emphasis_2 88 166 255
+            emphasis_3 163 113 247
+        }
+        exit_code_error {
+            base 255 123 114
+            background 13 17 23
+            emphasis_0 240 246 252
+            emphasis_1 240 246 252
+            emphasis_2 88 166 255
+            emphasis_3 163 113 247
+        }
     }
 }
