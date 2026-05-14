@@ -1,2 +1,7 @@
 config/zed/conversations/
 config/zed/prompts/
+
+# AI tool configs contain hardcoded auth tokens / user-local project state.
+# Kept out of the repo to avoid leaking secrets and machine-local data.
+config/amp/
+codex/config.toml
