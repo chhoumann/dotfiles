@@ -125,7 +125,6 @@ cask "google-chrome"    # Web browser
 cask "mac-mouse-fix"  # Better mouse
 cask "wribe"          # AI transcription
 cask "codexbar"       # Menu bar AI
-cask "sparkle"        # App update framework
 cask "temurin@11"     # Java 11 runtime
 
 cask "cleanshot"      # Screenshots

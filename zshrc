@@ -514,6 +514,4 @@ path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})
 # CF CLI completions
 [[ -f "$HOME/.config/cf/completions/_cf.zsh" ]] && source "$HOME/.config/cf/completions/_cf.zsh"
 
-# Added by GitButler installer
-export PATH="$HOME/.local/bin:$PATH"
-eval "$(but completions zsh)"
+command -v but >/dev/null 2>&1 && eval "$(but completions zsh)"
