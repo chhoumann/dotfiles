@@ -510,9 +510,9 @@ fi
 path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})
 
 # bun completions
-[ -s "/Users/christian/.bun/_bun" ] && source "/Users/christian/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 # CF CLI completions
-[[ -f "/Users/christian/.config/cf/completions/_cf.zsh" ]] && source "/Users/christian/.config/cf/completions/_cf.zsh"
+[[ -f "$HOME/.config/cf/completions/_cf.zsh" ]] && source "$HOME/.config/cf/completions/_cf.zsh"
 
 # Added by GitButler installer
 export PATH="$HOME/.local/bin:$PATH"
