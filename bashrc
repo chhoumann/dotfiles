@@ -118,3 +118,7 @@ fi
 . "$HOME/.cargo/env"
 PATH=~/.console-ninja/.bin:$PATH
 export PATH=$HOME/.npm-global/bin:$PATH
+
+# Added by GitButler installer
+export PATH="$HOME/.local/bin:$PATH"
+eval "$(but completions bash)"
