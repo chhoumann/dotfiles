@@ -58,9 +58,9 @@ cd ~/Developer/dotfiles
 ./install mac apps
 ```
 
-That `apps` profile is where live app state such as Claude, Codex, VS Code, Cursor, and Zed lives. Keeping it separate reduces accidental repo churn.
+That `apps` profile is where live app state such as Claude, VS Code, Cursor, and Zed lives. Keeping it separate reduces accidental repo churn.
 
-Git identity is intentionally local now. Shared Git behavior lives in [gitconfig](/Users/christian/Developer/dotfiles/gitconfig), while per-machine identity lives in `~/.gitconfig.local`. Start from [gitconfig.local.example](/Users/christian/Developer/dotfiles/gitconfig.local.example) on new machines.
+Git identity is intentionally local now. Shared Git behavior lives in [gitconfig](gitconfig), while per-machine identity lives in `~/.gitconfig.local`. Start from [gitconfig.local.example](gitconfig.local.example) on new machines.
 
 ## Tool Ownership
 

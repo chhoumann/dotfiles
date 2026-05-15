@@ -8,6 +8,7 @@
     # Karabiner
     ~/.config/karabiner/karabiner.json:
       path: ./config/karabiner/karabiner.json
+      create: true
       force: true
     ~/.config/karabiner/assets:
       path: ./config/karabiner/assets

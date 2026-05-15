@@ -29,6 +29,11 @@
       ~/.npmrc:
           force: true
           path: npmrc
+      ~/.local/bin/zellij-cwd-launch:
+          path: scripts/zellij-cwd-launch
+          create: true
+          relink: true
+          force: true
       ~/.aerospace.toml:
           force: true
           path: aerospace.toml

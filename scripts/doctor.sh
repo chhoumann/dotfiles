@@ -66,7 +66,7 @@ else
   fail "vite+ env file present"
 fi
 
-node_info="$(env -i HOME="$HOME" USER="${USER:-}" LOGNAME="${LOGNAME:-}" SHELL=/bin/zsh PATH=/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin /bin/zsh -lic 'printf "%s\n%s\n%s\n%s\n" "$(which node)" "$(which npm)" "$(node -v)" "$(npm -v)"' 2>/dev/null || true)"
+node_info="$(env -i HOME="$HOME" USER="${USER:-}" LOGNAME="${LOGNAME:-}" SHELL=/bin/zsh PATH=/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/usr/local/bin /bin/zsh -lic 'printf "%s\n%s\n%s\n%s\n" "$(which node)" "$(which npm)" "$(node -v)" "$(npm -v)"' 2>/dev/null || true)"
 node_path="$(printf '%s\n' "$node_info" | sed -n '1p')"
 npm_path="$(printf '%s\n' "$node_info" | sed -n '2p')"
 

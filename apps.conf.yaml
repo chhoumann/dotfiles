@@ -10,16 +10,6 @@
       create: true
       relink: true
       force: true
-    ~/.config/amp/settings.json:
-      path: config/amp/settings.json
-      create: true
-      relink: true
-      force: true
-    ~/.codex/config.toml:
-      path: codex/config.toml
-      create: true
-      relink: true
-      force: true
     ~/.config/zed/settings.json:
       path: config/zed/settings.json
       create: true
