@@ -7,20 +7,42 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "word_diff_enabled": true,
+  "diff_view_style": "split",
+  "cli_default_open_behavior": "new_window",
+  "project_panel": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left",
+    "tree_view": true,
+    "sort_by_path": true,
+    "file_icons": true
+  },
   "agent_servers": {
-    "codex": {
+    "codex-acp": {
+      "type": "registry",
       "default_mode": "full-access"
     }
   },
   "agent": {
+    "tool_permissions": {
+      "default": "allow"
+    },
+    "dock": "right",
     "default_profile": "write",
     "default_model": {
       "provider": "zed.dev",
       "model": "claude-haiku-4-5"
     },
     "use_modifier_to_send": true,
-    "play_sound_when_agent_done": true,
-    "always_allow_tool_actions": true,
+    "play_sound_when_agent_done": "always",
     "model_parameters": []
   },
   "inlay_hints": {
