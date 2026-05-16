@@ -157,10 +157,7 @@
     "*.tsx": "${capture}.ts",
     "tsconfig.json": "tsconfig.*.json",
     "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock"
-  },
-
-  // ─── Updates ────────────────────────────────────────────────────────
-  "update.releaseTrack": "default",                   // ⚡ was "dev" — back to stable channel
+  }, // ⚡ was "dev" — back to stable channel
   "update.mode": "silentlyApplyOnQuit",
 
   // ─── Schema downloads (harmless trust list, kept) ───────────────────
