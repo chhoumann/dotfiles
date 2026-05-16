@@ -160,6 +160,8 @@ command -v bat >/dev/null 2>&1 && alias cat="bat"
 alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 
+source "${DOTFILES_DIR}/shell/lumen.zsh"
+
 cdt() {
   local base="${TMPDIR:-/tmp}"
   local raw_label="${1:-${PWD:t}}"
