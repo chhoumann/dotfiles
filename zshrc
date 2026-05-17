@@ -156,12 +156,12 @@ alias lg=lazygit
 [[ -x "$HOME/.fly/bin/flyctl" ]] && alias fly="$HOME/.fly/bin/flyctl"
 
 if command -v eza >/dev/null 2>&1; then
-    alias ls="eza --icons --git"
-    alias l='eza -alg --color=always --group-directories-first --git'
-    alias ll='eza -aliSgh --color=always --group-directories-first --icons --header --long --git'
-    alias lt='eza -@alT --color=always --git'
-    alias llt="eza --oneline --tree --icons --git-ignore"
-    alias lr='eza -alg --sort=modified --color=always --group-directories-first --git'
+    alias ls='eza --icons --git --group-directories-first'
+    alias l='eza -al --icons --git --group-directories-first'
+    alias ll='eza -al --icons --git --group-directories-first --header'
+    alias lt='eza --tree --icons --git --git-ignore --level=2'
+    alias llt='eza --tree --icons --git --git-ignore --level=4'
+    alias lr='eza -al --icons --git --group-directories-first --sort=modified'
 else
     alias l='ls -alh'
     alias ll='ls -alh'
