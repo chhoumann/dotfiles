@@ -93,6 +93,11 @@
           create: true
           relink: true
           force: true
+      ~/.config/atuin/themes/github-dark.toml:
+          path: config/atuin/themes/github-dark.toml
+          create: true
+          relink: true
+          force: true
 # - create:
 #     - ~/downloads
 #     - ~/.vim/undo-history

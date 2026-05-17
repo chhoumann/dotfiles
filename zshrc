@@ -183,6 +183,7 @@ alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 
 source "${DOTFILES_DIR}/shell/lumen.zsh"
+source "${DOTFILES_DIR}/shell/git-fzf.zsh"
 
 cdt() {
   local base="${TMPDIR:-/tmp}"
@@ -424,6 +425,29 @@ function yy() {
 # Prompt
 if command -v starship >/dev/null 2>&1 && [[ -t 1 ]] && [[ "${TERM-}" != "dumb" ]]; then
   eval "$(starship init zsh)"
+fi
+
+# Vim-mode cursor shape: steady block in normal mode, blinking beam in insert.
+# zle-keymap-select fires on mode switch; zle-line-init resets the cursor at
+# each new prompt; zshexit restores the terminal default on shell exit so we
+# don't leave a beam behind. Uses add-zle-hook-widget so we coexist with
+# starship's own zle hooks instead of clobbering them.
+if [[ -o interactive ]]; then
+  autoload -Uz add-zle-hook-widget add-zsh-hook
+
+  _cursor_keymap_select() {
+    case "${KEYMAP}" in
+      vicmd)      print -n '\e[2 q' ;;  # steady block
+      viins|main) print -n '\e[5 q' ;;  # blinking beam
+    esac
+  }
+  add-zle-hook-widget zle-keymap-select _cursor_keymap_select
+
+  _cursor_line_init() { print -n '\e[5 q'; }
+  add-zle-hook-widget zle-line-init _cursor_line_init
+
+  _cursor_exit() { print -n '\e[0 q'; }
+  add-zsh-hook zshexit _cursor_exit
 fi
 
 # PATH management (dedupe + only add existing dirs)

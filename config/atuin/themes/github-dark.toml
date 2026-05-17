@@ -1,0 +1,18 @@
+[theme]
+name = "github-dark"
+parent = "default"
+
+# Atuin theme keys are coarse (AlertInfo/Warn/Error, Annotation, Base,
+# Guidance, Important). Hex values are accepted via ratatui's Color parser
+# in atuin >= 18, but if a future build regresses, swap each hex for the
+# nearest X11 named color (e.g. dodgerblue/mediumpurple/goldenrod) — the
+# named-color fallback is what the upstream docs guarantee.
+[colors]
+Title = "#58a6ff"
+Important = "#bc8cff"
+Guidance = "#3fb950"
+AlertInfo = "#58a6ff"
+AlertWarn = "#d29922"
+AlertError = "#ff7b72"
+Annotation = "#8b949e"
+Base = "#c9d1d9"
