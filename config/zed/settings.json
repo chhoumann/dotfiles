@@ -57,9 +57,9 @@
     "enabled": false
   },
   "terminal": {
-    "font_family": "IoskeleyMonoTerm Nerd Font"
+    "font_family": "GeistMono Nerd Font Mono"
   },
-  "buffer_font_family": "Ioskeley Mono",
+  "buffer_font_family": "Geist Mono",
   "multi_cursor_modifier": "cmd_or_ctrl",
   "vertical_scroll_margin": 10.0,
   "minimap": {
