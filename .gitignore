@@ -5,3 +5,9 @@ config/zed/prompts/
 # Kept out of the repo to avoid leaking secrets and machine-local data.
 config/amp/
 codex/config.toml
+
+# Editor swap/backup files
+*.swp
+*.swo
+*~
+.DS_Store
