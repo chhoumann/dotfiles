@@ -32,41 +32,34 @@ if [[ -n "${VSCODE_PID-}" || -n "${VSCODE_IPC_HOOK_CLI-}" || "${TERM_PROGRAM-}" 
   IS_VSCODE=true
 fi
 
-# export ZELLIJ_AUTO_ATTACH=true
-# Prefer tmux or zellij without affecting the other; default stays zellij.
-export MUX_PREFERRED="${MUX_PREFERRED:-zellij}"
-start_preferred_mux() {
+# Auto-launch zellij in Ghostty: attach to the most recent session if any,
+# otherwise start a fresh one. Set ZELLIJ_AUTO_ATTACH=true to skip the
+# session-picker logic and always attach -c; ZELLIJ_AUTO_EXIT=true to close
+# the parent shell when zellij exits.
+start_zellij() {
     [[ $- == *i* ]] || return 0
     [[ -t 0 && -t 1 ]] || return 0
     [[ "${TERM_PROGRAM-}" == "ghostty" ]] || return 0
     [[ -z "$ZELLIJ" && -z "$TMUX" ]] || return 0
+    command -v zellij >/dev/null 2>&1 || return 0
 
-    if [[ "$MUX_PREFERRED" == "tmux" ]] && command -v tmux >/dev/null 2>&1; then
-        tmux new -A -s main
-    elif command -v zellij >/dev/null 2>&1; then
-        if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-            zellij attach -c
+    if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
+        zellij attach -c
+    else
+        local sessions last_session
+        sessions=$(timeout 2 zellij list-sessions --no-formatting --short 2>/dev/null || true)
+        if [[ -z "$sessions" ]]; then
+            zellij
         else
-            local sessions last_session
-            if command -v timeout >/dev/null 2>&1; then
-                sessions=$(timeout 2 zellij list-sessions --no-formatting --short 2>/dev/null || true)
-            else
-                sessions=$(zellij list-sessions --no-formatting --short 2>/dev/null || true)
-            fi
-
-            if [[ -z "$sessions" ]]; then
-                zellij
-            else
-                last_session=$(printf '%s\n' "$sessions" | tail -n 1)
-                zellij attach "$last_session" || zellij
-            fi
+            last_session=$(printf '%s\n' "$sessions" | tail -n 1)
+            zellij attach "$last_session" || zellij
         fi
-
-        [[ "$ZELLIJ_AUTO_EXIT" == "true" ]] && exit
     fi
+
+    [[ "$ZELLIJ_AUTO_EXIT" == "true" ]] && exit
 }
 
-start_preferred_mux
+start_zellij
 
 # Zinit configuration
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -74,10 +67,7 @@ if [[ -r "${ZINIT_HOME}/zinit.zsh" ]]; then
   source "${ZINIT_HOME}/zinit.zsh"
 fi
 
-# Add in Powerlevel10k if desired - remember to comment out starship & use the p10k file
-# zinit ice depth=1; zinit light romkatv/powerlevel10k
-
-# Add in zsh plugins that extend completions before `compinit`.
+# zsh-completions must load before compinit; zinit cdreplay + snippets after.
 if (( ${+functions[zinit]} )); then
   zinit light zsh-users/zsh-completions
 fi
@@ -95,12 +85,9 @@ else
     compinit -C -d "$ZSH_COMPDUMP"
 fi
 unset _zcompdump_refresh
+
 if (( ${+functions[zinit]} )); then
   zinit cdreplay -q
-fi
-
-# Add in snippets
-if (( ${+functions[zinit]} )); then
   zinit snippet OMZP::git
   zinit snippet OMZP::sudo
   zinit snippet OMZP::aws
@@ -109,10 +96,6 @@ if (( ${+functions[zinit]} )); then
   zinit snippet OMZP::command-not-found
 fi
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# https://www.youtube.com/watch?v=ud7YxC33Z3w | "This Zsh config is perhaps my favorite one yet."
 ## -- Keybinds ---
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
@@ -179,7 +162,6 @@ alias ccc="pbcopy"
 alias gdash="gh extension exec dash"
 [[ -x "$(command -v topgrade 2>/dev/null)" ]] && alias tgall='topgrade -cy --no-retry'
 command -v bat >/dev/null 2>&1 && alias cat="bat"
-alias py="python -m pdb -c c"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 
 source "${DOTFILES_DIR}/shell/lumen.zsh"
@@ -222,170 +204,6 @@ if [[ -n "$ZELLIJ_PANE_ID" ]]; then
   chpwd_functions+=(_zellij_cwd_track)
   _zellij_cwd_track
 fi
-
-alias csb="$HOME/projects/claude-manager/claude-squad"
-
-# Git worktree swap functions
-gwt-use() {
-  local branch="$1"
-
-  # Check if we're in a git repo
-  git rev-parse --git-dir &>/dev/null || { echo "Not in a git repository"; return 1; }
-
-  # Get main branch name
-  local main_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null)
-  main_branch=${main_branch##refs/remotes/origin/}
-  [[ -z "$main_branch" ]] && main_branch="main"
-
-  if [[ -z "$branch" ]]; then
-    # Build list: branch|path
-    local worktrees=()
-    local wt_branch wt_path
-    while IFS= read -r line; do
-      if [[ "$line" == worktree\ * ]]; then
-        wt_path="${line#worktree }"
-      elif [[ "$line" == branch\ refs/heads/* ]]; then
-        wt_branch="${line#branch refs/heads/}"
-        worktrees+=("$wt_branch"$'\t'"$wt_path")
-      fi
-    done < <(git worktree list --porcelain)
-
-    [[ ${#worktrees[@]} -eq 0 ]] && { echo "No worktrees with branches found"; return 1; }
-
-    # If only one worktree, use it directly
-    if [[ ${#worktrees[@]} -eq 1 ]]; then
-      branch="${worktrees[1]%%$'\t'*}"
-      echo "Only one worktree found, using: $branch"
-    else
-      # Build display list with time and message, sorted by most recent commit
-      local unsorted=()
-      for entry in "${worktrees[@]}"; do
-        local b="${entry%%$'\t'*}"
-        local p="${entry#*$'\t'}"
-        local timestamp=$(git log -1 --format="%ct" "$b" 2>/dev/null || echo "0")
-        local time=$(git log -1 --format="%ar" "$b" 2>/dev/null || echo "unknown")
-        local msg=$(git log -1 --format="%s" "$b" 2>/dev/null)
-        [[ ${#msg} -gt 40 ]] && msg="${msg:0:40}..."
-        unsorted+=("$timestamp"$'\t'"$b"$'\t'"$p"$'\t'"$time"$'\t'"$msg")
-      done
-      # Sort by timestamp (descending) and remove timestamp column
-      local display_list
-      display_list=$(printf '%s\n' "${unsorted[@]}" | sort -t$'\t' -k1 -rn | cut -f2-)
-
-      # Preview script with full paths
-      local preview_cmd="
-        branch=\$(echo {} | cut -f1)
-        path=\$(echo {} | cut -f2)
-        main=\"origin/$main_branch\"
-        printf '\033[1;36m━━━ %s ━━━\033[0m\n\n' \"\$branch\"
-
-        # vs main (from merge-base)
-        base=\$(git merge-base \"\$main\" \"\$branch\" 2>/dev/null)
-        if [ -n \"\$base\" ]; then
-          ahead=\$(git rev-list --count \"\$base\"..\"\$branch\" 2>/dev/null || echo 0)
-          behind=\$(git rev-list --count \"\$base\"..\"\$main\" 2>/dev/null || echo 0)
-          printf '\033[33m↑%s\033[0m ahead  \033[33m↓%s\033[0m behind %s\n' \"\$ahead\" \"\$behind\" \"\$main\"
-        fi
-
-        # vs own remote tracking branch
-        tracking=\$(git rev-parse --abbrev-ref \"\$branch\"@{upstream} 2>/dev/null)
-        if [ -n \"\$tracking\" ]; then
-          push_ahead=\$(git rev-list --count \"\$tracking\"..\"\$branch\" 2>/dev/null || echo 0)
-          push_behind=\$(git rev-list --count \"\$branch\"..\"\$tracking\" 2>/dev/null || echo 0)
-          if [ \"\$push_ahead\" -gt 0 ] || [ \"\$push_behind\" -gt 0 ]; then
-            printf '\033[35m↑%s\033[0m to push  \033[35m↓%s\033[0m to pull\n' \"\$push_ahead\" \"\$push_behind\"
-          else
-            printf '\033[32m✓ in sync with %s\033[0m\n' \"\$tracking\"
-          fi
-        else
-          printf '\033[2mno remote tracking branch\033[0m\n'
-        fi
-
-        printf '\033[2m%s\033[0m\n\n' \"\$path\"
-        changes=\$(git diff --shortstat \"\$main\"...\"\$branch\" 2>/dev/null)
-        [ -n \"\$changes\" ] && printf '\033[32m%s\033[0m\n\n' \"\$changes\"
-        printf '\033[1mRecent commits:\033[0m\n'
-        git log --color=always --format='%C(yellow)%h%C(reset) %C(cyan)%ar%C(reset) %s %C(dim)(%an)%C(reset)' -8 \"\$branch\" 2>/dev/null
-      "
-
-      local selection=$(echo "$display_list" | fzf \
-              --prompt="  " \
-              --header="Select a worktree branch to checkout here (ctrl-l: toggle preview)" \
-              --preview="$preview_cmd" \
-              --preview-window=right:55%:wrap \
-              --delimiter=$'\t' \
-              --with-nth='1,3,4' \
-              --ansi \
-              --border=rounded \
-              --border-label=" gwt-use " \
-              --bind='ctrl-l:toggle-preview')
-      [[ -z "$selection" ]] && return 1
-      branch="${selection%%$'\t'*}"
-    fi
-  fi
-
-  # Find the worktree path
-  local wt_path=$(git worktree list --porcelain | awk -v b="$branch" '
-    /^worktree / { path=$2 }
-    /^branch refs\/heads\// { if ($0 ~ b"$") print path }
-  ')
-
-  if [[ -z "$wt_path" ]]; then
-    echo "No worktree found for branch: $branch"
-    return 1
-  fi
-
-  printf "\n\033[2m⏸ Detaching worktree at %s...\033[0m\n" "$wt_path"
-  git -C "$wt_path" checkout --detach || return 1
-
-  printf "\033[2m⎇ Checking out %s...\033[0m\n" "$branch"
-  git checkout "$branch" || return 1
-
-  printf "\n\033[1;32m✓ Now on %s\033[0m\n" "$branch"
-}
-
-gwt-return() {
-  git rev-parse --git-dir &>/dev/null || { echo "Not in a git repository"; return 1; }
-
-  local branch=$(git branch --show-current)
-  if [[ -z "$branch" ]]; then
-    echo "Not on a branch (detached HEAD?)"
-    return 1
-  fi
-
-  # Find detached worktrees
-  local detached=$(git worktree list | awk '/detached/ {print $1}')
-  [[ -z "$detached" ]] && { echo "No detached worktrees found"; return 1; }
-
-  local count=$(echo "$detached" | wc -l | tr -d ' ')
-  local wt_path
-
-  if [[ "$count" -eq 1 ]]; then
-    wt_path="$detached"
-    echo "Only one detached worktree found, using: $wt_path"
-  else
-    wt_path=$(echo "$detached" | fzf \
-        --prompt="↩ Return '$branch' to: " \
-        --header="Detached worktrees" \
-        --preview='printf "\033[1;36m━━━ %s ━━━\033[0m\n\n" "$(basename {})"; git -C {} status --short 2>/dev/null; echo; git -C {} log --oneline -5 2>/dev/null' \
-        --preview-window=right:50%:wrap \
-        --ansi \
-        --border=rounded \
-        --border-label=" gwt-return ")
-    [[ -z "$wt_path" ]] && return 1
-  fi
-
-  local main_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
-  [[ -z "$main_branch" ]] && main_branch="main"
-
-  printf "\n\033[2m⎇ Switching to %s...\033[0m\n" "$main_branch"
-  git checkout "$main_branch" || { git checkout main 2>/dev/null || git checkout master; } || return 1
-
-  printf "\033[2m↩ Restoring %s in %s...\033[0m\n" "$branch" "$wt_path"
-  git -C "$wt_path" checkout "$branch" || return 1
-
-  printf "\n\033[1;32m✓ %s restored to %s\033[0m\n" "$branch" "$(basename "$wt_path")"
-}
 
 ccv() {
   if [[ "$1" == "update" ]]; then
@@ -470,10 +288,8 @@ path_prepend "$HOME/.local/bin"
 path_prepend "$HOME/go/bin"
 
 # Optional local CLIs (installed per-machine); only enabled if present.
-path_prepend "$HOME/.opencode/bin"
 path_prepend "$HOME/.codeium/windsurf/bin"
 path_prepend "$HOME/.antigravity/antigravity/bin"
-path_append "$HOME/Developer/vr/scripts"
 
 # Make Intel Homebrew / manual installs usable on Apple Silicon and vice versa.
 path_append "/usr/local/bin"
@@ -603,8 +419,6 @@ fi
 # override package launchers when needed.
 path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 # CF CLI completions
 [[ -f "$HOME/.config/cf/completions/_cf.zsh" ]] && source "$HOME/.config/cf/completions/_cf.zsh"
 
