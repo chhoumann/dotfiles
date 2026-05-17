@@ -1,6 +1,32 @@
 gui:
   showFileIcons: true
   nerdFontsVersion: "3"
+  theme:
+    activeBorderColor:
+      - "#58a6ff"
+      - bold
+    inactiveBorderColor:
+      - "#30363d"
+    optionsTextColor:
+      - "#58a6ff"
+    selectedLineBgColor:
+      - "#161b22"
+    cherryPickedCommitBgColor:
+      - "#30363d"
+    cherryPickedCommitFgColor:
+      - "#bc8cff"
+    unstagedChangesColor:
+      - "#ff7b72"
+    defaultFgColor:
+      - "#c9d1d9"
+    searchingActiveBorderColor:
+      - "#d29922"
+      - bold
+  authorColors:
+    "*": "#bc8cff"
+  branchColors:
+    "main": "#58a6ff"
+    "master": "#58a6ff"
 git:
     paging:
         # colorArg: always

@@ -3,6 +3,28 @@ export IS_VSCODE=false
 export EDITOR="${EDITOR:-vim}"
 DOTFILES_DIR="${${(%):-%N}:A:h}"
 
+# GitHub Dark palette — applied to fzf, man, autosuggestion, and syntax
+# highlighting. Plugin-array overrides for autosuggest/highlighting live
+# *after* the zinit load block below; the env vars set here are read at
+# tool-invocation time and are safe to set early.
+export MANPAGER="sh -c 'col -bx | bat --language man --plain'"
+export MANROFFOPT="-c"
+export FZF_DEFAULT_OPTS="
+  --height=40%
+  --layout=reverse
+  --border=rounded
+  --prompt='❯ '
+  --pointer='▶'
+  --marker='✓'
+  --info=inline
+  --color=fg:#c9d1d9,bg:-1,hl:#bc8cff
+  --color=fg+:#f0f6fc,bg+:#161b22,hl+:#d2a8ff
+  --color=info:#58a6ff,prompt:#3fb950,pointer:#ff7b72
+  --color=marker:#d29922,spinner:#58a6ff,header:#8b949e
+  --color=border:#30363d,gutter:-1,separator:#30363d
+  --color=preview-bg:-1,preview-fg:#c9d1d9
+"
+
 source "${DOTFILES_DIR}/shell/shared.zsh"
 
 # VS Code sets a few env vars; avoid spawning subprocesses here.
@@ -490,6 +512,52 @@ if (( ${+functions[zinit]} )); then
     zinit light zsh-users/zsh-autosuggestions
     zinit light zsh-users/zsh-syntax-highlighting
 fi
+
+# GitHub Dark palette for inline ghost-text and as-you-type highlighting.
+# Must come after the plugins load so we override their defaults.
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6e7681'
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+typeset -gA ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[default]='fg=#c9d1d9'
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#ff7b72,bold'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#ffa657'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#39c5cf,bold'
+ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=#39c5cf'
+ZSH_HIGHLIGHT_STYLES[global-alias]='fg=#39c5cf'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#58a6ff'
+ZSH_HIGHLIGHT_STYLES[function]='fg=#58a6ff'
+ZSH_HIGHLIGHT_STYLES[command]='fg=#58a6ff,bold'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=#bc8cff'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#8b949e'
+ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=#58a6ff'
+ZSH_HIGHLIGHT_STYLES[path]='fg=#c9d1d9,underline'
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#6e7681'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#c9d1d9,underline'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=#d29922'
+ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#bc8cff'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#39c5cf'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#39c5cf'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#bc8cff'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#3fb950'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#3fb950'
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#3fb950'
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#d2a8ff'
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=#d2a8ff'
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=#d2a8ff'
+ZSH_HIGHLIGHT_STYLES[assign]='fg=#d29922'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=#d29922,bold'
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#8b949e,italic'
+ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#39c5cf'
+ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#39c5cf'
+ZSH_HIGHLIGHT_STYLES[arg0]='fg=#58a6ff,bold'
+ZSH_HIGHLIGHT_STYLES[bracket-error]='fg=#ff7b72,bold'
+ZSH_HIGHLIGHT_STYLES[bracket-level-1]='fg=#58a6ff'
+ZSH_HIGHLIGHT_STYLES[bracket-level-2]='fg=#bc8cff'
+ZSH_HIGHLIGHT_STYLES[bracket-level-3]='fg=#3fb950'
+ZSH_HIGHLIGHT_STYLES[bracket-level-4]='fg=#d29922'
+ZSH_HIGHLIGHT_STYLES[bracket-level-5]='fg=#39c5cf'
+ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]='standout'
 
 if command -v atuin >/dev/null 2>&1 && [[ -t 0 ]] && [[ -t 1 ]]; then
   eval "$(atuin init zsh)"      # ctrl+r: history (overrides fzf's)
