@@ -15,6 +15,28 @@
 	navigate = true
 	line-numbers = true
 	side-by-side = true
+	syntax-theme = Coldark-Dark
+	file-style = "bold #f0f6fc"
+	file-decoration-style = "#30363d ol"
+	hunk-header-style = "#8b949e bold"
+	hunk-header-decoration-style = "#30363d box"
+	hunk-header-file-style = "#58a6ff"
+	hunk-header-line-number-style = "#bc8cff"
+	line-numbers-left-style = "#6e7681"
+	line-numbers-right-style = "#6e7681"
+	line-numbers-minus-style = "#ff7b72"
+	line-numbers-plus-style = "#3fb950"
+	line-numbers-zero-style = "#30363d"
+	minus-style = "syntax #3d1a1f"
+	minus-emph-style = "syntax #6b1f2a"
+	plus-style = "syntax #142e1c"
+	plus-emph-style = "syntax #1c5331"
+	zero-style = "syntax"
+	whitespace-error-style = "#3d1a1f reverse"
+	merge-conflict-begin-symbol = ⌃
+	merge-conflict-end-symbol = ⌄
+	merge-conflict-ours-diff-header-style = "#d29922 bold"
+	merge-conflict-theirs-diff-header-style = "#bc8cff bold"
 [merge]
 	conflictstyle = diff3
 [diff]

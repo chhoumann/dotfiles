@@ -83,6 +83,16 @@
           create: true
           relink: true
           force: true
+      ~/.config/starship.toml:
+          path: config/starship/starship.toml
+          create: true
+          relink: true
+          force: true
+      ~/.config/bat/config:
+          path: config/bat/config
+          create: true
+          relink: true
+          force: true
 # - create:
 #     - ~/downloads
 #     - ~/.vim/undo-history
