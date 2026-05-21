@@ -20,6 +20,12 @@
       create: true
       relink: true
       force: true
+    ~/.config/zed/themes:
+      path: config/zed/themes/
+      create: true
+      glob: true
+      relink: true
+      force: true
     "~/Library/Application Support/Cursor/User/settings.json":
       path: ./vscode/settings.json
       create: true
