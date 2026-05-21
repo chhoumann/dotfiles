@@ -122,3 +122,4 @@ export PATH=$HOME/.npm-global/bin:$PATH
 # Added by GitButler installer
 export PATH="$HOME/.local/bin:$PATH"
 eval "$(but completions bash)"
+source /Users/christian/.safe-chain/scripts/init-posix.sh # Safe-chain bash initialization script

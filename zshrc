@@ -423,3 +423,4 @@ path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})
 [[ -f "$HOME/.config/cf/completions/_cf.zsh" ]] && source "$HOME/.config/cf/completions/_cf.zsh"
 
 command -v but >/dev/null 2>&1 && eval "$(but completions zsh)"
+source /Users/christian/.safe-chain/scripts/init-posix.sh # Safe-chain Zsh initialization script
