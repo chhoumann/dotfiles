@@ -162,6 +162,7 @@ alias ccc="pbcopy"
 alias gdash="gh extension exec dash"
 [[ -x "$(command -v topgrade 2>/dev/null)" ]] && alias tgall='topgrade -cy --no-retry'
 command -v bat >/dev/null 2>&1 && alias cat="bat"
+command -v tofu >/dev/null 2>&1 && alias terraform="tofu"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
 
 source "${DOTFILES_DIR}/shell/lumen.zsh"
