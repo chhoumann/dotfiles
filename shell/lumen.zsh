@@ -7,6 +7,7 @@
 #   ld cs [sha] pick / open commit, stacked → HEAD
 #   ld b  [br]  pick / open branch...HEAD
 #   ld m        diff vs origin's default branch
+#   ld mw       diff vs origin's default branch + working tree
 #   ld f  [pa]  pick / open file with --focus
 #   ld w        --watch mode
 #   ld h        help / status header
@@ -34,6 +35,7 @@ ld() {
     cs)       _ld_commit_stacked "$@" ;;
     b)        _ld_branch "$@" ;;
     m)        _ld_main "$@" ;;
+    mw)       _ld_main_worktree "$@" ;;
     f)        _ld_file "$@" ;;
     w)        command lumen diff --watch "$@" ;;
     h|help)   _ld_help ;;
@@ -112,6 +114,26 @@ _ld_main() {
   command lumen diff "${base}...HEAD" "$@"
 }
 
+_ld_main_worktree() {
+  local base_ref merge_base
+  base_ref=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)
+
+  if [[ -z "$base_ref" ]]; then
+    if git rev-parse --verify origin/main >/dev/null 2>&1; then
+      base_ref=origin/main
+    elif git rev-parse --verify origin/master >/dev/null 2>&1; then
+      base_ref=origin/master
+    elif git rev-parse --verify main >/dev/null 2>&1; then
+      base_ref=main
+    else
+      base_ref=master
+    fi
+  fi
+
+  merge_base=$(git merge-base "$base_ref" HEAD) || return
+  command lumen diff "${merge_base}..-" "$@"
+}
+
 _ld_file() {
   local file="$1"
   if [[ -z "$file" ]]; then
@@ -162,6 +184,7 @@ _ld_help() {
   print -P "  %F{yellow}ld cs%f [sha] commit, stacked → HEAD"
   print -P "  %F{yellow}ld b%f  [br]  branch...HEAD"
   print -P "  %F{yellow}ld m%f        vs origin default branch"
+  print -P "  %F{yellow}ld mw%f       vs origin default branch + working tree"
   print -P "  %F{yellow}ld f%f  [pa]  file with --focus"
   print -P "  %F{yellow}ld w%f        --watch mode"
   print -P "  %F{yellow}ld h%f        this help"
@@ -224,6 +247,7 @@ _ld() {
         'cs:commit, stacked → HEAD'
         'b:branch (branch...HEAD)'
         'm:vs origin default branch'
+        'mw:vs origin default branch + working tree'
         'f:changed file (--focus)'
         'w:--watch mode'
         'h:help / status'
