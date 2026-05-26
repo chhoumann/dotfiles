@@ -43,6 +43,9 @@ start_zellij() {
     [[ -z "$ZELLIJ" && -z "$TMUX" ]] || return 0
     command -v zellij >/dev/null 2>&1 || return 0
 
+    # GUI-launched shells can inherit /. Seed new zellij sessions from home.
+    [[ "$PWD" == "/" ]] && cd -- "$HOME"
+
     if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
         zellij attach -c
     else
