@@ -7,7 +7,11 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "icon_theme": "Soft Charmed Icons",
+  "icon_theme": {
+    "mode": "light",
+    "light": "Soft Charmed Icons",
+    "dark": "Soft Charmed Icons"
+  },
   "edit_predictions": {
     "allow_data_collection": "no"
   },
@@ -89,7 +93,7 @@
   "ui_font_size": 16,
   "buffer_font_size": 15,
   "theme": {
-    "mode": "system",
+    "mode": "light",
     "light": "Modern Vesper Light",
     "dark": "Modern Vesper"
   },
