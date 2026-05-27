@@ -96,7 +96,10 @@ if (( ${+functions[zinit]} )); then
   zinit snippet OMZP::aws
   zinit snippet OMZP::kubectl
   zinit snippet OMZP::kubectx
-  zinit snippet OMZP::command-not-found
+  # Disabled because Homebrew's command-not-found handler can make typos feel
+  # like they hang while it searches for a formula that provides the command.
+  # Use `brew search <name>` manually when you want install suggestions.
+  # zinit snippet OMZP::command-not-found
 fi
 
 ## -- Keybinds ---
