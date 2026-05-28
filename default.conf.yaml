@@ -34,6 +34,11 @@
           create: true
           relink: true
           force: true
+      ~/.local/bin/zed-wait:
+          path: scripts/zed-wait
+          create: true
+          relink: true
+          force: true
       ~/.aerospace.toml:
           force: true
           path: aerospace.toml
