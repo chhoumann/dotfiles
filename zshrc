@@ -407,7 +407,7 @@ ZSH_HIGHLIGHT_STYLES[bracket-level-5]='fg=#39c5cf'
 ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]='standout'
 
 if command -v atuin >/dev/null 2>&1 && [[ -t 0 ]] && [[ -t 1 ]]; then
-  eval "$(atuin init zsh)"      # ctrl+r: history (overrides fzf's)
+  eval "$(atuin init zsh --disable-ai)"      # ctrl+r: history (overrides fzf's)
 fi
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"    # per-directory env vars
 
