@@ -199,6 +199,15 @@ alias zj="zellij"
 alias zja="zellij attach"
 alias zjl="zellij list-sessions"
 
+ccz() {
+  local file
+  file=$(mktemp "${TMPDIR:-/tmp}/zellij-scrollback.XXXXXX.txt") || return 1
+
+  zellij action dump-screen --full --path "$file" || return 1
+  zed "$file" >/dev/null 2>&1 &!
+  print -r -- "$file"
+}
+
 # Track each zellij pane's cwd so floating-pane launchers (yazi, etc.) can land
 # in the focused pane's directory. zellij's `Run` doesn't expose focused-pane
 # cwd via CLI on macOS, so we tail it from chpwd.
