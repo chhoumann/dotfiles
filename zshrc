@@ -1,6 +1,5 @@
 # Initialize variables
 export IS_VSCODE=false
-export EDITOR="${EDITOR:-vim}"
 DOTFILES_DIR="${${(%):-%N}:A:h}"
 
 # GitHub Dark palette — applied to fzf, man, autosuggestion, and syntax
@@ -275,7 +274,9 @@ if [[ -o interactive ]]; then
   add-zsh-hook zshexit _cursor_exit
 fi
 
-# PATH management (dedupe + only add existing dirs)
+# Interactive PATH additions (dedupe + only add existing dirs). Baseline
+# exported PATH and tool-home variables live in zshenv so scripts and
+# GUI-spawned shells get them too.
 typeset -U path PATH
 
 path_prepend() {
@@ -284,41 +285,19 @@ path_prepend() {
   path=("$dir" $path)
 }
 
-path_append() {
-  local dir="$1"
-  [[ -d "$dir" ]] || return 0
-  path+=("$dir")
-}
-
+# Reassert user tool precedence after login-shell setup such as `brew shellenv`.
+# The corresponding exported variables and baseline PATH live in zshenv.
 path_prepend "$HOME/bin"
 path_prepend "$HOME/.local/bin"
 path_prepend "$HOME/go/bin"
+path_prepend "$BUN_INSTALL/bin"
+path_prepend "$HOME/.cargo/bin"
+path_prepend "$DENO_INSTALL/bin"
+path_prepend "$PNPM_HOME"
 
 # Optional local CLIs (installed per-machine); only enabled if present.
 path_prepend "$HOME/.codeium/windsurf/bin"
 path_prepend "$HOME/.antigravity/antigravity/bin"
-
-# Make Intel Homebrew / manual installs usable on Apple Silicon and vice versa.
-path_append "/usr/local/bin"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-path_prepend "$BUN_INSTALL/bin"
-[[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
-
-# cargo
-path_prepend "$HOME/.cargo/bin"
-
-# deno
-export DENO_INSTALL="$HOME/.deno"
-path_prepend "$DENO_INSTALL/bin"
-
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-path_prepend "$PNPM_HOME"
-
-# .NET user tools
-path_append "$HOME/.dotnet"
 
 if [[ -n "${HOMEBREW_PREFIX-}" ]]; then
   path_prepend "$HOMEBREW_PREFIX/opt/llvm/bin"
@@ -333,7 +312,7 @@ if [[ -n "${HOMEBREW_PREFIX-}" ]]; then
   done
 fi
 
-export UV_TORCH_BACKEND=auto
+[[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
 
 ## -- Shell Integrations --
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
