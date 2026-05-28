@@ -1,2 +1,0 @@
-#!/usr/bin/env sh
-exec /opt/homebrew/bin/zed --wait "$@"
