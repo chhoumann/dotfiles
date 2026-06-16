@@ -7,6 +7,7 @@
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4-6"
   },
   "includeCoAuthoredBy": false,
+  "model": "claude-opus-4-8",
   "enabledPlugins": {
     "frontend-design@claude-code-plugins": true,
     "swift-lsp@claude-plugins-official": true,
@@ -22,7 +23,7 @@
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "skipDangerousModePermissionPrompt": true,
-  "model": "claude-opus-4-8"
+  "skipWorkflowUsageWarning": true
 }
