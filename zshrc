@@ -63,20 +63,80 @@ start_zellij() {
 
 start_zellij
 
-# Zinit configuration
+# Zinit-managed plugin paths. Fast path sources already-installed plugin files
+# directly; zinit stays available as the fallback loader when a cache is missing.
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-if [[ -r "${ZINIT_HOME}/zinit.zsh" ]]; then
-  source "${ZINIT_HOME}/zinit.zsh"
-fi
+ZINIT_BASE="${ZINIT_HOME:h}"
 
-# zsh-completions must load before compinit; zinit cdreplay + snippets after.
-if (( ${+functions[zinit]} )); then
-  zinit light zsh-users/zsh-completions
+_dotfiles_load_zinit() {
+  (( ${+functions[zinit]} )) && return 0
+  [[ -r "${ZINIT_HOME}/zinit.zsh" ]] || return 1
+  source "${ZINIT_HOME}/zinit.zsh"
+}
+
+_dotfiles_source_or_zinit_plugin() {
+  local plugin_dir="${ZINIT_BASE}/plugins/$1"
+  local repo="$2"
+  local file="$3"
+
+  if [[ -r "$plugin_dir/$file" ]]; then
+    source "$plugin_dir/$file"
+  else
+    _dotfiles_load_zinit && zinit light "$repo"
+  fi
+}
+
+_dotfiles_source_or_zinit_snippet() {
+  local name="$1"
+  local snippet_path="${ZINIT_BASE}/snippets/OMZP::${name}/OMZP::${name}"
+
+  if [[ -r "$snippet_path" ]]; then
+    if [[ "$name" == "git" && -n "${commands[git]-}" ]]; then
+      local cache="${ZSH_CACHE_DIR}/omzp-git.zsh"
+      local cache_header=""
+      local expected_header=": dotfiles-cache-command: ${commands[git]} $snippet_path"
+
+      [[ -r "$cache" ]] && IFS= read -r cache_header < "$cache"
+      if [[ ! -s "$cache" || "$cache_header" != "$expected_header" || "${commands[git]}" -nt "$cache" || "$snippet_path" -nt "$cache" ]]; then
+        local git_version="${${(As: :)$("${commands[git]}" version 2>/dev/null)}[3]}"
+        if [[ -n "$git_version" ]]; then
+          {
+            print -r -- "$expected_header"
+            local line
+            while IFS= read -r line; do
+              if [[ "$line" == git_version=* ]]; then
+                print -r -- "git_version='$git_version'"
+              else
+                print -r -- "$line"
+              fi
+            done < "$snippet_path"
+          } >| "${cache}.tmp" 2>/dev/null && mv "${cache}.tmp" "$cache" || rm -f "${cache}.tmp"
+        fi
+      fi
+
+      if [[ -s "$cache" ]]; then
+        source "$cache"
+      else
+        source "$snippet_path"
+      fi
+    else
+      source "$snippet_path"
+    fi
+  else
+    _dotfiles_load_zinit && zinit snippet "OMZP::${name}"
+  fi
+}
+
+# zsh-completions must be in fpath before compinit.
+if [[ -d "${ZINIT_BASE}/plugins/zsh-users---zsh-completions/src" ]]; then
+  fpath=("${ZINIT_BASE}/plugins/zsh-users---zsh-completions/src" $fpath)
+else
+  _dotfiles_load_zinit && zinit light zsh-users/zsh-completions
 fi
 
 # Load completions (must be before syntax-highlighting)
 ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
-mkdir -p "$ZSH_CACHE_DIR"
+[[ -d "$ZSH_CACHE_DIR" ]] || mkdir -p "$ZSH_CACHE_DIR"
 ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
 autoload -Uz compinit
 typeset -a _zcompdump_refresh
@@ -90,16 +150,16 @@ unset _zcompdump_refresh
 
 if (( ${+functions[zinit]} )); then
   zinit cdreplay -q
-  zinit snippet OMZP::git
-  zinit snippet OMZP::sudo
-  zinit snippet OMZP::aws
-  zinit snippet OMZP::kubectl
-  zinit snippet OMZP::kubectx
-  # Disabled because Homebrew's command-not-found handler can make typos feel
-  # like they hang while it searches for a formula that provides the command.
-  # Use `brew search <name>` manually when you want install suggestions.
-  # zinit snippet OMZP::command-not-found
 fi
+_dotfiles_source_or_zinit_snippet git
+_dotfiles_source_or_zinit_snippet sudo
+_dotfiles_source_or_zinit_snippet aws
+_dotfiles_source_or_zinit_snippet kubectl
+_dotfiles_source_or_zinit_snippet kubectx
+# Disabled because Homebrew's command-not-found handler can make typos feel
+# like they hang while it searches for a formula that provides the command.
+# Use `brew search <name>` manually when you want install suggestions.
+# _dotfiles_source_or_zinit_snippet command-not-found
 
 ## -- Keybinds ---
 bindkey '^p' history-search-backward
@@ -165,7 +225,7 @@ alias c="code"
 alias ci="code-insiders"
 alias ccc="pbcopy"
 alias gdash="gh extension exec dash"
-[[ -x "$(command -v topgrade 2>/dev/null)" ]] && alias tgall='topgrade -cy --no-retry'
+[[ -x "$(command -v topgrade 2>/dev/null)" ]] && alias tgall='topgrade -cy --no-ask-retry'
 command -v bat >/dev/null 2>&1 && alias cat="bat"
 command -v tofu >/dev/null 2>&1 && alias terraform="tofu"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
@@ -255,9 +315,35 @@ function yy() {
 	rm -f -- "$tmp"
 }
 
+_dotfiles_source_cached_hook() {
+  local cache="$1"
+  shift
+
+  local cmd="$1"
+  local cmd_path="${commands[$cmd]-}"
+  local cache_header=""
+  local expected_header
+
+  [[ -n "$cmd_path" ]] || return 1
+  expected_header=": dotfiles-cache-command: $cmd_path $*"
+
+  [[ -r "$cache" ]] && IFS= read -r cache_header < "$cache"
+  if [[ ! -s "$cache" || "$cache_header" != "$expected_header" || "$cmd_path" -nt "$cache" ]]; then
+    {
+      print -r -- "$expected_header"
+      "$cmd_path" "${@:2}"
+    } >| "${cache}.tmp" 2>/dev/null && mv "${cache}.tmp" "$cache" || {
+      rm -f "${cache}.tmp"
+      return 1
+    }
+  fi
+
+  source "$cache"
+}
+
 # Prompt
-if command -v starship >/dev/null 2>&1 && [[ -t 1 ]] && [[ "${TERM-}" != "dumb" ]]; then
-  eval "$(starship init zsh)"
+if [[ -n "${commands[starship]-}" && -t 1 && "${TERM-}" != "dumb" ]]; then
+  _dotfiles_source_cached_hook "${ZSH_CACHE_DIR}/starship-init.zsh" starship init zsh
 fi
 
 # Vim-mode cursor shape: steady block in normal mode, blinking beam in insert.
@@ -323,8 +409,56 @@ fi
 
 [[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
 
+[[ -d "$HOME/.safe-chain/bin" ]] && path+=("$HOME/.safe-chain/bin")
+
+_safe_chain_print_warning() {
+  printf "\033[43;30mWarning:\033[0m safe-chain is not available to protect you from installing malware. %s will run without it.\n" "$1"
+  printf "Install safe-chain by using \033[36mnpm install -g @aikidosec/safe-chain\033[0m.\n"
+}
+
+_safe_chain_wrap() {
+  local original_cmd="$1"
+
+  if ! whence -p "$original_cmd" >/dev/null 2>&1; then
+    command "$@"
+    return $?
+  fi
+
+  if (( ${+commands[safe-chain]} )); then
+    safe-chain "$@"
+  else
+    _safe_chain_print_warning "$original_cmd"
+    command "$@"
+  fi
+}
+
+npx() { _safe_chain_wrap npx "$@"; }
+yarn() { _safe_chain_wrap yarn "$@"; }
+pnpm() { _safe_chain_wrap pnpm "$@"; }
+pnpx() { _safe_chain_wrap pnpx "$@"; }
+rush() { _safe_chain_wrap rush "$@"; }
+rushx() { _safe_chain_wrap rushx "$@"; }
+bun() { _safe_chain_wrap bun "$@"; }
+bunx() { _safe_chain_wrap bunx "$@"; }
+pip() { _safe_chain_wrap pip "$@"; }
+pip3() { _safe_chain_wrap pip3 "$@"; }
+uv() { _safe_chain_wrap uv "$@"; }
+uvx() { _safe_chain_wrap uvx "$@"; }
+poetry() { _safe_chain_wrap poetry "$@"; }
+python() { _safe_chain_wrap python "$@"; }
+python3() { _safe_chain_wrap python3 "$@"; }
+pipx() { _safe_chain_wrap pipx "$@"; }
+npm() {
+  if [[ "$1" == "-v" || "$1" == "--version" ]] && [[ $# -eq 1 ]]; then
+    command npm "$@"
+    return
+  fi
+
+  _safe_chain_wrap npm "$@"
+}
+
 ## -- Shell Integrations --
-command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+_dotfiles_source_cached_hook "${ZSH_CACHE_DIR}/zoxide-init.zsh" zoxide init zsh
 
 if command -v fzf >/dev/null 2>&1 && [[ -t 0 ]] && [[ -t 1 ]]; then
     # Faster than `source <(fzf --zsh)` and avoids spawning a process on startup.
@@ -342,11 +476,18 @@ fi
 # fzf-tab should load after `compinit` and after fzf's own shell scripts so it
 # becomes the final owner of `Tab`. Autosuggestions should come after that
 # because it wraps widgets.
-if (( ${+functions[zinit]} )); then
-    zinit light Aloxaf/fzf-tab
-    zinit light zsh-users/zsh-autosuggestions
-    zinit light zsh-users/zsh-syntax-highlighting
+_dotfiles_source_or_zinit_plugin "Aloxaf---fzf-tab" "Aloxaf/fzf-tab" "fzf-tab.zsh"
+_dotfiles_source_or_zinit_plugin "zsh-users---zsh-autosuggestions" "zsh-users/zsh-autosuggestions" "zsh-autosuggestions.zsh"
+_dotfiles_source_or_zinit_plugin "zsh-users---zsh-syntax-highlighting" "zsh-users/zsh-syntax-highlighting" "zsh-syntax-highlighting.zsh"
+
+if (( ! ${+functions[zinit]} )) && [[ -r "${ZINIT_HOME}/zinit.zsh" ]]; then
+  zinit() {
+    unfunction zinit
+    source "${ZINIT_HOME}/zinit.zsh"
+    zinit "$@"
+  }
 fi
+unfunction _dotfiles_load_zinit _dotfiles_source_or_zinit_plugin _dotfiles_source_or_zinit_snippet 2>/dev/null
 
 # GitHub Dark palette for inline ghost-text and as-you-type highlighting.
 # Must come after the plugins load so we override their defaults.
@@ -394,10 +535,11 @@ ZSH_HIGHLIGHT_STYLES[bracket-level-4]='fg=#d29922'
 ZSH_HIGHLIGHT_STYLES[bracket-level-5]='fg=#39c5cf'
 ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]='standout'
 
-if command -v atuin >/dev/null 2>&1 && [[ -t 0 ]] && [[ -t 1 ]]; then
-  eval "$(atuin init zsh --disable-ai)"      # ctrl+r: history (overrides fzf's)
+if [[ -n "${commands[atuin]-}" && -t 0 && -t 1 ]]; then
+  _dotfiles_source_cached_hook "${ZSH_CACHE_DIR}/atuin-init.zsh" atuin init zsh --disable-ai # ctrl+r: history (overrides fzf's)
 fi
-command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"    # per-directory env vars
+_dotfiles_source_cached_hook "${ZSH_CACHE_DIR}/direnv-hook.zsh" direnv hook zsh    # per-directory env vars
+unfunction _dotfiles_source_cached_hook 2>/dev/null
 
 if [[ -f "$HOME/.config/secrets/api.env" ]]; then
     source "$HOME/.config/secrets/api.env"
@@ -417,5 +559,13 @@ path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})
 # CF CLI completions
 [[ -f "$HOME/.config/cf/completions/_cf.zsh" ]] && source "$HOME/.config/cf/completions/_cf.zsh"
 
-command -v but >/dev/null 2>&1 && eval "$(but completions zsh)"
-source /Users/christian/.safe-chain/scripts/init-posix.sh # Safe-chain Zsh initialization script
+_dotfiles_load_op_service_account_token() {
+  preexec_functions=("${(@)preexec_functions:#_dotfiles_load_op_service_account_token}")
+  [[ -n "${OP_SERVICE_ACCOUNT_TOKEN-}" ]] && return 0
+
+  local token
+  token=$(security find-generic-password -w -s op-service-account 2>/dev/null) || return 0
+  [[ -n "$token" ]] && export OP_SERVICE_ACCOUNT_TOKEN="$token"
+}
+typeset -ag preexec_functions
+preexec_functions=("${(@)preexec_functions:#_dotfiles_load_op_service_account_token}" _dotfiles_load_op_service_account_token)
