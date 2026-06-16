@@ -2,8 +2,11 @@
 # Install everything with: brew bundle --file=~/Developer/dotfiles/Brewfile
 
 # Taps
-tap "oven-sh/bun"
 tap "chhoumann/tap"
+tap "chhoumann/wribe"
+tap "openclaw/tap"
+tap "jnsahaj/lumen"
+tap "steipete/tap"
 
 # ============================================================
 # Command-line Tools
@@ -30,6 +33,8 @@ brew "ast-grep"         # Code search/lint/rewrite
 brew "delta"            # Better git diffs
 brew "gh"               # GitHub CLI
 brew "git"              # Version control
+brew "openclaw/tap/gogcli", trusted: true # Google CLI (gog)
+brew "jnsahaj/lumen/lumen", trusted: true # AI git diffs (ld)
 brew "graphviz"         # Graph visualization
 brew "hyperfine"        # CLI benchmarking
 brew "jq"               # JSON processor
@@ -42,7 +47,6 @@ brew "xcodegen"         # Xcode project generator
 brew "go"               # Go language
 brew "rust"             # Rust language
 brew "zig"              # Zig language
-brew "bun"              # JavaScript runtime
 brew "openjdk@11"       # Java 11
 brew "swiftformat"      # Swift formatter
 brew "swig"             # Wrapper generator
@@ -75,7 +79,7 @@ brew "direnv"           # Per-directory env vars
 brew "topgrade"         # Update everything
 brew "languagetool"     # Grammar checker
 brew "pandoc"           # Document converter
-brew "chhoumann/tap/uca" # Update multiple coding-agent CLIs with one command
+brew "chhoumann/tap/uca", trusted: true # Update multiple coding-agent CLIs with one command
 
 # ============================================================
 # GUI Applications (Casks)
@@ -98,6 +102,7 @@ cask "insomnia"         # API client
 cask "mitmproxy"        # HTTP debugging proxy
 cask "ngrok"            # HTTP tunneling
 cask "devtoys"          # Developer utilities
+cask "steipete/tap/codexbar", trusted: true # Menu bar AI usage
 
 # System utilities
 cask "karabiner-elements"  # Keyboard customization
@@ -123,11 +128,9 @@ cask "google-chrome"    # Web browser
 # ============================================================
 
 cask "mac-mouse-fix"  # Better mouse
-cask "wribe"          # AI transcription
-cask "codexbar"       # Menu bar AI
+cask "chhoumann/wribe/wribe", trusted: true # AI transcription
 cask "temurin@11"     # Java 11 runtime
 
 cask "cleanshot"      # Screenshots
 cask "clop"           # Image optimizer (free)
 cask "screen-studio"  # Screen recording
-brew "tw93/tap/mole"
