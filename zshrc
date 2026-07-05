@@ -232,6 +232,7 @@ alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | x
 
 source "${DOTFILES_DIR}/shell/lumen.zsh"
 source "${DOTFILES_DIR}/shell/git-fzf.zsh"
+source "${DOTFILES_DIR}/shell/ssh-fzf.zsh"
 
 cdt() {
   local base="${TMPDIR:-/tmp}"
