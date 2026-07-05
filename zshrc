@@ -265,7 +265,8 @@ ccz() {
   file=$(mktemp "${TMPDIR:-/tmp}/zellij-scrollback.XXXXXX.txt") || return 1
 
   zellij action dump-screen --full --path "$file" || return 1
-  zed "$file" >/dev/null 2>&1 &!
+  zed "$file" >/dev/null 2>&1 &
+  disown $! 2>/dev/null || true
   print -r -- "$file"
 }
 
