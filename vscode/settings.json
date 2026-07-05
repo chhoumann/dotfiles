@@ -181,7 +181,7 @@
   "vim.highlightedyank.enable": true,
   "vim.useSystemClipboard": true,
   "vim.smartRelativeLine": true,
-  "vim.disableExtension": false,
+  "vim.disableExtension": true,
   "vim.handleKeys": {},
   "vim.commandLineModeKeyBindings": [],
   "vim.commandLineModeKeyBindingsNonRecursive": [],
