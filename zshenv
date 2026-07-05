@@ -15,6 +15,7 @@ fi
 export BUN_INSTALL="$HOME/.bun"
 export DENO_INSTALL="$HOME/.deno"
 export PNPM_HOME="$HOME/.local/share/pnpm"
+export VP_HOME="${VP_HOME:-$HOME/.vite-plus}"
 export UV_TORCH_BACKEND=auto
 
 typeset -U path PATH
@@ -22,7 +23,8 @@ typeset -U path PATH
 _dotfiles_path_prepend() {
   local dir="$1"
   [[ -d "$dir" ]] || return 0
-  path=("$dir" $path)
+  path=("${(@)path:#$dir}")
+  path=("$dir" "${path[@]}")
 }
 
 _dotfiles_path_append() {
@@ -45,11 +47,13 @@ _dotfiles_path_prepend "$HOME/go/bin"
 _dotfiles_path_prepend "$BUN_INSTALL/bin"
 _dotfiles_path_prepend "$HOME/.cargo/bin"
 _dotfiles_path_prepend "$DENO_INSTALL/bin"
-_dotfiles_path_prepend "$PNPM_HOME"
+_dotfiles_path_prepend "$VP_HOME/bin"
 
 _dotfiles_path_append "$HOME/.dotnet"
 
-# Keep personal shims ahead of package-manager bins for every zsh invocation.
-path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})
+# Keep personal and Vite+ shims ahead of package-manager bins for every zsh invocation.
+_dotfiles_path_prepend "$VP_HOME/bin"
+_dotfiles_path_prepend "$HOME/.local/bin"
+path=("${(@)path:#$PNPM_HOME}")
 
 unfunction _dotfiles_path_prepend _dotfiles_path_append

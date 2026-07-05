@@ -378,7 +378,8 @@ typeset -U path PATH
 path_prepend() {
   local dir="$1"
   [[ -d "$dir" ]] || return 0
-  path=("$dir" $path)
+  path=("${(@)path:#$dir}")
+  path=("$dir" "${path[@]}")
 }
 
 # Reassert user tool precedence after login-shell setup such as `brew shellenv`.
@@ -389,7 +390,6 @@ path_prepend "$HOME/go/bin"
 path_prepend "$BUN_INSTALL/bin"
 path_prepend "$HOME/.cargo/bin"
 path_prepend "$DENO_INSTALL/bin"
-path_prepend "$PNPM_HOME"
 
 # Optional local CLIs (installed per-machine); only enabled if present.
 path_prepend "$HOME/.codeium/windsurf/bin"
@@ -407,6 +407,9 @@ if [[ -n "${HOMEBREW_PREFIX-}" ]]; then
     fi
   done
 fi
+
+path_prepend "${VP_HOME:-$HOME/.vite-plus}/bin"
+path=("${(@)path:#$PNPM_HOME}")
 
 [[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
 
@@ -570,3 +573,4 @@ _dotfiles_load_op_service_account_token() {
 }
 typeset -ag preexec_functions
 preexec_functions=("${(@)preexec_functions:#_dotfiles_load_op_service_account_token}" _dotfiles_load_op_service_account_token)
+
