@@ -15,7 +15,7 @@
     "show": true
   },
   "icon_theme": {
-    "mode": "light",
+    "mode": "dark",
     "light": "Soft Charmed Icons",
     "dark": "Soft Charmed Icons"
   },
@@ -100,7 +100,7 @@
   "ui_font_size": 16,
   "buffer_font_size": 15,
   "theme": {
-    "mode": "light",
+    "mode": "dark",
     "light": "Modern Vesper Light",
     "dark": "Modern Vesper"
   },
@@ -120,5 +120,17 @@
         "arguments": ["--std=c++23"]
       }
     }
-  }
+  },
+    "file_scan_exclusions": [
+      "**/.svn",
+      "**/.hg",
+      "**/.jj",
+      "**/.sl",
+      "**/.repo",
+      "**/CVS",
+      "**/.DS_Store",
+      "**/Thumbs.db",
+      "**/.classpath",
+      "**/.settings"
+    ]
 }
