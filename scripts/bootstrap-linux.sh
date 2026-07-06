@@ -91,10 +91,12 @@ if command -v batcat >/dev/null && [[ ! -e "$LOCAL_BIN/bat" ]]; then
 fi
 
 step "upstream release binaries"
-# install_release <cmd> <owner/repo> <asset-substring>
-# Downloads the latest release asset matching the substring, extracts it,
-# and installs the binary named <cmd> into ~/.local/bin. Skips when the
-# command already exists anywhere on PATH.
+# install_release <cmd> <owner/repo> <asset-suffix>
+# Downloads the latest release asset whose name ends with the suffix,
+# extracts it, and installs the binary named <cmd> into ~/.local/bin.
+# Skips when the command already exists anywhere on PATH. Suffix matching
+# (not substring) keeps .sha256 and sibling packages like atuin-server
+# from being picked up.
 install_release() {
   local cmd="$1" repo="$2" match="$3" url tmp
   if command -v "$cmd" >/dev/null 2>&1; then
@@ -102,7 +104,7 @@ install_release() {
     return 0
   fi
   url="$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest" |
-    jq -r --arg m "$match" '.assets[].browser_download_url | select(contains($m))' | head -1)"
+    jq -r --arg m "$match" '.assets[].browser_download_url | select(endswith($m))' | head -1)"
   if [[ -z "$url" ]]; then
     echo "WARN: no release asset matching '$match' for $repo; skipping $cmd" >&2
     return 0
@@ -123,9 +125,9 @@ install_release() {
 # zshrc relies on outside of Homebrew.
 install_release fzf junegunn/fzf "linux_amd64.tar.gz"
 install_release delta dandavison/delta "x86_64-unknown-linux-gnu.tar.gz"
-install_release lazygit jesseduffield/lazygit "Linux_x86_64.tar.gz"
-install_release zellij zellij-org/zellij "x86_64-unknown-linux-musl.tar.gz"
-install_release atuin atuinsh/atuin "x86_64-unknown-linux-gnu.tar.gz"
+install_release lazygit jesseduffield/lazygit "linux_x86_64.tar.gz"
+install_release zellij zellij-org/zellij "zellij-x86_64-unknown-linux-musl.tar.gz"
+install_release atuin atuinsh/atuin "atuin-x86_64-unknown-linux-gnu.tar.gz"
 
 step "starship"
 if command -v starship >/dev/null 2>&1; then
