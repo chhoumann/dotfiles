@@ -158,6 +158,7 @@ fi
 # Single quotes keep ${HOME} literal; npm expands it per user.
 npm_globalconfig="$(npm config get globalconfig)"
 if ! sudo grep -qs '^prefix=' "$npm_globalconfig"; then
+  sudo install -dm 755 "$(dirname "$npm_globalconfig")"
   # shellcheck disable=SC2016  # ${HOME} must stay literal; npm expands it.
   echo 'prefix=${HOME}/.local' | sudo tee -a "$npm_globalconfig" >/dev/null
 fi
