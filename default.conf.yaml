@@ -29,6 +29,22 @@
       ~/.npmrc:
           force: true
           path: npmrc
+      # Shared agent instructions: one file, read by both Codex and Claude Code.
+      ~/.codex/AGENTS.md:
+          path: agents/AGENTS.md
+          create: true
+          relink: true
+          force: true
+      ~/.claude/CLAUDE.md:
+          path: agents/AGENTS.md
+          create: true
+          relink: true
+          force: true
+      ~/.claude/agents:
+          path: claude/agents
+          create: true
+          relink: true
+          force: true
       ~/.local/bin/zellij-cwd-launch:
           path: scripts/zellij-cwd-launch
           create: true

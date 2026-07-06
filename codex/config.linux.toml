@@ -1,0 +1,38 @@
+# Codex baseline for Linux agent boxes. bootstrap-linux.sh copies this to
+# ~/.codex/config.toml only when none exists (Codex rewrites its config at
+# runtime, so it must not be symlinked into the repo).
+#
+# Deliberately excluded from the Mac config: `notify` (macOS app), the
+# node_repl / RepoPromptCE / ChromeDevTools MCP servers (Mac-only paths),
+# and the uidotsh MCP server (carries a bearer token; secrets stay off
+# these boxes).
+
+model = "gpt-5.5"
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+
+tool_output_token_limit = 25000
+web_search = "live"
+
+personality = "pragmatic"
+model_reasoning_effort = "xhigh"
+approvals_reviewer = "user"
+
+service_tier = "default"
+
+[features]
+goals = true
+plugins = true
+hooks = true
+fast_mode = true
+unified_exec = true
+shell_snapshot = true
+memories = true
+chronicle = false
+js_repl = false
+
+[tools]
+view_image = true
+
+[agents]
+max_threads = 32

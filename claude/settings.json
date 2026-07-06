@@ -7,12 +7,22 @@
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4-6"
   },
   "includeCoAuthoredBy": false,
-  "model": "claude-opus-4-8",
+  "permissions": {
+    "allow": [
+      "Skill(ui)",
+      "Skill(ui:*)",
+      "Bash(gh release *)",
+      "Bash(git log *)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "claude-fable-5",
   "enabledPlugins": {
     "frontend-design@claude-code-plugins": true,
     "swift-lsp@claude-plugins-official": true,
     "warp@claude-code-warp": true,
-    "rust-analyzer-lsp@claude-plugins-official": true
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "codex@openai-codex": true
   },
   "extraKnownMarketplaces": {
     "claude-code-warp": {
@@ -20,10 +30,16 @@
         "source": "github",
         "repo": "warpdotdev/claude-code-warp"
       }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true
 }
