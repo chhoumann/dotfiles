@@ -1,5 +1,9 @@
 # Dotfiles Brewfile
 # Install everything with: brew bundle --file=~/Developer/dotfiles/Brewfile
+#
+# Use canonical formula/cask names (no aliases), or scripts/brew-drift.sh
+# reports false drift. Machine-local packages that aren't part of the
+# portable setup go in Brewfile.local (gitignored, same syntax).
 
 # Taps
 tap "chhoumann/tap"
@@ -30,7 +34,7 @@ brew "walk"             # Terminal navigator
 
 # Development tools
 brew "ast-grep"         # Code search/lint/rewrite
-brew "delta"            # Better git diffs
+brew "git-delta"        # Better git diffs
 brew "gh"               # GitHub CLI
 brew "git"              # Version control
 brew "openclaw/tap/gogcli", trusted: true # Google CLI (gog)

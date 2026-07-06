@@ -1,2 +1,34 @@
+# Topgrade config (https://github.com/topgrade-rs/topgrade)
+# Run via the `tgall` alias; all behavior lives here so a bare `topgrade`
+# does exactly the same thing.
+
 [misc]
-disable = ["containers", "cursor", "node"]
+disable = [
+    "containers",
+    "cursor",
+    "node",
+    # macOS updates can close apps and want a reboot; run them deliberately
+    # (Software Update / `tgos`), not as a side effect of updating dev tools.
+    "system",
+    # Microsoft AutoUpdate keeps Office fresh on its own; the check costs ~20s.
+    "microsoft_office",
+]
+# NOTE: keep the `gcloud` step enabled. gcloud is installed via the
+# `gcloud-cli` cask, which has auto_updates=true, so a non-greedy
+# `brew upgrade --cask` never touches it - `gcloud components update`
+# is what actually updates it.
+
+assume_yes = true
+ask_retry = false
+cleanup = true
+
+# Notifications should carry signal: only ping when something failed.
+notify_end = "on_failure"
+
+[brew]
+autoremove = true
+
+[post_commands]
+# Read-only report: what's installed but not in the Brewfile (or the
+# gitignored Brewfile.local), and what's tracked but missing. Never mutates.
+"Brewfile drift" = "~/Developer/dotfiles/scripts/brew-drift.sh"

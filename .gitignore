@@ -6,6 +6,10 @@ config/zed/prompts/
 config/amp/
 codex/config.toml
 
+# Machine-local brew packages (scripts/brew-drift.sh treats this as an
+# overlay of the Brewfile; same syntax).
+Brewfile.local
+
 # Editor swap/backup files
 *.swp
 *.swo

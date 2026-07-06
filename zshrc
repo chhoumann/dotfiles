@@ -225,7 +225,24 @@ alias c="code"
 alias ci="code-insiders"
 alias ccc="pbcopy"
 alias gdash="gh extension exec dash"
-[[ -x "$(command -v topgrade 2>/dev/null)" ]] && alias tgall='topgrade -cy --no-ask-retry'
+# Update everything (behavior configured in config/topgrade/topgrade.toml),
+# then print an AI digest of the version bumps that matter on this machine
+# (scripts/update-digest.sh). macOS system updates are excluded; run those
+# deliberately via `tgos`.
+if command -v topgrade >/dev/null 2>&1; then
+  tgall() {
+    local state="${TGALL_STATE:-$HOME/.local/state/tgall}" rc
+    mkdir -p "$state"
+    "${DOTFILES_DIR}/scripts/pkg-manifest.sh" > "$state/manifest.before"
+    topgrade "$@"
+    rc=$?
+    "${DOTFILES_DIR}/scripts/pkg-manifest.sh" > "$state/manifest.after"
+    "${DOTFILES_DIR}/scripts/update-digest.sh" "$state/manifest.before" "$state/manifest.after"
+    return $rc
+  }
+fi
+alias tgos='sudo softwareupdate --install --all'
+alias brewdrift="${DOTFILES_DIR}/scripts/brew-drift.sh"
 command -v bat >/dev/null 2>&1 && alias cat="bat"
 command -v tofu >/dev/null 2>&1 && alias terraform="tofu"
 alias pcl="gh pr list | fzf --preview 'gh pr view {1}' | awk '{ print \$1 }' | xargs gh pr checkout"
