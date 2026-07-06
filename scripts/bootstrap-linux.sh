@@ -128,6 +128,7 @@ install_release delta dandavison/delta "x86_64-unknown-linux-gnu.tar.gz"
 install_release lazygit jesseduffield/lazygit "linux_x86_64.tar.gz"
 install_release zellij zellij-org/zellij "zellij-x86_64-unknown-linux-musl.tar.gz"
 install_release atuin atuinsh/atuin "atuin-x86_64-unknown-linux-gnu.tar.gz"
+install_release uca chhoumann/uca "linux_amd64.tar.gz"
 
 step "starship"
 if command -v starship >/dev/null 2>&1; then
