@@ -55,7 +55,9 @@ REMOTE
 
 step "sync ~/.agents/skills"
 ssh "$host" 'mkdir -p "$HOME/.agents/skills" "$HOME/.claude/skills"'
-rsync -a --delete --info=stats1 "$HOME/.agents/skills/" "$host:.agents/skills/"
+# Plain flags only: macOS ships a dated rsync that rejects --info et al.
+rsync -a --delete "$HOME/.agents/skills/" "$host:.agents/skills/"
+echo "synced $(find "$HOME/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ') shared skills"
 
 step "sync ~/.claude/skills layout"
 # Walk the local layout once and mirror it: shared skills become relative

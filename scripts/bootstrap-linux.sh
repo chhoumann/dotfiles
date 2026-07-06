@@ -65,7 +65,7 @@ sudo apt-get update -qq
 # Filter the wishlist against what this release actually ships, so one
 # missing package (e.g. eza on older Ubuntus) doesn't sink the whole run.
 apt_wanted=(
-  zsh tmux git curl unzip jq ripgrep fd-find bat tree
+  zsh tmux git curl unzip jq ripgrep fd-find bat tree rsync
   zoxide eza btop direnv shellcheck hyperfine gh
 )
 apt_missing=()
