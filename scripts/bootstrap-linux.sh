@@ -151,9 +151,28 @@ if ! command -v node >/dev/null 2>&1; then
   curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
   sudo apt-get install -y -qq nodejs
 fi
+
+# npm globals go under ~/.local so the agent CLIs can update themselves
+# without sudo (uca, `claude update`). Set in npm's machine-global config,
+# not ~/.npmrc, which dotbot links to the repo file shared with the Mac.
+# Single quotes keep ${HOME} literal; npm expands it per user.
+npm_globalconfig="$(npm config get globalconfig)"
+if ! sudo grep -qs '^prefix=' "$npm_globalconfig"; then
+  # shellcheck disable=SC2016  # ${HOME} must stay literal; npm expands it.
+  echo 'prefix=${HOME}/.local' | sudo tee -a "$npm_globalconfig" >/dev/null
+fi
+
+# Migrate agent CLIs that earlier bootstraps installed root-owned under /usr.
+for pkg in @anthropic-ai/claude-code @openai/codex; do
+  if [[ -d "/usr/lib/node_modules/$pkg" ]]; then
+    echo "migrating root-owned $pkg to user prefix"
+    sudo npm rm -g --prefix /usr "$pkg"
+  fi
+done
+
 command -v pnpm >/dev/null 2>&1 || corepack enable --install-directory "$LOCAL_BIN" pnpm
-command -v claude >/dev/null 2>&1 || sudo npm install -g @anthropic-ai/claude-code
-command -v codex >/dev/null 2>&1 || sudo npm install -g @openai/codex
+command -v claude >/dev/null 2>&1 || npm install -g @anthropic-ai/claude-code
+command -v codex >/dev/null 2>&1 || npm install -g @openai/codex
 
 step "zinit"
 "$DOTFILES_DIR/scripts/bootstrap/install-zinit.sh"
