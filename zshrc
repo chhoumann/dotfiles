@@ -577,3 +577,9 @@ _dotfiles_load_op_service_account_token() {
 typeset -ag preexec_functions
 preexec_functions=("${(@)preexec_functions:#_dotfiles_load_op_service_account_token}" _dotfiles_load_op_service_account_token)
 
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<
