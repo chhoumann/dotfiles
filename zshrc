@@ -134,6 +134,15 @@ else
   _dotfiles_load_zinit && zinit light zsh-users/zsh-completions
 fi
 
+# >>> grok installer >>>
+# Moved up from the installer's append-at-end spot: fpath must precede the
+# compinit below, which also makes the installer's own compinit rerun redundant.
+if [[ -d "$HOME/.grok" ]]; then
+  export PATH="$HOME/.grok/bin:$PATH"
+  fpath=(~/.grok/completions/zsh $fpath)
+fi
+# <<< grok installer <<<
+
 # Load completions (must be before syntax-highlighting)
 ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 [[ -d "$ZSH_CACHE_DIR" ]] || mkdir -p "$ZSH_CACHE_DIR"
@@ -576,10 +585,3 @@ _dotfiles_load_op_service_account_token() {
 }
 typeset -ag preexec_functions
 preexec_functions=("${(@)preexec_functions:#_dotfiles_load_op_service_account_token}" _dotfiles_load_op_service_account_token)
-
-
-# >>> grok installer >>>
-export PATH="$HOME/.grok/bin:$PATH"
-fpath=(~/.grok/completions/zsh $fpath)
-autoload -Uz compinit && compinit -C
-# <<< grok installer <<<
