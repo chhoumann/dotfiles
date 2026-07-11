@@ -299,25 +299,10 @@ if [[ -n "$ZELLIJ_PANE_ID" ]]; then
   _zellij_cwd_track
 fi
 
-ccv() {
-  if [[ "$1" == "update" ]]; then
-    claude update
-  else
-    claude --dangerously-skip-permissions "$@"
-  fi
-}
-
-cx() {
-  if [[ "$1" == "update" ]]; then
-    bun update -g @openai/codex --latest
-  else
-    codex --yolo "$@"
-  fi
-}
-
-function ampx() {
-  amp --dangerously-allow-all "${@:1}"
-}
+# No permission/sandbox flags on purpose: the safe modes live in the user
+# configs (claude defaultMode=auto; codex on-request + workspace-write).
+alias ccv=claude
+alias cx=codex
 
 # https://github.com/antonmedv/walk
 function cdl() {
