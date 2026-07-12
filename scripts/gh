@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Use the dedicated GitHub App on headless agent boxes, and the normal gh
+# keyring/Desktop authentication everywhere else.
+set -euo pipefail
+
+gh_bin=""
+for candidate in /usr/bin/gh /opt/homebrew/bin/gh /usr/local/bin/gh; do
+  if [[ -x "$candidate" ]]; then
+    gh_bin="$candidate"
+    break
+  fi
+done
+
+if [[ -z "$gh_bin" ]]; then
+  echo "GitHub CLI is not installed" >&2
+  exit 127
+fi
+
+token_file="${OP_SERVICE_ACCOUNT_TOKEN_FILE:-$HOME/.config/agent-auth/op-service-account-token}"
+if [[ -r "$token_file" ]]; then
+  GH_TOKEN="$("$HOME/.local/bin/github-app-token")"
+  export GH_TOKEN
+fi
+
+exec "$gh_bin" "$@"

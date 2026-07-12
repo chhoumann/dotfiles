@@ -58,8 +58,8 @@ if [[ -z "$current_email" ]]; then
   fi
 fi
 
-if command -v gh >/dev/null 2>&1; then
-  gh auth setup-git 2>/dev/null || true
-fi
+# gitconfig owns the GitHub credential helper. Running `gh auth setup-git`
+# here would rewrite that tracked file with a machine-specific gh path and
+# bypass the GitHub App helper used by headless agent boxes.
 
 echo "Git configuration complete"

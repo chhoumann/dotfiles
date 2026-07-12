@@ -50,6 +50,31 @@
           create: true
           relink: true
           force: true
+      ~/.local/bin/op:
+          path: scripts/op
+          create: true
+          relink: true
+          force: true
+      ~/.local/bin/github-app-token:
+          path: scripts/github-app-token.mjs
+          create: true
+          relink: true
+          force: true
+      ~/.local/bin/gh:
+          path: scripts/gh
+          create: true
+          relink: true
+          force: true
+      ~/.local/bin/git-credential-agent-github:
+          path: scripts/git-credential-agent-github
+          create: true
+          relink: true
+          force: true
+      ~/.local/bin/agent-auth-doctor:
+          path: scripts/agent-auth-doctor
+          create: true
+          relink: true
+          force: true
       ~/.config/lazygit/config.yml:
           path: config/lazygit/config.yml
           create: true

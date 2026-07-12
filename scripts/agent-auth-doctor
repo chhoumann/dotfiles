@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Non-secret health check for the authentication surfaces used by coding agents.
+set -euo pipefail
+
+token_file="${OP_SERVICE_ACCOUNT_TOKEN_FILE:-$HOME/.config/agent-auth/op-service-account-token}"
+config_file="${AGENT_AUTH_CONFIG:-$HOME/.config/agent-auth/config.json}"
+
+if [[ ! -r "$config_file" ]]; then
+  echo "agent_auth_config=missing"
+  exit 1
+fi
+
+expected_vault="$(jq -er '.onePasswordVault' "$config_file")"
+probe_repo="${AGENT_AUTH_PROBE_REPO:-$(jq -er '.privateProbeRepository' "$config_file")}"
+echo "agent_auth_config=ok"
+
+if [[ ! -r "$token_file" ]]; then
+  echo "1password_token=missing"
+  exit 1
+fi
+
+token_mode="$(stat -c %a "$token_file" 2>/dev/null || stat -f %Lp "$token_file")"
+[[ "$token_mode" == "600" ]] || { echo "1password_token=bad_mode:$token_mode"; exit 1; }
+echo "1password_token=ok"
+
+vaults="$(op vault list --format json | jq -r 'map(.name) | sort | join(",")')"
+[[ "$vaults" == "$expected_vault" ]] || { echo "1password_vaults=unexpected:$vaults"; exit 1; }
+echo "1password_vaults=ok:$vaults"
+
+github_token="$(github-app-token)"
+[[ "$github_token" == ghs_* ]] || { echo "github_token=unexpected_format"; exit 1; }
+echo "github_token=ok:installation"
+unset github_token
+
+repo_count="$(gh api /installation/repositories --jq .total_count)"
+[[ "$repo_count" =~ ^[0-9]+$ ]] || { echo "github_repositories=unavailable"; exit 1; }
+echo "github_repositories=ok:$repo_count"
+
+git ls-remote --exit-code "https://github.com/$probe_repo.git" HEAD >/dev/null
+echo "git_private_clone=ok"
+
+codex login status 2>&1 | grep -q '^Logged in'
+echo "codex_auth=ok"
+
+claude auth status | jq -e '.loggedIn == true' >/dev/null
+echo "claude_auth=ok"

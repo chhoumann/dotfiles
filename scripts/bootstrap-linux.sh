@@ -8,9 +8,9 @@
 #   ~/dotfiles/scripts/bootstrap-linux.sh --git-name "Name" --git-email you@example.com
 #
 # No Homebrew on Linux: apt where the archive is good enough, upstream
-# release binaries in ~/.local/bin where it is not. Secrets are never
-# installed here; agent CLIs (claude, codex) need a one-time interactive
-# login afterwards.
+# release binaries in ~/.local/bin where it is not. Secret values are never
+# installed from this repository. A headless host can provide its own
+# 1Password service-account token at ~/.config/agent-auth/op-service-account-token.
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -60,13 +60,27 @@ if [[ ! -f /etc/apt/sources.list.d/github-cli.list ]]; then
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" |
     sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
 fi
+
+# 1Password CLI from its signed upstream repository. Service-account auth is
+# handled by scripts/op after dotfiles are linked.
+if [[ ! -f /etc/apt/sources.list.d/1password.list ]]; then
+  curl -sS https://downloads.1password.com/linux/keys/1password.asc |
+    sudo gpg --dearmor --yes --output /usr/share/keyrings/1password-archive-keyring.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" |
+    sudo tee /etc/apt/sources.list.d/1password.list >/dev/null
+  sudo install -dm 755 /etc/debsig/policies/AC2D62742012EA22 /usr/share/debsig/keyrings/AC2D62742012EA22
+  curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol |
+    sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol >/dev/null
+  curl -sS https://downloads.1password.com/linux/keys/1password.asc |
+    sudo gpg --dearmor --yes --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+fi
 sudo apt-get update -qq
 
 # Filter the wishlist against what this release actually ships, so one
 # missing package (e.g. eza on older Ubuntus) doesn't sink the whole run.
 apt_wanted=(
   zsh tmux git curl unzip jq ripgrep fd-find bat tree rsync
-  zoxide eza btop direnv shellcheck hyperfine gh
+  zoxide eza btop direnv shellcheck hyperfine gh 1password-cli
 )
 apt_missing=()
 apt_install=()

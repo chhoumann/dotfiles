@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Transparent 1Password CLI launcher. On headless agent boxes it loads the
+# machine's service-account token from a rootless, mode-0600 file. Everywhere
+# else it delegates to the normal CLI and preserves desktop-app integration.
+set -euo pipefail
+
+op_bin=""
+for candidate in /usr/bin/op /opt/homebrew/bin/op /usr/local/bin/op; do
+  if [[ -x "$candidate" ]]; then
+    op_bin="$candidate"
+    break
+  fi
+done
+
+if [[ -z "$op_bin" ]]; then
+  echo "1Password CLI is not installed" >&2
+  exit 127
+fi
+
+token_file="${OP_SERVICE_ACCOUNT_TOKEN_FILE:-$HOME/.config/agent-auth/op-service-account-token}"
+if [[ -z "${OP_SERVICE_ACCOUNT_TOKEN:-}" && -r "$token_file" ]]; then
+  OP_SERVICE_ACCOUNT_TOKEN="$(<"$token_file")"
+  export OP_SERVICE_ACCOUNT_TOKEN
+fi
+
+exec "$op_bin" "$@"

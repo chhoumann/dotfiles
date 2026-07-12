@@ -1,0 +1,5 @@
+{
+  "onePasswordVault": "AUTOMATION_VAULT",
+  "githubAppItemId": "ONEPASSWORD_ITEM_ID",
+  "privateProbeRepository": "OWNER/PRIVATE_REPOSITORY"
+}
