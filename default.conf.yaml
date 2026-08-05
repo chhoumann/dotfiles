@@ -8,6 +8,9 @@
       ~/.gitconfig:
           force: true
           path: gitconfig
+      ~/.gitignore_global:
+          force: true
+          path: gitignore_global
       ~/.tmux.conf:
           force: true
           path: tmux.conf
