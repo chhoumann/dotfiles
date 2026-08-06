@@ -9,7 +9,6 @@
 	ui = auto
 [core]
 	pager = delta
-	excludesFile = ~/.gitignore_global
 [interactive]
 	diffFilter = delta --color-only
 [delta]
