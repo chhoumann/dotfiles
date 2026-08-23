@@ -585,3 +585,6 @@ _dotfiles_load_op_service_account_token() {
 }
 typeset -ag preexec_functions
 preexec_functions=("${(@)preexec_functions:#_dotfiles_load_op_service_account_token}" _dotfiles_load_op_service_account_token)
+
+# bun completions
+[ -s "/Users/christian/.bun/_bun" ] && source "/Users/christian/.bun/_bun"
