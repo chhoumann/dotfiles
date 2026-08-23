@@ -33,6 +33,23 @@ echo "== packages"
 apt-get update -qq
 grep -vE '^\s*(#|$)' "$SERVER_DIR/packages.txt" | xargs apt-get install -y -qq
 
+echo "== containerd image store on /data (docker data-root does not cover it)"
+install -d /etc/containerd /data/containerd 2>/dev/null || true
+[ -f /etc/containerd/config.toml ] || printf 'version = 2\nroot = "/data/containerd"\n' > /etc/containerd/config.toml
+
+echo "== journal: persistent, capped"
+install -d /etc/systemd/journald.conf.d
+printf '[Journal]\nStorage=persistent\nSystemMaxUse=1G\n' > /etc/systemd/journald.conf.d/persistent.conf
+
+echo "== heavy home dirs live on /data (root LV is small)"
+install -d -o christian -g christian /data/home
+for d in Developer .cache; do
+    tgt="/data/home/${d#.}"; [ "$d" = ".cache" ] && tgt=/data/home/dot-cache
+    install -d -o christian -g christian "$tgt" "/home/christian/$d"
+    grep -q "$tgt " /etc/fstab || echo "$tgt /home/christian/$d none bind 0 0" >> /etc/fstab
+    mountpoint -q "/home/christian/$d" || mount "/home/christian/$d" 2>/dev/null || true
+done
+
 echo "== system config files"
 install -m 644 "$SERVER_DIR/etc/sysctl.d/99-agentbox.conf" /etc/sysctl.d/
 install -m 644 "$SERVER_DIR/etc/zram-generator.conf" /etc/systemd/zram-generator.conf
