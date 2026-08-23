@@ -1,0 +1,4 @@
+# Prefer HTTPS for GitHub remotes.
+[url "https://github.com/"]
+	insteadOf = git@github.com:
+	insteadOf = ssh://git@github.com/

@@ -1,6 +1,3 @@
-[include]
-	path = ~/.gitconfig.local
-
 [init]
 	defaultBranch = main
 [pull]
@@ -41,13 +38,18 @@
 	conflictstyle = diff3
 [diff]
 	colorMoved = default
-[credential]
-	helper = osxkeychain
 [gtr "hook"]
 	postCreate = zellij action new-tab && zellij action rename-tab \"$(basename $(pwd))\" && zellij action write-chars \"cd $(pwd)\" && zellij action write 10
 [credential "https://github.com"]
 	helper = 
 	helper = !$HOME/.local/bin/git-credential-agent-github
 [credential "https://gist.github.com"]
-	helper = 
+	helper =
 	helper = !$HOME/.local/bin/git-credential-agent-github
+
+# OS-specific settings (dotbot links ~/.gitconfig.os to gitconfig.macos or
+# gitconfig.linux), then host-local overrides. Order matters: local wins last.
+[include]
+	path = ~/.gitconfig.os
+[include]
+	path = ~/.gitconfig.local

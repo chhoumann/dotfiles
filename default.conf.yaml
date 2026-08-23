@@ -5,6 +5,18 @@
 - clean: ["~"]
 
 - link:
+      ~/.gitconfig.os:
+          force: true
+          path: gitconfig.macos
+          if: '[ "$(uname -s)" = Darwin ]'
+
+- link:
+      ~/.gitconfig.os:
+          force: true
+          path: gitconfig.linux
+          if: '[ "$(uname -s)" = Linux ]'
+
+- link:
       ~/.gitconfig:
           force: true
           path: gitconfig
