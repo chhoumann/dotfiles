@@ -87,6 +87,20 @@ ufw default allow outgoing >/dev/null
 ufw allow in on tailscale0 >/dev/null
 ufw allow 22/tcp >/dev/null
 ufw allow 41641/udp >/dev/null
+# Containers must not reach the tailnet: 100.64/10 is CGNAT space, which
+# container network lockdowns that only cover RFC1918 miss. DOCKER-USER is
+# the chain Docker consults before its own forward rules.
+iptables -C DOCKER-USER -d 100.64.0.0/10 -j DROP 2>/dev/null || iptables -I DOCKER-USER 1 -d 100.64.0.0/10 -j DROP 2>/dev/null || true
+if ! grep -q "DOCKER-USER" /etc/ufw/after.rules; then
+    cat >> /etc/ufw/after.rules <<'EOF'
+
+*filter
+:DOCKER-USER - [0:0]
+-A DOCKER-USER -d 100.64.0.0/10 -j DROP
+-A DOCKER-USER -j RETURN
+COMMIT
+EOF
+fi
 ufw --force enable >/dev/null
 
 echo "== docker group for christian"
