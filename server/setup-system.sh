@@ -43,8 +43,13 @@ printf '[Journal]\nStorage=persistent\nSystemMaxUse=1G\n' > /etc/systemd/journal
 
 echo "== heavy home dirs live on /data (root LV is small)"
 install -d -o christian -g christian /data/home
-for d in Developer .cache; do
-    tgt="/data/home/${d#.}"; [ "$d" = ".cache" ] && tgt=/data/home/dot-cache
+for d in Developer .cache .npm .local/share/pnpm; do
+    case "$d" in
+        Developer) tgt=/data/home/Developer ;;
+        .cache) tgt=/data/home/dot-cache ;;
+        .npm) tgt=/data/home/npm ;;
+        .local/share/pnpm) tgt=/data/home/pnpm-store ;;
+    esac
     install -d -o christian -g christian "$tgt" "/home/christian/$d"
     grep -q "$tgt " /etc/fstab || echo "$tgt /home/christian/$d none bind 0 0" >> /etc/fstab
     mountpoint -q "/home/christian/$d" || mount "/home/christian/$d" 2>/dev/null || true
