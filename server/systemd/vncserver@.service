@@ -1,0 +1,14 @@
+[Unit]
+Description=TigerVNC server on display %i
+After=network.target
+
+[Service]
+Type=simple
+User=christian
+PAMName=login
+ExecStart=/usr/bin/tigervncserver :%i -fg -localhost yes -geometry 1920x1080 -depth 24 -SecurityTypes VncAuth -xstartup /home/christian/.vnc/xstartup
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

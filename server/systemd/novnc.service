@@ -1,0 +1,12 @@
+[Unit]
+Description=noVNC websockify bridge (6080 -> localhost:5901)
+After=network.target vncserver@1.service
+Requires=vncserver@1.service
+
+[Service]
+ExecStart=/usr/bin/websockify --web=/usr/share/novnc 6080 localhost:5901
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

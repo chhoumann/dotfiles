@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# XFS on /data sees the 800G virtual size; only this check sees the real pool.
+set -euo pipefail
+pct=$(lvs --noheadings -o data_percent vg0/vdopool 2>/dev/null | tr -d ' ' | cut -d. -f1)
+[ -z "$pct" ] && exit 0
+if [ "$pct" -ge 80 ]; then
+    msg="VDO pool vg0/vdopool at ${pct}% physical capacity. Free space (docker prune, delete worktrees, then fstrim /data) or lvextend the pool."
+    logger -p user.warning "$msg"
+    wall "$msg" 2>/dev/null || true
+fi

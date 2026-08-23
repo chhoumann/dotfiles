@@ -1,0 +1,71 @@
+# One package per line. Comments and blanks ignored.
+# Storage
+lvm2
+vdo
+thin-provisioning-tools
+xfsprogs
+mdadm
+# Memory / resource control
+systemd-zram-generator
+systemd-oomd
+# Base / security
+ufw
+unattended-upgrades
+ca-certificates
+gnupg
+curl
+wget
+jq
+unzip
+build-essential
+# Dev tooling
+git
+gh
+nodejs
+docker.io
+docker-buildx
+openjdk-21-jre-headless
+python3-numpy
+shellcheck
+strace
+trace-cmd
+# Agent sandboxing (Claude Code native sandbox deps)
+bubblewrap
+socat
+# CLI utilities
+bat
+btop
+eza
+fd-find
+ripgrep
+direnv
+zoxide
+hyperfine
+htop
+tmux
+tree
+zsh
+vim
+# Monitoring: netdata is not in the Ubuntu archive anymore (license change);
+# installed separately via the official kickstart script.
+# Desktop / VNC
+xfce4
+xfce4-terminal
+xfce4-taskmanager
+tigervnc-standalone-server
+tigervnc-common
+novnc
+websockify
+xvfb
+dbus-x11
+x11-xserver-utils
+xdotool
+wmctrl
+scrot
+fonts-dejavu
+fonts-noto-color-emoji
+fonts-noto-core
+fonts-ubuntu-console
+# Services
+tailscale
+1password-cli

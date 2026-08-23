@@ -1,0 +1,6 @@
+[Unit]
+Description=Warn when the VDO pool physical usage crosses 80%
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/vdo-pool-check
