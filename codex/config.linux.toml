@@ -7,7 +7,7 @@
 # and the uidotsh MCP server (carries a bearer token; secrets stay off
 # these boxes).
 
-model = "gpt-5.5"
+model = "gpt-5.6-sol"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
 
