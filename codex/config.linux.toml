@@ -31,8 +31,8 @@ memories = true
 chronicle = false
 js_repl = false
 
-[tools]
-view_image = true
-
 [agents]
 max_threads = 32
+
+[plugins."build-ios-apps@openai-curated-remote"]
+enabled = false
