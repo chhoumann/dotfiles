@@ -15,7 +15,7 @@ tool_output_token_limit = 25000
 web_search = "live"
 
 personality = "pragmatic"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "high"
 approvals_reviewer = "user"
 
 service_tier = "default"
