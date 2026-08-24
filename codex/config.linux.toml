@@ -8,14 +8,14 @@
 # these boxes).
 
 model = "gpt-5.6-sol"
-approval_policy = "never"
+approval_policy = "on-request"
 sandbox_mode = "danger-full-access"
 
 tool_output_token_limit = 25000
 web_search = "live"
 
 personality = "pragmatic"
-model_reasoning_effort = "xhigh"
+model_reasoning_effort = "medium"
 approvals_reviewer = "user"
 
 service_tier = "default"
