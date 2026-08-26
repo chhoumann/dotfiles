@@ -1,0 +1,27 @@
+[Unit]
+Description=Orca remote runtime
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=christian
+Group=christian
+WorkingDirectory=/home/christian/Developer
+Environment=HOME=/home/christian
+Environment=LIBGL_ALWAYS_SOFTWARE=1
+Environment=PATH=/home/christian/.local/bin:/home/christian/.cargo/bin:/home/christian/.bun/bin:/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=/etc/orca-serve.env
+ExecStart=/usr/bin/orca-ide serve --port ${ORCA_PORT} --pairing-address ${ORCA_PAIRING_ADDRESS} --json
+UMask=0077
+KillMode=mixed
+Restart=on-failure
+RestartPreventExitStatus=3
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
