@@ -1,0 +1,2 @@
+// Leave copy_command unset so Zellij emits OSC 52 to the client terminal.
+// That is the only clipboard path that works over SSH.

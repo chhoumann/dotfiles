@@ -420,8 +420,10 @@ scroll_buffer_size 50000
 // copy_command "xclip -selection clipboard" // x11
 // copy_command "wl-copy"                    // wayland
 // copy_command "pbcopy"                     // osx
-// 
-copy_command "pbcopy"
+//
+// copy_command is OS-specific (dotbot runs scripts/link-zellij-config.sh):
+// os.macos.kdl sets pbcopy, os.linux.kdl leaves this unset so OSC 52 works
+// over SSH.
  
 // Choose the destination for copied text
 // Allows using the primary selection buffer (on x11/wayland) instead of the system clipboard.

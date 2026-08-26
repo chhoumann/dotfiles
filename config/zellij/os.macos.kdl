@@ -1,0 +1,3 @@
+// Local macOS pasteboard. Do not use this overlay on Linux; Zellij would
+// swallow OSC 52 and copies over SSH would vanish.
+copy_command "pbcopy"

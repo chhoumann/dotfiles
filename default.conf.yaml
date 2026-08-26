@@ -112,11 +112,6 @@
           create: true
           glob: true
           relink: true
-      ~/.config/zellij:
-          path: config/zellij
-          create: true
-          glob: true
-          relink: true
       ~/.config/gh-dash:
           path: config/gh-dash
           create: true
@@ -152,6 +147,11 @@
           create: true
           relink: true
           force: true
+- shell:
+      - command: ./scripts/link-zellij-config.sh
+        description: Link OS-specific Zellij config
+        stdout: true
+
 # - create:
 #     - ~/downloads
 #     - ~/.vim/undo-history
