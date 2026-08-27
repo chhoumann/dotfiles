@@ -16,6 +16,7 @@ We try to only add new functionality that is small (that is, simple and few line
 - Fix bugs at the root, not the symptom. Before fixing, reproduce the bug end-to-end, as close to the real user's path as possible. The reproduction is what proves the fix is real and not a workaround.
 - Hold the UI to a high bar. If something looks wrong: fix it when it's small and adjacent, flag it when it's larger or out of scope. Don't silently expand the change.
 - Boyscout rule with scope discipline: leave things better than you found them, but keep every change reviewable. Small adjacent issues (a lint warning, a flaky test, a typo) get fixed. Anything larger or unrelated gets surfaced, not folded into the current work.
+- Tautological tests are considered harmful.
 **Backwards-compatibility**: When changing existing functionality, you might wonder whether we need to ensure backwards-compatibility. As a rule of thumb:
   - If the change is local to the workspace (part of the current workspace diff, i.e., uncommitted or not yet merged into main) then we should NOT provide backwards-compatibility. Operate as if no changes have been made yet (e.g., rewrite migrations as needed).
   - If the change is in main, but hasn't yet been released (the user will tell you), then probably don't need to provide backwards-compatibility. In this case, you should always ask the user what to do.
