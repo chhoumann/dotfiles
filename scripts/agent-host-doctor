@@ -1,0 +1,268 @@
+#!/usr/bin/env bash
+# Secret-safe health check for Linux coding-agent hosts.
+set -euo pipefail
+
+format="human"
+case "${1:-}" in
+  "") ;;
+  --json) format="json" ;;
+  -h|--help)
+    echo "usage: agent-host-doctor [--json]"
+    exit 0
+    ;;
+  *)
+    echo "unknown option: $1" >&2
+    exit 2
+    ;;
+esac
+
+command -v jq >/dev/null || { echo "agent-host-doctor requires jq" >&2; exit 2; }
+
+checks=()
+failures=0
+warnings=0
+
+add_check() {
+  local id="$1" status="$2" summary="$3" actual="${4:-}"
+  checks+=("$(jq -cn \
+    --arg id "$id" \
+    --arg status "$status" \
+    --arg summary "$summary" \
+    --arg actual "$actual" \
+    '{id:$id,status:$status,summary:$summary,actual:$actual}')")
+  if [[ "$status" == fail ]]; then
+    failures=$((failures + 1))
+  fi
+  if [[ "$status" == warn ]]; then
+    warnings=$((warnings + 1))
+  fi
+}
+
+top_level_toml() {
+  local file="$1" key="$2"
+  sed -nE "s/^${key}[[:space:]]*=[[:space:]]*\"?([^\"]*)\"?[[:space:]]*$/\1/p" "$file" | head -1
+}
+
+root_use="$(df -P / | awk 'NR == 2 {gsub(/%/, "", $5); print $5}')"
+if ((root_use >= 90)); then
+  add_check root_disk fail "root filesystem is nearly full" "${root_use}%"
+elif ((root_use >= 80)); then
+  add_check root_disk warn "root filesystem has limited headroom" "${root_use}%"
+else
+  add_check root_disk pass "root filesystem has headroom" "${root_use}%"
+fi
+
+if [[ -d "$HOME/.t3" ]]; then
+  t3_kib="$( { du -sk "$HOME/.t3" 2>/dev/null || true; } | awk 'NR == 1 {value=$1} END {print value + 0}')"
+  t3_mib=$((t3_kib / 1024))
+  root_device="$(df -P / | awk 'NR == 2 {print $1}')"
+  t3_device="$(df -P "$HOME/.t3" | awk 'NR == 2 {print $1}')"
+  if [[ "$t3_device" == "$root_device" ]] && ((t3_mib >= 1024)); then
+    add_check t3_storage fail "large T3 state is stored on the root filesystem" "${t3_mib} MiB on ${t3_device}"
+  elif [[ "$t3_device" == "$root_device" ]]; then
+    add_check t3_storage warn "T3 state is stored on the root filesystem" "${t3_mib} MiB on ${t3_device}"
+  else
+    add_check t3_storage pass "T3 state is off the root filesystem" "${t3_mib} MiB on ${t3_device}"
+  fi
+fi
+
+codex_config="$HOME/.codex/config.toml"
+if [[ -r "$codex_config" ]]; then
+  approval="$(top_level_toml "$codex_config" approval_policy)"
+  sandbox="$(top_level_toml "$codex_config" sandbox_mode)"
+  reviewer="$(top_level_toml "$codex_config" approvals_reviewer)"
+  if [[ "$approval" == on-request && "$sandbox" == workspace-write && "$reviewer" =~ ^(auto_review|guardian_subagent)$ ]]; then
+    add_check codex_policy pass "Codex uses automatic review in workspace-write" "$approval/$sandbox/$reviewer"
+  else
+    add_check codex_policy fail "Codex automatic policy is not safely configured" "$approval/$sandbox/$reviewer"
+  fi
+else
+  add_check codex_policy fail "Codex config is missing" "$codex_config"
+fi
+
+claude_settings="$HOME/.claude/settings.json"
+if [[ -r "$claude_settings" ]] && jq -e . "$claude_settings" >/dev/null 2>&1; then
+  claude_mode="$(jq -r '.permissions.defaultMode // "missing"' "$claude_settings")"
+  if [[ "$claude_mode" == auto ]]; then
+    add_check claude_policy pass "Claude uses automatic permissions" "$claude_mode"
+  else
+    add_check claude_policy fail "Claude automatic permissions are not configured" "$claude_mode"
+  fi
+else
+  add_check claude_policy fail "Claude settings are missing or invalid" "$claude_settings"
+fi
+
+shared_skills=0
+claude_skills=0
+[[ -d "$HOME/.agents/skills" ]] && shared_skills="$(find "$HOME/.agents/skills" -mindepth 1 -maxdepth 1 -type d | wc -l)"
+[[ -d "$HOME/.claude/skills" ]] && claude_skills="$(find "$HOME/.claude/skills" -mindepth 1 -maxdepth 1 | wc -l)"
+if ((shared_skills == 0 || claude_skills == 0)); then
+  add_check skills warn "agent skills are absent or incomplete" "shared=${shared_skills},claude=${claude_skills}"
+else
+  add_check skills pass "agent skills are installed" "shared=${shared_skills},claude=${claude_skills}"
+fi
+
+oauth_state="unset"
+if command -v zsh >/dev/null 2>&1; then
+  oauth_probe="$(zsh -lic 'if [[ -n ${CLAUDE_CODE_OAUTH_TOKEN:-} ]]; then echo __AGENT_HOST_OAUTH_set__; else echo __AGENT_HOST_OAUTH_unset__; fi' 2>/dev/null || true)"
+  if grep -q '__AGENT_HOST_OAUTH_set__' <<<"$oauth_probe"; then
+    oauth_state="set"
+  elif grep -q '__AGENT_HOST_OAUTH_unset__' <<<"$oauth_probe"; then
+    oauth_state="unset"
+  fi
+elif [[ -n "${CLAUDE_CODE_OAUTH_TOKEN:-}" ]]; then
+  oauth_state="set"
+fi
+if [[ "$oauth_state" == unset ]]; then
+  add_check claude_oauth_env pass "no shell OAuth token overrides Claude login" "$oauth_state"
+else
+  add_check claude_oauth_env fail "shell OAuth token overrides Claude login" "$oauth_state"
+fi
+
+oauth_process_count=0
+if [[ "$(uname -s)" == Linux ]] && command -v python3 >/dev/null 2>&1; then
+  oauth_process_count="$(python3 - <<'PY'
+from pathlib import Path
+import os
+
+count = 0
+for entry in os.listdir("/proc"):
+    if not entry.isdigit():
+        continue
+    try:
+        environ = Path(f"/proc/{entry}/environ").read_bytes().split(b"\0")
+    except (FileNotFoundError, PermissionError, ProcessLookupError):
+        continue
+    if any(item.startswith(b"CLAUDE_CODE_OAUTH_TOKEN=") for item in environ):
+        count += 1
+print(count)
+PY
+)"
+fi
+if ((oauth_process_count == 0)); then
+  add_check claude_oauth_processes pass "no running process retains a shell OAuth override" "0"
+else
+  add_check claude_oauth_processes fail "running processes retain a shell OAuth override" "$oauth_process_count"
+fi
+
+if [[ "$(uname -s)" == Linux ]]; then
+  xcode_hits=0
+  xcode_processes=0
+  for file in "$codex_config" "$claude_settings"; do
+    [[ -r "$file" ]] || continue
+    if grep -Eiq 'xcodebuildmcp|xcode[_-]?mcp' "$file"; then
+      xcode_hits=$((xcode_hits + 1))
+    fi
+  done
+  xcode_processes="$( { pgrep -af 'xcodebuildmcp|xcode[_-]?mcp' 2>/dev/null || true; } | awk '!/agent-host-doctor/ { count++ } END { print count + 0 }')"
+  if ((xcode_hits == 0 && xcode_processes == 0)); then
+    add_check platform_tools pass "no macOS-only Xcode MCP is configured or running" "config_files=0,processes=0"
+  else
+    add_check platform_tools fail "macOS-only Xcode MCP is configured or running on Linux" "config_files=${xcode_hits},processes=${xcode_processes}"
+  fi
+fi
+
+instruction_missing=0
+instruction_mismatch=0
+instruction_checked=0
+if [[ -d "$HOME/.t3/worktrees" && -d "$HOME/Developer" ]]; then
+  declare -A canonical_agents=()
+  while IFS= read -r -d '' file; do
+    repo="$(basename "$(dirname "$file")")"
+    canonical_agents["$repo"]="$file"
+  done < <(find "$HOME/Developer" -maxdepth 4 -type f -name AGENTS.md -print0 2>/dev/null)
+  for repo_root in "$HOME/.t3/worktrees"/*; do
+    [[ -d "$repo_root" ]] || continue
+    repo="$(basename "$repo_root")"
+    canonical="${canonical_agents[$repo]:-}"
+    [[ -n "$canonical" ]] || continue
+    for worktree in "$repo_root"/*; do
+      [[ -d "$worktree" ]] || continue
+      instruction_checked=$((instruction_checked + 1))
+      if [[ ! -f "$worktree/AGENTS.md" ]]; then
+        instruction_missing=$((instruction_missing + 1))
+      elif ! cmp -s "$canonical" "$worktree/AGENTS.md"; then
+        instruction_mismatch=$((instruction_mismatch + 1))
+      fi
+    done
+  done
+fi
+if ((instruction_missing > 0)); then
+  add_check repo_instructions fail "worktree instructions are missing" "checked=${instruction_checked},missing=${instruction_missing},mismatch=${instruction_mismatch}"
+elif ((instruction_mismatch > 0)); then
+  add_check repo_instructions warn "some worktrees have repository-specific instruction differences" "checked=${instruction_checked},missing=${instruction_missing},mismatch=${instruction_mismatch}"
+else
+  add_check repo_instructions pass "repository instructions match active worktrees" "checked=${instruction_checked}"
+fi
+
+if [[ -r "$HOME/.t3/userdata/state.sqlite" ]] && command -v python3 >/dev/null 2>&1; then
+  t3_modes="$(python3 - "$HOME/.t3/userdata/state.sqlite" <<'PY'
+import sqlite3
+import sys
+
+connection = sqlite3.connect(sys.argv[1])
+rows = connection.execute(
+    "select runtime_mode, count(*) from projection_threads "
+    "where deleted_at is null group by runtime_mode order by runtime_mode"
+).fetchall()
+latest = connection.execute(
+    "select runtime_mode from projection_threads "
+    "where deleted_at is null order by created_at desc limit 1"
+).fetchone()
+counts = ",".join(f"{mode}={count}" for mode, count in rows)
+print(f"latest={latest[0] if latest else 'none'};{counts}")
+PY
+)"
+  if [[ "$t3_modes" == latest=auto\;* ]]; then
+    add_check t3_runtime_mode pass "newest T3 session uses auto" "$t3_modes"
+  else
+    add_check t3_runtime_mode warn "newest T3 session does not use auto" "$t3_modes"
+  fi
+fi
+
+failed_units=0
+if command -v systemctl >/dev/null 2>&1; then
+  failed_units="$(systemctl --user --failed --no-legend 2>/dev/null | sed '/^[[:space:]]*$/d' | wc -l)"
+fi
+if ((failed_units == 0)); then
+  add_check user_services pass "no failed user services" "0"
+else
+  add_check user_services warn "user services have failures" "$failed_units"
+fi
+
+secret_argv_count="$(ps -eo args= | awk '
+  BEGIN { IGNORECASE=1; count=0 }
+  /agent-host-doctor/ { next }
+  /(^|[[:space:]])(--?(token|api[-_]?key|password|secret)(=|[[:space:]]+)[^[:space:]]+)/ { count++ }
+  /(^|[[:space:]])([A-Z0-9_]*(TOKEN|API_KEY|PASSWORD|SECRET))=[^[:space:]]+/ { count++ }
+  END { print count }
+')"
+if ((secret_argv_count == 0)); then
+  add_check secret_argv pass "no obvious secrets appear in process arguments" "0"
+else
+  add_check secret_argv fail "possible secrets appear in process arguments" "$secret_argv_count"
+fi
+
+codex_version="$(codex --version 2>/dev/null || echo missing)"
+claude_version="$(claude --version 2>/dev/null || echo missing)"
+node_version="$(node --version 2>/dev/null || echo missing)"
+add_check versions pass "agent runtime versions collected" "codex=${codex_version};claude=${claude_version};node=${node_version}"
+
+checks_json="$(printf '%s\n' "${checks[@]}" | jq -s .)"
+report="$(jq -cn \
+  --argjson ok "$([[ $failures -eq 0 ]] && echo true || echo false)" \
+  --arg host "$(hostname)" \
+  --arg generated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+  --argjson failures "$failures" \
+  --argjson warnings "$warnings" \
+  --argjson checks "$checks_json" \
+  '{ok:$ok,host:$host,generated_at:$generated_at,failures:$failures,warnings:$warnings,checks:$checks}')"
+
+if [[ "$format" == json ]]; then
+  jq . <<<"$report"
+else
+  jq -r '.checks[] | "\(.status | ascii_upcase)\t\(.id)\t\(.summary)\t\(.actual)"' <<<"$report"
+  jq -r '"result\tok=\(.ok) failures=\(.failures) warnings=\(.warnings)"' <<<"$report"
+fi
+
+((failures == 0))

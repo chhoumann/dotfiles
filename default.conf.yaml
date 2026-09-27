@@ -91,6 +91,12 @@
           create: true
           relink: true
           force: true
+      ~/.local/bin/agent-host-doctor:
+          path: scripts/agent-host-doctor
+          create: true
+          relink: true
+          force: true
+          if: '[ "$(uname -s)" = Linux ]'
       ~/.config/lazygit/config.yml:
           path: config/lazygit/config.yml
           create: true
