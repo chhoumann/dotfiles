@@ -49,7 +49,7 @@ start_zellij() {
         zellij attach -c
     else
         local sessions last_session
-        sessions=$(timeout 2 zellij list-sessions --no-formatting --short 2>/dev/null || true)
+        sessions=$(zellij list-sessions --no-formatting --short 2>/dev/null)
         if [[ -z "$sessions" ]]; then
             zellij
         else
