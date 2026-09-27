@@ -30,6 +30,10 @@ setup scripts.
   vg0, rest of vg0 free.
 - setup-storage.sh: VDO pool -> thin virtual XFS volume at /data, with VG
   headroom kept for emergency lvextend. Docker data-root lives on /data.
+- T3 state and worktrees live on `/data/home/dot-t3`, bind-mounted at `~/.t3`.
+- Codex state and managed worktrees live on `/data/home/codex`. `CODEX_HOME`
+  points there, with a compatibility bind at `~/.codex` for app launches that
+  still use the default path.
 - Pool exhaustion is the failure mode: writes fail while df shows free space.
   vdo-pool-check.timer warns at 80% physical. Daily fstrim is what returns
   freed blocks to the pool; do not disable it.

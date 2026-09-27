@@ -42,18 +42,76 @@ install -d /etc/systemd/journald.conf.d
 printf '[Journal]\nStorage=persistent\nSystemMaxUse=1G\n' > /etc/systemd/journald.conf.d/persistent.conf
 
 echo "== heavy home dirs live on /data (root LV is small)"
-install -d -o christian -g christian /data/home
-for d in Developer .cache .npm .local/share/pnpm; do
+install -d -o christian -g christian /data/home /data/home/tmp
+chmod 700 /data/home/tmp
+if grep -q '^TMPDIR=' /etc/environment; then
+    sed -i 's|^TMPDIR=.*|TMPDIR=/data/home/tmp|' /etc/environment
+else
+    echo 'TMPDIR=/data/home/tmp' >> /etc/environment
+fi
+if grep -q '^CODEX_HOME=' /etc/environment; then
+    sed -i 's|^CODEX_HOME=.*|CODEX_HOME=/data/home/codex|' /etc/environment
+else
+    echo 'CODEX_HOME=/data/home/codex' >> /etc/environment
+fi
+printf '%s\n' 'export TMPDIR=/data/home/tmp' > /etc/profile.d/data-tmp.sh
+printf '%s\n' 'export CODEX_HOME=/data/home/codex' > /etc/profile.d/codex-home.sh
+chmod 644 /etc/profile.d/data-tmp.sh /etc/profile.d/codex-home.sh
+install -d -o christian -g christian /home/christian/.config/environment.d
+printf '%s\n' 'TMPDIR=/data/home/tmp' > /home/christian/.config/environment.d/99-data-tmp.conf
+printf '%s\n' 'CODEX_HOME=/data/home/codex' > /home/christian/.config/environment.d/99-codex-home.conf
+chown christian:christian /home/christian/.config/environment.d/99-data-tmp.conf \
+    /home/christian/.config/environment.d/99-codex-home.conf
+
+ensure_bind_mount() {
+    local source="$1"
+    local target="$2"
+
+    install -d -o christian -g christian "$source" "$target"
+    if mountpoint -q "$target"; then
+        return
+    fi
+    if find "$target" -mindepth 1 -print -quit | grep -q .; then
+        echo "ERROR: $target is non-empty and not mounted." >&2
+        echo "Migrate it to $source before rerunning." >&2
+        exit 1
+    fi
+    grep -Fqx "$source $target none bind 0 0" /etc/fstab || \
+        echo "$source $target none bind 0 0" >> /etc/fstab
+    mount "$target"
+}
+
+for d in Developer .cache .npm .local/share/pnpm .codex .cursor/worktrees; do
     case "$d" in
         Developer) tgt=/data/home/Developer ;;
         .cache) tgt=/data/home/dot-cache ;;
         .npm) tgt=/data/home/npm ;;
         .local/share/pnpm) tgt=/data/home/pnpm-store ;;
+        .codex) tgt=/data/home/codex ;;
+        .cursor/worktrees) tgt=/data/home/cursor-worktrees ;;
     esac
-    install -d -o christian -g christian "$tgt" "/home/christian/$d"
-    grep -q "$tgt " /etc/fstab || echo "$tgt /home/christian/$d none bind 0 0" >> /etc/fstab
-    mountpoint -q "/home/christian/$d" || mount "/home/christian/$d" 2>/dev/null || true
+    ensure_bind_mount "$tgt" "/home/christian/$d"
 done
+chmod 700 /data/home/codex /data/home/codex/sessions /data/home/codex/worktrees 2>/dev/null || true
+find /data/home/codex/sessions -type d -exec chmod 700 {} + 2>/dev/null || true
+find /data/home/codex/sessions -type f -exec chmod 600 {} + 2>/dev/null || true
+find /data/home/codex -maxdepth 1 -type f -exec chmod go-rwx {} + 2>/dev/null || true
+systemctl daemon-reload
+
+# T3 worktrees are large. A fresh host gets the bind before T3 starts. For an
+# existing non-empty ~/.t3, stop T3 and migrate it explicitly before rerunning
+# this script so mounting cannot hide live data.
+install -d -o christian -g christian /data/home/dot-t3 /home/christian/.t3
+if ! mountpoint -q /home/christian/.t3; then
+    if find /home/christian/.t3 -mindepth 1 -print -quit | grep -q .; then
+        echo "ERROR: /home/christian/.t3 is non-empty and not mounted." >&2
+        echo "Stop T3, copy it to /data/home/dot-t3, verify it, then rerun." >&2
+        exit 1
+    fi
+    grep -q '^/data/home/dot-t3 /home/christian/.t3 ' /etc/fstab || \
+        echo '/data/home/dot-t3 /home/christian/.t3 none bind 0 0' >> /etc/fstab
+    mount /home/christian/.t3
+fi
 
 echo "== system config files"
 install -m 644 "$SERVER_DIR/etc/sysctl.d/99-agentbox.conf" /etc/sysctl.d/
