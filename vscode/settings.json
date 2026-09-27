@@ -235,5 +235,8 @@
     { "before": ["K"], "commands": ["workbench.action.focusAboveGroup"], "silent": true },
     { "before": ["<C-h>"], "commands": ["workbench.action.previousEditor"], "silent": true },
     { "before": ["<C-l>"], "commands": ["workbench.action.nextEditor"],     "silent": true }
-  ]
+  ],
+  "remote.SSH.remotePlatform": {
+    "agents-fsn1": "linux"
+  }
 }
