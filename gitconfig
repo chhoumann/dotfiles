@@ -35,9 +35,31 @@
 	merge-conflict-ours-diff-header-style = "#d29922 bold"
 	merge-conflict-theirs-diff-header-style = "#bc8cff bold"
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 [diff]
 	colorMoved = default
+	algorithm = histogram
+[rerere]
+	enabled = true
+[push]
+	autoSetupRemote = true
+	followTags = true
+[fetch]
+	prune = true
+[rebase]
+	autoStash = true
+	autoSquash = true
+	updateRefs = true
+[commit]
+	verbose = true
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[column]
+	ui = auto
+[core]
+	untrackedCache = true
 [gtr "hook"]
 	postCreate = zellij action new-tab && zellij action rename-tab \"$(basename $(pwd))\" && zellij action write-chars \"cd $(pwd)\" && zellij action write 10
 [credential "https://github.com"]
