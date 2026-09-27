@@ -216,13 +216,41 @@ else
 fi
 echo "merged claude baseline into $claude_settings"
 
-step "codex config"
+step "codex config and policy"
 mkdir -p "$HOME/.codex"
-if [[ -f "$HOME/.codex/config.toml" ]]; then
-  echo "\$HOME/.codex/config.toml exists; leaving it alone (codex owns it at runtime)"
-else
+codex_config="$HOME/.codex/config.toml"
+if [[ ! -f "$codex_config" ]]; then
   cp "$DOTFILES_DIR/codex/config.linux.toml" "$HOME/.codex/config.toml"
   echo "installed codex config baseline"
+else
+  # Codex may add runtime-owned settings to this file. Converge only the
+  # policy keys that define the safe automatic mode and preserve the rest.
+  python3 - "$DOTFILES_DIR/codex/config.linux.toml" "$codex_config" <<'PY'
+import re
+import sys
+from pathlib import Path
+
+baseline_path, live_path = map(Path, sys.argv[1:])
+managed = ("approval_policy", "sandbox_mode", "approvals_reviewer")
+baseline = baseline_path.read_text()
+live = live_path.read_text()
+
+for key in managed:
+    match = re.search(rf"(?m)^{re.escape(key)}\s*=\s*(.+)$", baseline)
+    if match is None:
+        raise SystemExit(f"missing managed Codex key in baseline: {key}")
+    replacement = f"{key} = {match.group(1)}"
+    pattern = rf"(?m)^{re.escape(key)}\s*=.*$"
+    if re.search(pattern, live):
+        live = re.sub(pattern, replacement, live, count=1)
+    else:
+        section = re.search(r"(?m)^\[", live)
+        offset = section.start() if section else len(live)
+        live = live[:offset].rstrip() + "\n" + replacement + "\n\n" + live[offset:].lstrip()
+
+live_path.write_text(live)
+PY
+  echo "converged managed Codex policy keys"
 fi
 
 step "login shell"
