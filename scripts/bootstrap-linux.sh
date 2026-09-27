@@ -263,6 +263,14 @@ else
   echo "login shell set to $zsh_path"
 fi
 
+if [[ "$(hostname -s)" == "agents-fsn1" ]]; then
+  step "effective agent skills"
+  "$HOME/Developer/skills/scripts/bootstrap-agents-fsn1.sh"
+fi
+
+step "agent host health"
+agent-host-doctor --json
+
 printf '\nBootstrap complete. One-time manual steps (interactive OAuth, no stored keys):\n'
 printf '  claude        # Claude Code login\n'
 printf '  codex login   # Codex login\n'

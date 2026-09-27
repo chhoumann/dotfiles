@@ -76,8 +76,8 @@ fi
 "$skills_dir/scripts/bootstrap-agents-fsn1.sh"
 REMOTE
 
-step "verify skills"
-ssh "$host" 'skills-sync doctor --source "$HOME/Developer/skills" --json'
+step "verify agent host"
+ssh "$host" 'skills-sync doctor --source "$HOME/Developer/skills" --json && agent-host-doctor --json'
 
 printf '\nDone. If the agent CLIs are not logged in yet, run on the box:\n'
 printf '  claude        # Claude Code login\n'
