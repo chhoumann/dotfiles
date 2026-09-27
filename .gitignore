@@ -15,3 +15,6 @@ Brewfile.local
 *.swo
 *~
 .DS_Store
+
+# Wrangler cache holds the Cloudflare account ID.
+.wrangler/
