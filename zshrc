@@ -281,6 +281,89 @@ fp() {
   fi | fzf --read0 --print0 --multi --preview 'bat --color=always -- {} 2>/dev/null || command cat -- {}' | xargs -0 -I{} realpath -- "{}"
 }
 
+zc() {
+  local remote_path rows selected
+
+  (( $# <= 1 )) || {
+    print -u2 "usage: zc [/absolute/remote/path]"
+    return 2
+  }
+
+  if (( $# == 1 )); then
+    remote_path="$1"
+  else
+    command -v fzf >/dev/null 2>&1 || {
+      print -u2 "zc: fzf is required"
+      return 1
+    }
+
+    rows=$(
+      ssh agents-fsn1 node <<'NODE'
+const { existsSync } = require("node:fs");
+const { DatabaseSync } = require("node:sqlite");
+
+const db = new DatabaseSync("/home/christian/.t3/userdata/state.sqlite", {
+  readOnly: true,
+});
+const worktrees = db.prepare(`
+  WITH recent AS (
+    SELECT
+      t.worktree_path,
+      p.title AS project,
+      t.title,
+      t.branch,
+      COALESCE(t.latest_user_message_at, t.created_at) AS activity_at,
+      ROW_NUMBER() OVER (
+        PARTITION BY t.worktree_path
+        ORDER BY COALESCE(t.latest_user_message_at, t.created_at) DESC
+      ) AS recency
+    FROM projection_threads t
+    JOIN projection_projects p ON p.project_id = t.project_id
+    WHERE t.worktree_path IS NOT NULL
+      AND t.deleted_at IS NULL
+      AND t.archived_at IS NULL
+      AND unixepoch(COALESCE(t.latest_user_message_at, t.created_at)) >= unixepoch('now', '-1 day')
+  )
+  SELECT worktree_path, project, title, branch
+  FROM recent
+  WHERE recency = 1
+  ORDER BY activity_at DESC
+`).all();
+db.close();
+
+const clean = (value) => String(value ?? "").replaceAll(/[\t\r\n]/g, " ");
+for (const worktree of worktrees) {
+  if (!existsSync(worktree.worktree_path)) continue;
+  const label = `${worktree.project}  ${worktree.title}  (${worktree.branch})`;
+  console.log(`${clean(worktree.worktree_path)}\t${clean(label)}`);
+}
+NODE
+    ) || return 1
+
+    [[ -n "$rows" ]] || {
+      print -u2 "zc: no unsettled T3 worktrees found"
+      return 1
+    }
+
+    selected=$(print -r -- "$rows" | fzf \
+      --delimiter=$'\t' \
+      --with-nth=2 \
+      --prompt='T3 worktree> ' \
+      --header='active in the last 24h: project  title  (branch)' \
+      --height=70% \
+      --reverse \
+      --border) || return 0
+    remote_path="${selected%%$'\t'*}"
+  fi
+
+  [[ "$remote_path" == /* ]] || {
+    print -u2 "zc: path must be absolute"
+    return 2
+  }
+
+  open "zed://ssh/agents-fsn1$remote_path"
+}
+
 # zellij
 alias zj="zellij"
 alias zja="zellij attach"
