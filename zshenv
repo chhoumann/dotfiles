@@ -57,3 +57,8 @@ _dotfiles_path_prepend "$HOME/.local/bin"
 path=("${(@)path:#$PNPM_HOME}")
 
 unfunction _dotfiles_path_prepend _dotfiles_path_append
+
+# ~/.npmrc references ${NPM_TOKEN}; yarn 1 hard-fails env expansion when the
+# variable is unset. Default it empty (yarn sends no auth header for a falsy
+# token); export a real token in publishing sessions to override.
+export NPM_TOKEN="${NPM_TOKEN:-}"
