@@ -202,8 +202,8 @@ step "link dotfiles (dotbot, default profile)"
 "$DOTFILES_DIR/install"
 
 step "claude settings"
-# The repo file is a baseline, not the live file: Claude Code and the Orca
-# hook installer both write to ~/.claude/settings.json (hooks, approved
+# The repo file is a baseline, not the live file: Claude Code and hook
+# installers write to ~/.claude/settings.json (hooks, approved
 # permissions), so we merge - baseline wins for the keys it defines,
 # machine-generated keys like `hooks` survive.
 mkdir -p "$HOME/.claude"
