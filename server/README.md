@@ -1,7 +1,9 @@
 # Dedicated dev server provisioning
 
 Provisioning kit for a Hetzner dedicated server (Ubuntu 26.04) used as a dev
-box. Storage: XFS on LVM VDO (inline dedup + LZ4 compression) on RAID1 NVMe.
+box. It stays generic: machine-specific facts (hostnames, tailnet
+identity, host-only firewall rules, extra units) live in Christian's private
+fleet repo, which is where each box's rebuild steps start. Storage: XFS on LVM VDO (inline dedup + LZ4 compression) on RAID1 NVMe.
 Rule: never hand-edit system config on the box; edit here and re-run the
 setup scripts.
 
