@@ -42,9 +42,10 @@ setup scripts.
 
 ## Notes
 
-- needrestart is configured to NOT auto-restart docker/containerd/tailscaled/
-  VNC/dbus during unattended upgrades (a dbus restart drops all SSH
-  sessions); reboot manually when /var/run/reboot-required appears.
+- needrestart only lists services that need a restart after unattended
+  upgrades and restarts none of them, so agent work is never interrupted.
+  Restart by hand in a quiet window (`sudo needrestart -b -r l` shows what is
+  pending), and reboot manually when /var/run/reboot-required appears.
 - Netdata is installed via its official kickstart script (no longer packaged
   in Ubuntu) and bound to localhost.
 - Known cosmetic: dm-vdo logs a `__GFP_RETRY_MAYFAIL` vmalloc warning on
