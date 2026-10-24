@@ -654,6 +654,8 @@ fi
 # Keep personal shims ahead of tool-managed bins so wrappers in ~/.local/bin
 # override package launchers when needed.
 path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})
+# Inside Rex terminals, keep the app's own rex first so it matches its server.
+path_prepend "${REX_BIN_DIR-}"
 
 # CF CLI completions
 [[ -f "$HOME/.config/cf/completions/_cf.zsh" ]] && source "$HOME/.config/cf/completions/_cf.zsh"
