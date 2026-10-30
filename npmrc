@@ -1,2 +1,9 @@
 min-release-age=7
+min-release-age-exclude[]=@openai/codex*
+min-release-age-exclude[]=@anthropic-ai/claude-code*
+min-release-age-exclude[]=@opencode/cli*
+min-release-age-exclude[]=opencode-ai
+min-release-age-exclude[]=opencode-{darwin,linux,windows}-*
+min-release-age-exclude[]=@xai-official/grok*
+min-release-age-exclude[]=@earendil-works/pi-*
 //registry.npmjs.org/:_authToken=${NPM_TOKEN}
