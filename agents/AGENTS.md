@@ -34,5 +34,15 @@ When a step doesn't need my input, keep going, and put status notes in the same 
 - When starting fresh or when the choice is genuinely open, default to pnpm (Node) and uv (Python). For anything not listed, prefer the fast, actively-maintained tool over the legacy default.
 
 ## Telemetry
-Please make note of mistakes you make in MISTAKES.md. If you find you wish you had more context or tools, write that down in DESIRES.md. If you learn anything about your env write that down in LEARNINGS.md.
+
+When you learn something a future session would need, append one line to the
+inbox with a single shell append. Kinds: `mistake` (you got something wrong
+and found the fix), `learning` (a fact about the environment or a tool), and
+`desire` (context or a tool you wished you had).
+
+    printf '%s\n' "- $(date +%F) | <kind> | <repo or project> | <what happened, with evidence>" >> ~/.claude/memory-inbox.md
+
+Only append. Never edit or rewrite the inbox; the nightly dream curates it.
+Never record secrets, prod data or customer details. To review or apply what
+dreaming found, load the `dreaming` skill.
 
