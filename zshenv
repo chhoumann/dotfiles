@@ -62,3 +62,8 @@ unfunction _dotfiles_path_prepend _dotfiles_path_append
 # variable is unset. Default it empty (yarn sends no auth header for a falsy
 # token); export a real token in publishing sessions to override.
 export NPM_TOKEN="${NPM_TOKEN:-}"
+
+# T3 Code sends usage telemetry by default (ingest.t3.codes, relayed to PostHog) and reads
+# Codex and Claude auth files to derive an account-linked ID. Keep it off everywhere.
+export T3CODE_TELEMETRY_ENABLED=false
+export T3CODE_OTEL_SDK_DISABLED=true
