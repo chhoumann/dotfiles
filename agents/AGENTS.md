@@ -16,6 +16,7 @@ We try to only add new functionality that is small (that is, simple and few line
 - Hold the UI to a high bar. If something looks wrong: fix it when it's small and adjacent, flag it when it's larger or out of scope. Don't silently expand the change.
 - Boyscout rule with scope discipline: leave things better than you found them, but keep every change reviewable. Small adjacent issues (a lint warning, a flaky test, a typo) get fixed. Anything larger or unrelated gets surfaced, not folded into the current work.
 - Tautological tests are considered harmful.
+- Every limit (size, count, rate, timeout) needs a first-principles reason, such as a protocol maximum or a measured resource bound, or it goes. "The environment currently allows X" is not a reason.
 - A regression test counts only after it fails on the pre-fix code with the assertion that names the bug. Mutants must compile, and a run must show the expected test count.
 - Report what you measured. Cite the log line, id or live output for any claim about what ran, and label inference and stand-in results as such.
 
